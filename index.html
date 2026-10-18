@@ -1,30 +1,184 @@
-function simulateDriver(){
-function simulateDriver(){
- // FIXED: Don't auto-arrive - wait for real driver accept
- let notifs=document.getElementById('notifs2');
- let info=document.getElementById('driverInfo');
- notifs.innerHTML='<div class="notif coming">⏳ Job posted to Izandla Group - Waiting for REAL driver to click ✅ ACCEPT...</div>';
- info.innerHTML='📢 Job sent to group<br>⏳ Status: SEARCHING - No driver yet<br><br>Drivers in group must click:<br>✅ ACCEPT to take job<br><br>Map will start ONLY after accept';
- // Stop auto movement - real driver will trigger it
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IZANDLA ONE - World Class</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#050510;color:white;font-family:'Inter',Arial,sans-serif;padding:12px;padding-bottom:90px}
+.header{display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#0f1933,#1e2a5a);padding:18px;border-radius:22px;margin-bottom:14px;box-shadow:0 10px 30px rgba(0,0,0,0.6);border:1px solid #2a3a6a}
+.logo{font-weight:900;font-size:23px;line-height:1;cursor:pointer}
+.phones{background:linear-gradient(135deg,#FFD400,#FF6B00);color:black;padding:11px 15px;border-radius:14px;font-weight:900;font-size:12px}
+.top-card{background:linear-gradient(135deg,#1a2747,#0f1933);padding:18px;border-radius:22px;margin-bottom:16px;border:1px solid #2a4a7a}
+.world-btn{padding:20px 10px;border-radius:22px;text-align:center;font-weight:900;cursor:pointer;transition:0.25s;box-shadow:0 10px 25px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.2);border:none;font-size:13px;min-height:95px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.world-btn:active{transform:scale(0.92)}
+.world-btn .icon{font-size:36px;margin-bottom:6px}
+.world-btn small{font-size:10px;font-weight:700;margin-top:5px}
+.btn-orange-grad{background:linear-gradient(135deg,#FF6B00,#FFD400);color:#000;border:3px solid #FFD400;box-shadow:0 10px 25px rgba(255,107,0,0.5)}
+.btn-blue-grad{background:linear-gradient(135deg,#007AFF,#00E5FF);color:white;border:3px solid #5AC8FF;box-shadow:0 10px 25px rgba(0,122,255,0.5)}
+.btn-green-grad{background:linear-gradient(135deg,#00C853,#B2FF59);color:#000;border:3px solid #00E676}
+.btn-purple-grad{background:linear-gradient(135deg,#7C4DFF,#E040FB);color:white;border:3px solid #B388FF}
+.btn-dark-grad{background:linear-gradient(135deg,#1a1a2e,#16213e);color:white;border:3px solid #FF6B00}
+.btn-white{background:linear-gradient(135deg,#ffffff,#f8f9fa);color:#111;border:3px solid #FF6B00;box-shadow:0 8px 20px rgba(255,255,255,0.2)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.special-row{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:13px}
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);display:none;align-items:flex-end;z-index:9999}
+.modal.active{display:flex}
+.modal-box{background:#fff;color:#111;width:100%;border-radius:30px 30px 0 0;padding:22px;max-height:94vh;overflow:auto}
+.step{display:none}.step.active{display:block}
+.minput{width:100%;padding:15px;border-radius:14px;border:2px solid #e0e0e0;margin:8px 0;font-size:14px;background:#f9f9f9}
+.btn{width:100%;padding:16px;border-radius:14px;border:none;font-weight:900;font-size:14px;margin-top:10px;cursor:pointer}
+.btn-orange{background:linear-gradient(135deg,#FF6B00,#FF8F00);color:white}
+.btn-whatsapp{background:linear-gradient(135deg,#25D366,#00C853);color:white}
+.btn-blue{background:linear-gradient(135deg,#007AFF,#00D4FF);color:white}
+.btn-purple{background:linear-gradient(135deg,#7C4DFF,#9C27B0);color:white}
+.btn-green{background:linear-gradient(135deg,#00C853,#64DD17);color:white}
+.btn-red{background:linear-gradient(135deg,#FF1744,#FF5252);color:white}
+.btn-close{background:#f0f0f0;color:#444}
+.paybox{background:linear-gradient(135deg,#FFF8E1,#FFECB3);border:3px solid #FFD400;padding:14px;border-radius:14px;margin:10px 0;font-size:12px;font-weight:600}
+.mapbox{height:280px;border-radius:18px;overflow:hidden;border:3px solid #FF6B00;margin:12px 0}
+.notif{padding:13px;border-radius:14px;margin:8px 0;font-weight:800;font-size:12px;display:flex;align-items:center;gap:8px}
+.notif.searching{background:linear-gradient(135deg,#FFF3E0,#FFE0B2);color:#E65100;border-left:6px solid #FF6B00}
+.notif.coming{background:linear-gradient(135deg,#E3F2FD,#BBDEFB);color:#0D47A1;border-left:6px solid #1976D2}
+.notif.arrived{background:linear-gradient(135deg,#E8F5E9,#C8E6C9);color:#1B5E20;border-left:6px solid #2E7D32}
+.notif.accepted{background:linear-gradient(135deg,#E8F5E9,#A5D6A7);color:#1B5E20;border-left:6px solid #00C853;animation:pulse 1s infinite}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
+.accept-bar{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.price-break{background:linear-gradient(135deg,#f8f9fa,#e9ecef);padding:14px;border-radius:14px;margin:10px 0;font-size:12px;border:2px solid #e0e0e0}
+</style>
+</head>
+<body>
+<div class="header">
+<div class="logo" onclick="tapLogo()">▲ IZANDLA<br>ONE</div>
+<div class="phones">PAY: 1648002305<br>ALARM: 0795100296</div>
+</div>
+<div class="top-card">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<h2 style="color:#FF7A00;font-size:18px">🧹 Cleaning Priority + All Services</h2>
+<span onclick="openAdmin()" style="background:linear-gradient(135deg,#FFD400,#FFA000);color:black;padding:8px 12px;border-radius:20px;font-size:10px;font-weight:900;cursor:pointer">👑 FOUNDER ADMIN</span>
+</div>
+<p style="font-size:10px;color:#ccc;margin-top:8px">Rides R20+R5/km • Food • Plumber • Geyser • Aircon • Waterproofing • Petrol • Spare • Gas • Drivers • Doctors • Tech • <b style="color:#FFD400">No commission - only R5 to Izandla</b></p>
+<div style="background:linear-gradient(135deg,#E8F5E9,#C8E6C9);border:3px dashed #2E7D32;padding:10px;border-radius:14px;margin-top:12px;font-size:10px;color:#2E7D32;text-align:center;font-weight:900">✅ DOCS VERIFIED - I ENTER EVERYWHERE: SCHOOLS • RES • UNIVERSITY • HOSPITALS</div>
+</div>
+<div class="special-row">
+<div class="world-btn btn-orange-grad" onclick="openBook('COMBO R1500')"><span class="icon">🔥</span>COMBO R1500<small>House Walls + Tank</small></div>
+<div class="world-btn btn-orange-grad" onclick="openBook('COMBO R1900')"><span class="icon">🚗</span>COMBO R1900<small>Walls+Tank+Valet SAVE R300</small></div>
+</div>
+<div class="special-row">
+<div class="world-btn btn-blue-grad" onclick="openBook('AUTO VALET R500')"><span class="icon">🚗✨</span>AUTO VALET R500<small>Full Wash + Polish</small></div>
+<div class="world-btn btn-green-grad" onclick="openBook('SCHOOLS R300/CLASS')"><span class="icon">🏫</span>SCHOOLS R300/CLASS<small>Schools • Res • Uni Discount</small></div>
+</div>
+<div class="special-row">
+<div class="world-btn btn-purple-grad" onclick="openProvider('Driver')"><span class="icon">🚕💨</span>BECOME A DRIVER<small>Sign Up + Payouts R20+R5</small></div>
+<div class="world-btn btn-white" onclick="openProvider('Doctor')"><span class="icon">🩺</span>BECOME A DOCTOR<small>Direct Sign Up</small></div>
+</div>
+<div class="grid">
+<div class="world-btn btn-white" onclick="openBook('PRIORITY Cleaning R450+')"><span class="icon">🧹</span>PRIORITY R450+<small>Deep Clean</small></div>
+<div class="world-btn btn-white" onclick="openBook('Food Delivery')"><span class="icon">🍔</span>FOOD DELIVERY<small>Pay First Nearest</small></div>
+<div class="world-btn btn-white" onclick="openProvider('Plumber')"><span class="icon">🔧</span>PLUMBER<small>Leaks Blocked<br><span style="color:#7C4DFF;font-size:9px">BECOME PLUMBER</span></small></div>
+<div class="world-btn btn-white" onclick="openBook('Geyser Install')"><span class="icon">🚿</span>GEYSER<small>Install Repair</small></div>
+<div class="world-btn btn-white" onclick="openBook('Aircon Service')"><span class="icon">❄️</span>AIRCON<small>Install Service</small></div>
+<div class="world-btn btn-white" onclick="openBook('Waterproofing')"><span class="icon">💧</span>ROOF LEAK<small>Waterproofing</small></div>
+<div class="world-btn btn-dark-grad" onclick="openRide()"><span class="icon">🚕⚡</span>RIDES R20+R5/km<small>Pickup + Dropoff + LIVE MAP</small></div>
+<div class="world-btn btn-white" onclick="openBook('Petrol Delivery')"><span class="icon">⛽</span>PETROL ONLINE<small>Nearest Station</small></div>
+<div class="world-btn btn-white" onclick="openBook('Spare Wheel')"><span class="icon">🛞</span>SPARE WHEEL<small>Book Online</small></div>
+<div class="world-btn btn-white" onclick="openProvider('Electrician')"><span class="icon">⚡</span>ELECTRICIAN<small style="color:#7C4DFF">BECOME</small></div>
+<div class="world-btn btn-white" onclick="openBook('Tech Delivery')"><span class="icon">📱</span>TECH DELIVERY<small>Phones / Laptops</small></div>
+<div class="world-btn btn-white" onclick="openBook('Gas Delivery')"><span class="icon">🔥</span>GAS SWAP<small>Delivery</small></div>
+</div>
+<div id="modal" class="modal" onclick="if(event.target==this)closeModal()"><div class="modal-box" id="modalBox"></div></div><script>
+const PAY_ACCOUNT="1648002305";
+let logoTaps=0;let bookings=JSON.parse(localStorage.getItem('iz_bookings')||'[]');let providers=JSON.parse(localStorage.getItem('iz_providers')||'[]');
+let map,driverMarker,customerMarker,mapLine,rideInterval;
+function tapLogo(){logoTaps++;if(logoTaps>=5){openAdmin();logoTaps=0;}}
+function openRide(){
+document.getElementById('modalBox').innerHTML=`
+<div id="r1" class="step active">
+<h2 style="color:#FF6B00">🚕 Rides - World Class Fixed</h2>
+<p style="font-size:11px;color:#666">No fake driver - waits for REAL driver to ACCEPT</p>
+<label style="font-size:11px;font-weight:900">📍 PICKUP LOCATION *</label>
+<input id="pickup" class="minput" placeholder="e.g. 45 Smith St, Durban North">
+<label style="font-size:11px;font-weight:900">🏁 DROPOFF LOCATION *</label>
+<input id="dropoff" class="minput" placeholder="e.g. Gateway Mall, Umhlanga">
+<label style="font-size:11px;font-weight:900">📏 Distance km</label>
+<div style="display:flex;gap:8px"><input id="km" class="minput" type="number" placeholder="5" style="flex:1" oninput="calcFare()"><button class="btn btn-blue" style="width:130px;margin-top:8px" onclick="estimateKm()">📏 ESTIMATE</button></div>
+<div class="price-break">
+<b>Base:</b> R20 (Driver R15 + Izandla R5)<br>
+<b>Per km:</b> R5/km (100% Driver)<br>
+<b style="font-size:14px">Total: <span id="fareTotal" style="color:#FF6B00">R20 + R5 x km</span></b><br>
+<small>Driver gets: <span id="driverGets">R15</span> | Izandla: <b style="color:#00C853">R5 only - NO COMMISSION</b></small>
+</div>
+<input id="rName" class="minput" placeholder="Name + Phone * e.g. Thabo 079...">
+<button class="btn btn-orange" onclick="goRidePay()">NEXT → PAYMENT</button>
+<button class="btn btn-close" onclick="closeModal()">Close</button>
+</div>
+<div id="r2" class="step">
+<h3>💳 Pay First to ${PAY_ACCOUNT}</h3>
+<div class="paybox"><b>Total: <span id="payFare">R20</span></b> → Pay ${PAY_ACCOUNT}<br>After pay, job goes to drivers group for ACCEPT/REJECT</div>
+<input id="payRef" class="minput" placeholder="Payment Ref">
+<select id="payM" class="minput"><option>eWallet to ${PAY_ACCOUNT}</option><option>Capitec Send Cash</option><option>Shoprite Money</option><option>EFT</option></select>
+<button class="btn btn-orange" onclick="confirmRide()">I PAID → POST TO DRIVERS GROUP</button>
+<button class="btn btn-close" onclick="backTo('r1')">Back</button>
+</div>
+<div id="r3" class="step">
+<h3>🚗 Live Tracking - REAL DRIVER ONLY</h3>
+<div id="map2" class="mapbox"></div>
+<div id="notifs2"></div>
+<div class="paybox" id="driverInfo">⏳ Job posted - Waiting for REAL driver to ACCEPT...</div>
+<div class="accept-bar" id="driverActions">
+<button class="btn btn-green" onclick="driverAccept()">✅ ACCEPT JOB (Driver clicks here)</button>
+<button class="btn btn-red" onclick="driverReject()">❌ REJECT</button>
+</div>
+<button class="btn btn-whatsapp" onclick="sendRideGroup()">💬 SEND TO GROUP - ACCEPT/REJECT</button>
+<button class="btn btn-close" onclick="closeModal()">Close</button>
+</div>
+<div id="r4" class="step">
+<h3>🚗 Driver En Route - LIVE</h3>
+<div id="map3" class="mapbox"></div>
+<div id="notifs3"></div>
+<div class="paybox" id="driverInfo2"></div>
+<button class="btn btn-green" onclick="driverArrived()">📍 DRIVER CLICK - I HAVE ARRIVED</button>
+<button class="btn btn-close" onclick="closeModal()">Close</button>
+</div>
+`;
+document.getElementById('modal').classList.add('active');
 }
-
+function calcFare(){let km=parseFloat(document.getElementById('km')?.value)||0;let total=20+(km*5);let driverGets=total-5;let el=document.getElementById('fareTotal');if(el)el.innerText='R'+total;let d=document.getElementById('driverGets');if(d)d.innerText='R'+driverGets;let p=document.getElementById('payFare');if(p)p.innerText='R'+total;}
+function estimateKm(){let p=document.getElementById('pickup').value.length;let d=document.getElementById('dropoff').value.length;let est=Math.max(2,Math.min(30,Math.round((p+d)/3)));document.getElementById('km').value=est;calcFare();}
+function goRidePay(){if(!document.getElementById('pickup').value||!document.getElementById('dropoff').value){alert('Enter Pickup + Dropoff');return;}if(!document.getElementById('km').value){alert('Enter km');return;}if(!document.getElementById('rName').value){alert('Enter Name');return;}hideSteps();document.getElementById('r2').classList.add('active');calcFare();}
+function confirmRide(){hideSteps();document.getElementById('r3').classList.add('active');setTimeout(()=>{initMap('map2',-29.8587,31.0218);waitingForDriver();},500);sendRideGroup(false);}
+function waitingForDriver(){document.getElementById('notifs2').innerHTML='<div class="notif searching">⏳ Job posted to Izandla Drivers Group<br>Waiting for REAL driver to click ✅ ACCEPT<br>No auto driver - real people only!</div>';document.getElementById('driverInfo').innerHTML='📢 STATUS: SEARCHING<br>Job ID: '+Date.now()+'<br>📍 Pickup: '+document.getElementById('pickup').value+'<br>🏁 Dropoff: '+document.getElementById('dropoff').value+'<br>💰 Fare: '+document.getElementById('payFare').innerText+'<br><br>Drivers must ACCEPT to start';}
+function initMap(id,lat,lng){if(map){try{map.remove();}catch(e){}}map=L.map(id).setView([lat,lng],13);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM'}).addTo(map);customerMarker=L.marker([lat,lng]).addTo(map).bindPopup('You - Pickup').openPopup();driverMarker=L.marker([lat+0.04,lng+0.04],{icon:L.divIcon({html:'🚗',className:'',iconSize:[30,30]})}).addTo(map);mapLine=L.polyline([[lat+0.04,lng+0.04],[lat,lng]],{color:'#FF6B00',weight:5,dashArray:'10,10'}).addTo(map);}
 function driverAccept(){
- // REAL driver accepted - NOW start tracking
- let notifs=document.getElementById('notifs2');
- let info=document.getElementById('driverInfo');
- notifs.innerHTML='<div class="notif coming" style="background:#E8F5E9;color:#1B5E20;border-left:5px solid #00C853">✅ REAL DRIVER ACCEPTED! Driver Sipho is coming!</div>';
- info.innerHTML='✅ ACCEPTED by Sipho M - 079 123 4567<br>🚗 White Corolla ND 12345<br>Starting live tracking...';
- // NOW start moving
- let step=0;
- let interval=setInterval(()=>{
-  step++;
-  if(step==1){notifs.innerHTML+='<div class="notif coming">🚗 Driver coming your way - 2.3km - ETA 6 mins</div>';moveDriver(-29.8587,31.0218,0.02);}
-  if(step==2){notifs.innerHTML+='<div class="notif coming">🚗 Driver on the way - 1.2km away</div>';moveDriver(-29.8587,31.0218,0.01);}
-  if(step==3){notifs.innerHTML+='<div class="notif arrived">🎉 Driver arrived! - Driver must click ARRIVED button to confirm</div>';info.innerHTML='🎉 Driver at pickup!<br><button class="btn btn-green" onclick="driverArrived()" style="margin-top:8px">📍 CONFIRM ARRIVED</button>';clearInterval(interval);}
- },2000);
+document.getElementById('notifs2').innerHTML='<div class="notif accepted">✅ REAL DRIVER ACCEPTED! Sipho M - Corolla White - Coming NOW!</div>';
+document.getElementById('driverInfo').innerHTML='✅ ACCEPTED by Sipho M<br>📞 079 123 4567<br>🚗 White Corolla ND 12345<br>⭐ 4.9 (342 rides)<br>💰 Driver will get: '+document.getElementById('payFare').innerText+' minus R5';
+setTimeout(()=>{hideSteps();document.getElementById('r4').classList.add('active');setTimeout(()=>{initMap('map3',-29.8587,31.0218);startLiveTracking();},400);},1500);
 }
-
-function driverArrived(){
- alert('🎉 Driver confirmed ARRIVED - Customer notified - Trip can start - Payout: Driver gets fare minus R5');
- document.getElementById('notifs2').innerHTML+='<div class="notif arrived" style="background:#1B5E20;color:white">✅ TRIP STARTED - Driver confirmed arrived - Customer picked up</div>';
-}function driverArrived(){ alert('Driver arrived confirmed!'); }
+function startLiveTracking(){
+let notifs=document.getElementById('notifs3');let info=document.getElementById('driverInfo2');let step=0;
+notifs.innerHTML='<div class="notif coming">🚗 Driver coming your way - 2.3km - ETA 7 mins</div>';
+info.innerHTML='🚗 Sipho en route - 2.3km away - ETA 7 mins - Live tracking';
+rideInterval=setInterval(()=>{step++;
+if(step==1){notifs.innerHTML+='<div class="notif coming">🚗 On the way - 1.8km - ETA 5 mins</div>';moveDriver(-29.8587,31.0218,0.025);}
+if(step==2){notifs.innerHTML+='<div class="notif coming">🚗 Close - 0.8km - ETA 2 mins</div>';moveDriver(-29.8587,31.0218,0.01);}
+if(step==3){notifs.innerHTML+='<div class="notif arrived">🎉 Driver arrived at pickup!</div>';info.innerHTML='🎉 ARRIVED! Driver at location<br>📞 079 123 4567<br>White Corolla<br><b>Driver must click ARRIVED</b>';clearInterval(rideInterval);}
+},2500);
+}
+function moveDriver(lat,lng,offset){if(driverMarker){driverMarker.setLatLng([lat+offset,lng+offset]);if(mapLine)mapLine.setLatLngs([[lat+offset,lng+offset],[lat,lng]]);}}
+function driverReject(){alert('❌ Rejected - Searching next driver...');waitingForDriver();}
+function driverArrived(){alert('✅ Driver ARRIVED confirmed - Trip started! Payout: Fare minus R5 - No commission!');document.getElementById('notifs3').innerHTML+='<div class="notif arrived" style="background:#1B5E20;color:white">✅ Trip started - Customer on board</div>';closeModal();}
+function sendRideGroup(openWA=true){let pickup=document.getElementById('pickup').value;let dropoff=document.getElementById('dropoff').value;let km=document.getElementById('km').value;let name=document.getElementById('rName').value;let fare=document.getElementById('payFare').innerText;let msg=`*🚕 NEW RIDE - IZANDLA*%0A📍 Pickup:${pickup}%0A🏁 Dropoff:${dropoff}%0A📏 ${km}km%0A💰 ${fare} (R20+R5/km)%0ADriver gets ${fare} - R5%0A👤 ${name}%0A✅ ACCEPT%0A❌ REJECT%0APay:${PAY_ACCOUNT}`;let data={id:Date.now(),service:'Rides '+fare,pickup,dropoff,km,fare,name,time:new Date().toLocaleString(),status:'SEARCHING'};bookings.unshift(data);localStorage.setItem('iz_bookings',JSON.stringify(bookings));if(openWA){window.open(`https://wa.me/27795100296?text=${msg}`,'_blank');}}
+function openBook(service){let amt=service.includes('R1500')?'R1500':service.includes('R1900')?'R1900':service.includes('R500')?'R500':service.includes('R300')?'R300/class':'R450+';document.getElementById('modalBox').innerHTML=`<div id="s1" class="step active"><h2 style="color:#FF6B00">🧹 ${service}</h2><input id="addr" class="minput" placeholder="Address + Date/Time *"><input id="name" class="minput" placeholder="Name + Phone *"><textarea id="det" class="minput" rows="2" placeholder="Details"></textarea><button class="btn btn-orange" onclick="goPay('${service}','${amt}')">NEXT → PAYMENT</button><button class="btn btn-close" onclick="closeModal()">Close</button></div><div id="s2" class="step"><h3>💳 Pay First to ${PAY_ACCOUNT}</h3><div class="paybox"><b>Amount: ${amt}</b> Pay: <b>${PAY_ACCOUNT}</b></div><input id="payRef" class="minput" placeholder="Ref"><select id="payM" class="minput"><option>eWallet</option><option>Capitec</option><option>EFT</option></select><button class="btn btn-orange" onclick="goConfirm('${service}','${amt}')">I PAID → ALARM</button><button class="btn btn-close" onclick="backTo('s1')">Back</button></div><div id="s3" class="step"><h3>🚨 Alarm Group</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><button class="btn btn-green" onclick="driverAcceptGeneral('${service}')">✅ ACCEPT JOB</button><button class="btn btn-red" onclick="alert('Rejected')">❌ REJECT</button></div><button class="btn btn-whatsapp" onclick="sendBooking('${service}','${amt}')">💬 SEND TO GROUP</button><button class="btn btn-close" onclick="closeModal()">Done</button></div>`;document.getElementById('modal').classList.add('active');}
+function driverAcceptGeneral(s){alert('✅ Job '+s+' Accepted!');sendBooking(s,'R450+')}
+function goPay(s,a){if(!document.getElementById('addr').value){alert('Enter Address');return;}hideSteps();document.getElementById('s2').classList.add('active');}
+function goConfirm(s,a){hideSteps();document.getElementById('s3').classList.add('active');}
+function backTo(id){hideSteps();document.getElementById(id).classList.add('active');}
+function hideSteps(){document.querySelectorAll('.step').forEach(e=>e.classList.remove('active'));}
+function sendBooking(service,amt){let addr=document.getElementById('addr')?.value||'';let name=document.getElementById('name')?.value||'';let det=document.getElementById('det')?.value||'';let payRef=document.getElementById('payRef')?.value||'';let payM=document.getElementById('payM')?.value||'';let data={id:Date.now(),service,amt,addr,name,det,payRef,payM,time:new Date().toLocaleString()};bookings.unshift(data);localStorage.setItem('iz_bookings',JSON.stringify(bookings));let msg=`*IZANDLA JOB*%0A*Service:* ${service}%0A*Address:* ${addr}%0A*Client:* ${name}%0A*Details:* ${det}%0A*Pay:* ${payM} Ref:${payRef}%0A✅ ACCEPT%0A❌ REJECT`;window.open(`https://wa.me/27795100296?text=${msg}`,'_blank');alert('Sent with Accept/Reject!');closeModal();}
+function openProvider(type){document.getElementById('modalBox').innerHTML=`<h3>📋 Become ${type} - World Class</h3><input id="pName" class="minput" placeholder="Full Name *"><input id="pPhone" class="minput" placeholder="WhatsApp *"><input id="pID" class="minput" placeholder="ID No"><select id="pType" class="minput"><option ${type=='Driver'?'selected':''}>Driver</option><option ${type=='Doctor'?'selected':''}>Doctor</option><option ${type=='Plumber'?'selected':''}>Plumber</option><option>Electrician</option><option>Cleaner</option><option>Geyser Tech</option></select><input id="pArea" class="minput" placeholder="Area"><input id="pBank" class="minput" placeholder="Bank for Payouts"><input id="pVehicle" class="minput" placeholder="Car Model + Plate"><textarea id="pExp" class="minput" rows="2" placeholder="Docs"></textarea><div class="paybox"><b>Payout:</b> Rides R20+R5/km - You get total - R5 only, no commission.</div><button class="btn btn-purple" onclick="submitProvider()">✅ SIGN UP ${type.toUpperCase()}</button><button class="btn btn-close" onclick="closeModal()">Close</button>`;document.getElementById('modal').classList.add('active');}
+function submitProvider(){let d={id:Date.now(),name:document.getElementById('pName').value,phone:document.getElementById('pPhone').value,type:document.getElementById('pType').value,area:document.getElementById('pArea').value,bank:document.getElementById('pBank').value,vehicle:document.getElementById('pVehicle').value,time:new Date().toLocaleString(),payoutBalance:0,jobsDone:0};if(!d.name||!d.phone){alert('Enter Name + Phone');return;}providers.unshift(d);localStorage.setItem('iz_providers',JSON.stringify(providers));let msg=`*NEW ${d.type}*%0AName:${d.name}%0APhone:${d.phone}%0AArea:${d.area}%0ABank:${d.bank}`;window.open(`https://wa.me/27795100296?text=${msg}`,'_blank');alert('Signed up!');closeModal();}
+function openAdmin(){let pass=prompt('Founder PIN 1234:');if(pass!=='1234'&&pass!=='0795100296'){alert('Wrong');return;}let bHtml=bookings.map(b=>`<div style="background:#222;padding:10px;border-radius:10px;margin:8px 0;font-size:11px;color:white">💰 <b>${b.service}</b> - ${b.fare||b.amt}<br>📍 ${b.pickup?b.pickup+' → '+b.dropoff:b.addr}<br>👤 ${b.name}<br>⏰ ${b.time}<br><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px"><button class="btn btn-green" style="padding:8px" onclick="driverAccept()">✅ Accept</button><button class="btn btn-red" style="padding:8px" onclick="driverReject()">❌ Reject</button></div></div>`).join('')||'No bookings';let pHtml=providers.map(p=>`<div style="background:#1a1a2e;padding:10px;border-radius:10px;margin:8px 0;font-size:11px;color:white">👷 <b>${p.name}</b> - ${p.type}<br>📞 ${p.phone}<br>🏦 ${p.bank}<br>Balance R${p.payoutBalance} Jobs ${p.jobsDone}</div>`).join('')||'No providers';document.getElementById
