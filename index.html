@@ -1,1 +1,30 @@
+function simulateDriver(){
+function simulateDriver(){
+ // FIXED: Don't auto-arrive - wait for real driver accept
+ let notifs=document.getElementById('notifs2');
+ let info=document.getElementById('driverInfo');
+ notifs.innerHTML='<div class="notif coming">⏳ Job posted to Izandla Group - Waiting for REAL driver to click ✅ ACCEPT...</div>';
+ info.innerHTML='📢 Job sent to group<br>⏳ Status: SEARCHING - No driver yet<br><br>Drivers in group must click:<br>✅ ACCEPT to take job<br><br>Map will start ONLY after accept';
+ // Stop auto movement - real driver will trigger it
+}
 
+function driverAccept(){
+ // REAL driver accepted - NOW start tracking
+ let notifs=document.getElementById('notifs2');
+ let info=document.getElementById('driverInfo');
+ notifs.innerHTML='<div class="notif coming" style="background:#E8F5E9;color:#1B5E20;border-left:5px solid #00C853">✅ REAL DRIVER ACCEPTED! Driver Sipho is coming!</div>';
+ info.innerHTML='✅ ACCEPTED by Sipho M - 079 123 4567<br>🚗 White Corolla ND 12345<br>Starting live tracking...';
+ // NOW start moving
+ let step=0;
+ let interval=setInterval(()=>{
+  step++;
+  if(step==1){notifs.innerHTML+='<div class="notif coming">🚗 Driver coming your way - 2.3km - ETA 6 mins</div>';moveDriver(-29.8587,31.0218,0.02);}
+  if(step==2){notifs.innerHTML+='<div class="notif coming">🚗 Driver on the way - 1.2km away</div>';moveDriver(-29.8587,31.0218,0.01);}
+  if(step==3){notifs.innerHTML+='<div class="notif arrived">🎉 Driver arrived! - Driver must click ARRIVED button to confirm</div>';info.innerHTML='🎉 Driver at pickup!<br><button class="btn btn-green" onclick="driverArrived()" style="margin-top:8px">📍 CONFIRM ARRIVED</button>';clearInterval(interval);}
+ },2000);
+}
+
+function driverArrived(){
+ alert('🎉 Driver confirmed ARRIVED - Customer notified - Trip can start - Payout: Driver gets fare minus R5');
+ document.getElementById('notifs2').innerHTML+='<div class="notif arrived" style="background:#1B5E20;color:white">✅ TRIP STARTED - Driver confirmed arrived - Customer picked up</div>';
+}function driverArrived(){ alert('Driver arrived confirmed!'); }
