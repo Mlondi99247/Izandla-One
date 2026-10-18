@@ -1,1 +1,160 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IZANDLA ONE - Durban</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a14;color:white;font-family:Arial,sans-serif;padding:10px}
+.header{display:flex;justify-content:space-between;align-items:center;background:#0f1933;padding:15px;border-radius:15px;margin-bottom:12px}
+.logo{font-weight:900;font-size:20px;line-height:1.1}
+.phones{background:#FFD400;color:black;padding:8px 12px;border-radius:8px;font-weight:bold;font-size:12px}
+.top-card{background:linear-gradient(135deg,#1e2a5a,#0f1933);padding:16px;border-radius:18px;margin-bottom:12px;border:1px solid #2a3a6a}
+.top-card h2{color:#FF7A00;font-size:17px}
+.top-card p{font-size:11px;color:#ddd;margin-top:6px;line-height:1.4}
+.badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.badges span{background:#fff2e0;color:#FF6B00;padding:4px 8px;border-radius:20px;font-size:10px;font-weight:bold}
+.doc-banner{background:#E8F5E9;border:2px dashed #2E7D32;padding:8px;border-radius:10px;margin-top:8px;font-size:10px;color:#2E7D32;text-align:center;font-weight:bold}
+.special-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.special{background:linear-gradient(135deg,#FF6B00,#FFD400);color:black;padding:12px;border-radius:14px;text-align:center;font-weight:bold;cursor:pointer;border:2px solid gold;font-size:13px}
+.special.blue{background:linear-gradient(135deg,#007AFF,#00D4FF);color:white;border-color:white}
+.special.green{background:linear-gradient(135deg,#00C853,#B2FF59);color:black}
+.special small{font-size:10px;font-weight:normal;display:block;margin-top:3px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.card{background:white;color:#111;border-radius:18px;padding:14px 8px;text-align:center;cursor:pointer;min-height:85px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.card .icon{font-size:28px}
+.card .label{color:#FF6B00;font-weight:bold;font-size:11px;margin-top:6px;line-height:1.2}
+.card.gold{border:3px solid gold;background:linear-gradient(white,#FFF8DC)}
+.card.prio{border:3px solid #FF6B00}
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.88);display:none;align-items:flex-end;z-index:99}
+.modal.active{display:flex}
+.modal-box{background:#fff;color:#111;width:100%;border-radius:22px 22px 0 0;padding:18px;max-height:90vh;overflow:auto}
+.step{display:none}
+.step.active{display:block}
+.minput{width:100%;padding:11px;border-radius:10px;border:1px solid #ccc;margin:6px 0;font-size:13px}
+.btn{width:100%;padding:13px;border-radius:11px;border:none;font-weight:bold;font-size:14px;margin-top:8px;cursor:pointer}
+.btn-orange{background:#FF6B00;color:white}
+.btn-whatsapp{background:#25D366;color:white}
+.btn-blue{background:#007AFF;color:white}
+.btn-close{background:#eee;color:#333}
+.paybox{background:#FFF8E1;border:2px solid #FFD400;padding:12px;border-radius:12px;margin:10px 0}
+.copybtn{background:black;color:#FFD400;padding:4px 8px;border-radius:6px;font-size:11px;border:none;margin-left:6px}
+</style>
+</head>
+<body>
+<div class="header">
+<div class="logo">▲ IZANDLA<br>ONE</div>
+<div class="phones">PAY: 1648002305<br>ALARM: 0795100296</div>
+</div>
+<div class="top-card">
+<h2>🧹 Cleaning Priority + All Services</h2>
+<p>Rides R20+R5/km • Food • Plumber • Geyser • Aircon • Waterproofing • Petrol • Spare • Gas • Drivers • Doctors • Tech • <b>All pay first 1648002305</b> • Alarm 0795100296</p>
+<div class="badges"><span>CLEANING FIRST</span><span>R5 FEE</span><span>NO COMMISSION</span><span>PAY FIRST 1648002305</span></div>
+<div class="doc-banner">✅ DOCS VERIFIED - I ENTER EVERYWHERE: SCHOOLS • RES • UNIVERSITY • HOSPITALS</div>
+</div>
+<div class="special-row">
+<div class="special" onclick="openBook('COMBO R1500 - Walls + Tank')">🔥 COMBO R1500<br><small>House Walls + Tank</small></div>
+<div class="special" onclick="openBook('COMBO R1900 - Walls + Tank + Auto Valet')">🚗 COMBO R1900<br><small>Walls+Tank+Valet SAVE R300</small></div>
+</div>
+<div class="special-row">
+<div class="special blue" onclick="openBook('AUTO VALET R500')">🚗✨ AUTO VALET R500<br><small>Exterior + Interior + Polish</small></div>
+<div class="special green" onclick="openBook('SCHOOLS DISCOUNT R300 per class')">🏫 SCHOOLS R300/CLASS<br><small>Schools • Res • Uni Discount</small></div>
+</div>
+<div class="grid">
+<div class="card prio" onclick="openBook('PRIORITY Cleaning R450+')"><div class="icon">🧹</div><div class="label">PRIORITY R450+<br>Deep Clean</div></div>
+<div class="card" onclick="openBook('Food Delivery - Pay First Nearest')"><div class="icon">🍔</div><div class="label">Pay First Nearest<br>Food</div></div>
+<div class="card" onclick="openBook('Plumber / Electrician / Water - Leaks Blocked')"><div class="icon">🔧</div><div class="label">Leaks Blocked<br>Plumber</div></div>
+<div class="card" onclick="openBook('Geyser Install & Repair')"><div class="icon">🚿</div><div class="label">Install Repair<br>Geyser</div></div>
+<div class="card" onclick="openBook('Aircon Install & Service')"><div class="icon">❄️</div><div class="label">Install Service<br>Aircon</div></div>
+<div class="card" onclick="openBook('Waterproofing Roof Leak')"><div class="icon">💧</div><div class="label">Roof Leak<br>Waterproofing</div></div>
+<div class="card" onclick="openBook('Rides Request R20+R5/km MAP')"><div class="icon">🚗</div><div class="label">R20+R5/km MAP<br>Rides</div></div>
+<div class="card" onclick="openBook('Buy Petrol Online - Nearest Station')"><div class="icon">⛽</div><div class="label">Nearest Station<br>Petrol</div></div>
+<div class="card" onclick="openBook('Buy/Book Spare Wheel Online')"><div class="icon">🛞</div><div class="label">Spare Wheel<br>Book</div></div>
+<div class="card" onclick="openBook('Request a Doctor')"><div class="icon">🩺</div><div class="label">Request<br>Doctor</div></div>
+<div class="card" onclick="openBook('Tech Delivery - Phones Laptops')"><div class="icon">📱</div><div class="label">Tech Delivery</div></div>
+<div class="card" onclick="openBook('Gas Swap Delivery')"><div class="icon">🔥</div><div class="label">Gas Swap<br>Delivery</div></div>
+</div>
+<div id="modal" class="modal" onclick="if(event.target==this)closeModal()">
+<div class="modal-box">
+<div id="step1" class="step active">
+<h3 id="mTitle">🧹 Book</h3>
+<input id="mService" class="minput" readonly style="background:#FFF3E0;font-weight:bold">
+<input id="mAddress" class="minput" placeholder="Address + Date/Time *">
+<input id="mName" class="minput" placeholder="Your Name + Phone *">
+<textarea id="mDetails" class="minput" rows="2" placeholder="Details: 1-Bed, School name + classes, Car model"></textarea>
+<button class="btn btn-orange" onclick="goStep2()">NEXT → PAYMENT</button>
+<button class="btn btn-close" onclick="closeModal()">Close</button>
+</div>
+<div id="step2" class="step">
+<h3>💳 Pay First</h3>
+<div class="paybox">
+<b>Amount:</b> <span id="payAmount">R450+</span><br>
+<b>Pay to:</b> <span id="payAccountDisplay">1648002305</span> <button class="copybtn" onclick="copyPay()">COPY</button><br>
+<small>Ref: Name + Service</small><br><br>
+<b>1.</b> EFT / eWallet to <b id="payAcc2">1648002305</b><br>
+<b>2.</b> Screenshot proof<br>
+<b>3.</b> Click I HAVE PAID
+</div>
+<input id="mPayRef" class="minput" placeholder="Payment Ref / Proof note">
+<select id="mPayMethod" class="minput">
+<option>eWallet to 1648002305</option>
+<option>Capitec Send Cash</option>
+<option>Shoprite Money Transfer</option>
+<option>EFT Bank Transfer</option>
+<option>Cash on Arrival</option>
+</select>
+<button class="btn btn-orange" onclick="goStep3()">I HAVE PAID → WHATSAPP GROUP</button>
+<button class="btn btn-close" onclick="goStep1()">← Back</button>
+</div>
+<div id="step3" class="step">
+<h3>🚨 Alarm WhatsApp Group</h3>
+<div class="paybox" style="background:#E8F5E9;border-color:#25D366">
+<b>Will send to:</b><br>• Izandla Group<br>• Alarm: 0795100296<br>• Pay: 1648002305
+</div>
+<button class="btn btn-whatsapp" onclick="sendGroup()">💬 SEND TO IZANDLA GROUP</button>
+<button class="btn btn-blue" onclick="sendGroup()">📱 SEND TO 0795100296 + 1648002305</button>
+<button class="btn btn-close" onclick="closeModal()">Done</button>
+</div>
+</div>
+</div>
+<script>
+const PAY_ACCOUNT = "1648002305";
+const ALARM_NUMBER = "0795100296";
+const GROUP_LINK = "";
+let curService="";
+function openBook(s){
+curService=s;
+document.getElementById('mTitle').innerText="🧹 "+s;
+document.getElementById('mService').value=s;
+let amt="R450+";
+if(s.includes("R1500")) amt="R1500"; else if(s.includes("R1900")) amt="R1900"; else if(s.includes("R500")) amt="R500"; else if(s.includes("R300")) amt="R300 per class";
+document.getElementById('payAmount').innerText=amt;
+document.getElementById('payAccountDisplay').innerText=PAY_ACCOUNT;
+document.getElementById('payAcc2').innerText=PAY_ACCOUNT;
+document.getElementById('modal').classList.add('active');
+goStep1();
+}
+function closeModal(){document.getElementById('modal').classList.remove('active');}
+function goStep1(){hideSteps();document.getElementById('step1').classList.add('active');}
+function goStep2(){if(!document.getElementById('mAddress').value){alert('Enter Address + Date/Time');return;}hideSteps();document.getElementById('step2').classList.add('active');}
+function goStep3(){hideSteps();document.getElementById('step3').classList.add('active');}
+function hideSteps(){document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));}
+function copyPay(){navigator.clipboard.writeText(PAY_ACCOUNT);alert('Copied: '+PAY_ACCOUNT);}
+function sendGroup(){
+let addr=document.getElementById('mAddress').value;
+let name=document.getElementById('mName').value;
+let details=document.getElementById('mDetails').value;
+let payRef=document.getElementById('mPayRef').value;
+let payMethod=document.getElementById('mPayMethod').value;
+let msg=`*IZANDLA ONE - NEW JOB*%0A*Service:* ${curService}%0A*Address+Time:* ${addr}%0A*Client:* ${name}%0A*Details:* ${details}%0A*Payment:* ${payMethod} - Ref: ${payRef} - PAID to ${PAY_ACCOUNT}%0A_Pay check 1648002305_`;
+window.open(`https://wa.me/27795100296?text=${msg}`,'_blank');
+setTimeout(()=>{window.open(`https://wa.me/27648002305?text=${msg}`,'_blank');},700);
+if(GROUP_LINK){setTimeout(()=>{window.open(GROUP_LINK,'_blank');},1200);}
+alert('Sent to 0795100296 + 1648002305');
+closeModal();
+}
+</script>
+</body>
+  </html>
