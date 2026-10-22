@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>🤝 IZANDLA - Sky Blue + Hidden Admin + Driver 14 Codes</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+body{background:#f0f9ff;color:#0f172a}
+header{position:sticky;top:0;z-index:99;background:#0f172a;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #38bdf8}
+.logo{font-weight:900;font-size:19px;color:#fff;letter-spacing:-0.5px;cursor:pointer;user-select:none}
+.live-dot{width:8px;height:8px;background:#38bdf8;border-radius:50%;display:inline-block;animation:pulse 1s infinite;box-shadow:0 0 10px #38bdf8}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.5)}100%{transform:scale(1)}}
+.hero{padding:28px 20px 10px;background:linear-gradient(180deg,#fff,#f0f9ff)}
+.hero h1{font-size:40px;font-weight:900;line-height:0.9;letter-spacing:-2px;color:#0f172a}
+.hero h1 span{color:#0ea5e9}
+.hero p{color:#64748b;margin-top:10px;font-size:13px;font-weight:700}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:20px;background:#f0f9ff}
+.app-btn{background:#fff;border:1px solid #e0f2fe;border-radius:28px;padding:22px 16px;text-align:left;cursor:pointer;transition:all 0.2s;position:relative;box-shadow:0 4px 20px rgba(14,165,233,0.08)}
+.app-btn:active{transform:scale(0.96)}
+.app-btn h3{font-size:14px;font-weight:900;color:#0f172a}
+.app-btn p{font-size:11px;color:#64748b;margin-top:4px;font-weight:700}
+.app-btn .craving{position:absolute;top:12px;right:12px;background:#0f172a;color:#fff;font-size:9px;font-weight:900;padding:4px 10px;border-radius:20px}
+.app-btn.primary{grid-column:span 2;background:linear-gradient(135deg,#0ea5e9,#38bdf8);color:#fff;border:none;box-shadow:0 10px 30px rgba(14,165,233,0.3)}
+.app-btn.primary h3{color:#fff}.app-btn.primary p{color:#e0f2fe}
+.page{display:none;position:fixed;inset:0;z-index:100;background:#f0f9ff;overflow-y:auto;padding-bottom:120px}
+.page.active{display:block;animation:slideIn 0.35s cubic-bezier(0.16,1,0.3,1)}
+@keyframes slideIn{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.page-head{position:sticky;top:0;background:#0f172a;padding:14px 16px;display:flex;align-items:center;gap:12px;border-bottom:3px solid #38bdf8;z-index:10}
+.page-head h3{color:#fff;font-size:15px;font-weight:900;flex:1}
+.page-head button{width:36px;height:36px;border-radius:50%;border:none;background:#fff;color:#0f172a;font-weight:900;cursor:pointer;flex-shrink:0}
+.card{background:#fff;border:1px solid #e0f2fe;border-radius:22px;padding:18px;margin:12px 16px;box-shadow:0 4px 15px rgba(0,0,0,0.04)}
+.input{width:100%;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:14px;padding:14px;color:#0f172a;font-size:14px;margin-top:10px;outline:none;font-weight:700}
+.input:focus{border-color:#38bdf8}
+.btn-main{width:100%;padding:16px;border-radius:30px;border:none;font-weight:900;font-size:14px;cursor:pointer;margin-top:12px}
+.btn-white{background:#0f172a;color:#fff}.btn-gold{background:#38bdf8;color:#fff}.btn-dark{background:#fff;color:#0f172a;border:2px solid #0f172a}.btn-locked{opacity:0.3;pointer-events:none}
+.combo{background:#f8fafc;border:2px solid #e2e8f0;border-radius:20px;padding:14px;text-align:center;cursor:pointer}.combo.selected{border-color:#0ea5e9;background:#f0f9ff}.combo .price{font-size:22px;font-weight:900;color:#0f172a}
+.menu-item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #f1f5f9}
+.cart-bar{position:fixed;bottom:18px;left:16px;right:16px;background:#0f172a;color:#fff;border-radius:30px;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;font-weight:900;box-shadow:0 20px 40px rgba(15,23,42,0.3);z-index:50;cursor:pointer;border:2px solid #38bdf8}
+#map{height:300px;border-radius:22px;margin:12px 16px;border:2px solid #0f172a}
+.alarmOverlay{position:fixed;inset:0;background:linear-gradient(135deg,#ff0000,#0f172a);z-index:999;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:20px;animation:flash 0.3s infinite}
+@keyframes flash{0%{background:#ff0000}50%{background:#0f172a}}
+.driver-card{background:#fff;border-radius:20px;padding:16px;margin:10px 16px;border:2px solid #e0f2fe;border-left:5px solid #0ea5e9}
+.stop-btn{position:fixed;top:80px;right:16px;z-index:101;background:#ff0000;color:#fff;border:none;padding:10px 18px;border-radius:30px;font-weight:900;cursor:pointer;display:none}.stop-btn.show{display:block}
+.admin-badge{font-size:9px;background:#38bdf8;color:#fff;padding:3px 8px;border-radius:10px;font-weight:900;margin-left:6px}
+</style>
+</head>
+<body>
+
+<button id="globalStop" class="stop-btn" onclick="stopAlarm()">🔇 STOP ALARM X</button>
+
+<header>
+<div class="logo" id="logoTap">🤝 IZANDLA <span class="live-dot"></span> • SKY BLUE • Tap 7x = Admin</div>
+<div style="display:flex;gap:6px">
+<div style="font-size:11px;background:#fff;color:#0f172a;padding:6px 10px;border-radius:20px;font-weight:900" onclick="openPage('driverPage')">DRIVER • 14</div>
+<div style="font-size:11px;background:#38bdf8;color:#fff;padding:6px 10px;border-radius:20px;font-weight:900" onclick="openAdminLogin()">ADMIN 🔐</div>
+</div>
+</header>
+
+<section class="hero">
+<h1>Quality<br><span>That Shocks</span><br>The World.</h1>
+<p>R20 base + R5/km • Pay to 079 5100 296 • 0% commission • World-class alarm</p>
+</section>
+
+<div class="grid">
+  <div class="app-btn primary" onclick="openPage('cleaningPage')"><div class="craving">MOST TAPPED</div><div style="font-size:32px">🧹✨</div><h3>Cleaning Services First</h3><p>Spotless Homes • Combo • School & Res Discount • Vallet R600 • Sneakers</p></div>
+  <div class="app-btn" onclick="openPage('foodPage')"><div style="font-size:28px">🍔</div><h3>Food Delivery</h3><p>R20 base + R5/km • Izandla -R5 • 0% commission</p></div>
+  <div class="app-btn" onclick="openPage('ridePage')"><div class="craving">R20 + R5/km</div><div style="font-size:28px">🚗</div><h3>Request a Ride</h3><p>OpenStreetMap • Auto km</p></div>
+  <div class="app-btn" onclick="openPage('constructionPage')"><div style="font-size:28px">🔧</div><h3>Construction</h3><p>Plumber • Aircon • Waterproof</p></div>
+  <div class="app-btn" onclick="openPage('petrolPage')"><div style="font-size:28px">⛽</div><h3>Petrol 1-10L</h3><p>Nearest station auto</p></div>
+  <div class="app-btn" onclick="openPage('gasPage')"><div style="font-size:28px">🔥</div><h3>Gas Swap</h3><p>9kg to 48kg</p></div>
+  <div class="app-btn" onclick="openPage('doctorPage')"><div class="craving">LOUD</div><div style="font-size:28px">👨‍⚕️</div><h3>Request a Doctor</h3><p>Pay before ring</p></div>
+  <div class="app-btn" onclick="openPage('maintenancePage')"><div style="font-size:28px">🏗️</div><h3>Maintenance</h3><p>Tiling • Repairs</p></div>
+</div>
+
+<!-- HIDDEN ADMIN PAGE - PASSWORD - NOT VISIBLE -->
+<div id="adminPage" class="page" style="background:#0f172a">
+<div class="page-head"><button onclick="closePage('adminPage')">X</button><h3>🔐 Hidden Admin - Password Required - Not Visible</h3><button onclick="stopAlarm()" style="background:#ff0000;color:#fff;padding:6px 12px;border-radius:20px;font-size:11px">STOP ALARM X</button></div>
+
+<div id="adminLogin" class="card" style="background:#111;border-color:#333">
+<h3 style="color:#fff;font-weight:900">🔐 Admin & Store Login</h3>
+<p style="color:#888;font-size:11px;margin-top:6px">Super Admin: 0795100296 • PizzaHut: pizzahut123 • Fish: fish123 • Burger: burger123</p>
+<input id="adminPass" class="input" type="password" placeholder="Enter password" style="background:#000;color:#fff;border-color:#333">
+<button class="btn-main btn-gold" onclick="loginAdmin()">🔓 Unlock Hidden Admin</button>
+<p id="loginError" style="color:red;font-size:12px;margin-top:8px;display:none">Wrong password - Try 0795100296</p>
+</div>
+
+<div id="adminDashboard" style="display:none">
+<div class="
