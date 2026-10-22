@@ -257,38 +257,83 @@ let pickupLatLng=null, dropLatLng=null, autoKm=0, isRidePaid=false;
 let selectedLitres=0, isPetrolPaid=false, selectedGas=9, gasPrice=600, isGasPaid=false;
 let isDoctorPaid=false, isConstPaid=false, isMainPaid=false;
 let currentAdminStore='PizzaHut', adminFilter='all', adminRoleType='all';
+// REAL GEOCODING - TRUE KM FROM OSM - NOT FAKE LENGTH
+async function getCoords(address){
+ try{
+  const q = encodeURIComponent(address + ', Queensburgh, KZN, South Africa');
+  const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${q}&limit=1`, {headers:{'Accept':'application/json'}});
+  const data = await res.json();
+  if(data && data[0]) return {lat:parseFloat(data[0].lat), lon:parseFloat(data[0].lon)};
+ }catch(e){}
+ return null;
+}
+function haversine(lat1, lon1, lat2, lon2){
+ const R=6371;
+ const dLat=(lat2-lat1)*Math.PI/180;
+ const dLon=(lon2-lon1)*Math.PI/180;
+ const a=Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+ return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
 
-// FIXED AUTO KM - NOT ALWAYS R33
-function estimateFoodKm(){
- const addr=document.getElementById('fAddress').value.trim();
- if(addr.length>5){
-  let km = 2 + (addr.length % 10) + (addr.charCodeAt(0)%5);
-  km = Math.max(1, Math.min(15, km+Math.random()));
-  foodDeliveryKm=km;
-  updateCart();
- }
-}
-function estimateCleanKm(){
- const addr=document.getElementById('cAddress').value.trim();
- if(addr.length>5){
-  let km = 2 + (addr.length % 8) + 1;
-  autoKm=km;
-  const total=currentCleanPrice+20+km*5;
-  document.getElementById('cTotal').innerText=`R${currentCleanPrice} + R${(20+km*5).toFixed(0)} (R20+R5/km x ${km.toFixed(1)}km)=R${total.toFixed(0)}`;
- }
-}
-function autoKmFromStreets(){
+// FOR RIDE - 2 STREETS = REAL KM
+async function autoKmFromStreets(){
  const p=document.getElementById('rPickup').value.trim();
  const d=document.getElementById('rDrop').value.trim();
- if(p.length>3 && d.length>3){
-  let km=2 + ((p.length+d.length)%10) + ((p.charCodeAt(0)+d.charCodeAt(0))%4);
-  km=Math.max(1,Math.min(20,km+Math.random()));
+ if(p.length<3 || d.length<3) return;
+ document.getElementById('rKm').innerText='Calculating real km...';
+ document.getElementById('rPrice').innerText='Please wait...';
+ const c1=await getCoords(p);
+ const c2=await getCoords(d);
+ if(c1 && c2){
+  let km=haversine(c1.lat,c1.lon,c2.lat,c2.lon);
+  km=Math.max(0.8, km); // min 0.8km
   autoKm=km;
   const price=20+km*5;
-  document.getElementById('rKm').innerText=km.toFixed(1)+' km auto from streets';
+  document.getElementById('rKm').innerText=km.toFixed(1)+' km real (OSM map)';
+  document.getElementById('rPrice').innerText='R'+price.toFixed(0)+' (R20 base+R5/km x '+km.toFixed(1)+'km)';
+ }else{
+  // fallback if OSM can't find street - estimate small
+  let km=1.5 + ((p.length+d.length)%4);
+  autoKm=km;
+  const price=20+km*5;
+  document.getElementById('rKm').innerText=km.toFixed(1)+' km estimate (OSM not found, tap map)';
   document.getElementById('rPrice').innerText='R'+price.toFixed(0)+' (R20 base+R5/km x '+km.toFixed(1)+'km)';
  }
 }
+
+// FOR FOOD & CLEANING - 1 ADDRESS = DISTANCE FROM MALVERN CENTER
+async function estimateFoodKm(){
+ const addr=document.getElementById('fAddress').value.trim();
+ if(addr.length<5) return;
+ document.getElementById('fDeliveryFee').innerText='Calculating real km...';
+ const c=await getCoords(addr);
+ const center={lat:-29.8579, lon:30.9091}; // Queensburgh / Malvern center
+ if(c){
+  let km=haversine(center.lat,center.lon,c.lat,c.lon);
+  km=Math.max(1, Math.min(20, km));
+  foodDeliveryKm=km;
+  updateCart();
+ }else{
+  foodDeliveryKm=2.5 + (addr.length % 5);
+  updateCart();
+ }
+}
+async function estimateCleanKm(){
+ const addr=document.getElementById('cAddress').value.trim();
+ if(addr.length<5) return;
+ const c=await getCoords(addr);
+ const center={lat:-29.8579, lon:30.9091};
+ if(c){
+  let km=haversine(center.lat,center.lon,c.lat,c.lon);
+  km=Math.max(1, Math.min(20, km));
+  autoKm=km;
+  const total=currentCleanPrice+20+km*5;
+  document.getElementById('cTotal').innerText=`R${currentCleanPrice} + R${(20+km*5).toFixed(0)} (R20+R5/km x ${km.toFixed(1)}km)=R${total.toFixed(0)}`;
+ }else{
+  autoKm=2.5;
+  document.getElementById('cTotal').innerText=`R${currentCleanPrice} + R20 base + R5/km - Type full street`;
+ }
+  }
 function selectClean(el,name,price){document.querySelectorAll('#cleaningPage .combo').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');currentCleanName=name;currentCleanPrice=price;document.getElementById('cComboName').innerText=name;estimateCleanKm();}
 function verifyCleanPay(){const r=cPayRef.value; const shot=document.getElementById('cPayShot').files[0]; if(r.length<3){alert('Enter pay ref to 079 5100 296');return} if(!shot){alert('Upload payment screenshot first');return} isCleanPaid=true;cPayStatus.innerText='✅ PAID - Screenshot verified - '+r+' - '+autoKm.toFixed(1)+'km';cPayStatus.style.color='#0ea5e9';cWhatsBtn.classList.remove('btn-locked')}
 function payAndSendClean(){if(!isCleanPaid){alert('Upload screenshot + verify');return}const total=currentCleanPrice+20+autoKm*5;const msg=`🤝🏿 CLEANING PAID%0A${currentCleanName}%0ATotal R${total.toFixed(0)} (${autoKm.toFixed(1)}km x R5)%0AAddress: ${cAddress.value}%0AName: ${cName.value}%0APay to 079 5100 296 Ref: ${cPayRef.value}%0A✅ Screenshot attached`;addDriverOrderSilent(currentCleanName+` R${total.toFixed(0)}`,cAddress.value,cName.value);window.location.href=`https://wa.me/27795100296?text=${msg}`}
