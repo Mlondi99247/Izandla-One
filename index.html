@@ -387,4 +387,144 @@ document.getElementById('bDate').value=today;
 </script>
 <script src="https://js.paystack.co/v1/inline.js"></script>
 </body>
-                                                                                                                                                                                                                                                                                                                  </html>
+   <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🤝 Spotless Homes | Combo Deals | Izandla Zezulu</title>
+<link rel="icon" href="/icon-192.png">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+body{background:#0f0f0f;color:#fff;}
+header{background:#000;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;}
+header h1{font-weight:900;font-size:18px;}
+header a{background:#fff;color:#000;padding:8px 16px;border-radius:20px;font-weight:900;text-decoration:none;font-size:13px;}
+.hero{text-align:center;padding:40px 20px;background:radial-gradient(circle at top, #222, #000);}
+.hero h2{font-size:32px;font-weight:900;line-height:1.1;}
+.hero h2 span{color:gold;}
+.hero .badge{display:inline-block;margin-top:12px;background:#111;border:1px solid #333;padding:6px 14px;border-radius:20px;font-size:12px;color:#aaa;}
+.services{max-width:900px;margin:20px auto;padding:0 20px;}
+.services ul{list-style:none;background:#161616;border-radius:20px;padding:20px;border:1px solid #222;}
+.services li{padding:10px 0;border-bottom:1px solid #222;font-size:15px;}
+.services li:last-child{border:none;}
+.combos{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:900px;margin:25px auto;padding:0 20px;}
+.combo-card{background:linear-gradient(135deg,#1a1a1a,#000);border:2px solid #333;border-radius:22px;padding:20px;text-align:center;position:relative;}
+.combo-card.popular{border-color:gold;background:linear-gradient(135deg,#2a2210,#000);}
+.combo-card h3{font-size:20px;font-weight:900;}
+.combo-card .price{font-size:34px;font-weight:900;margin:10px 0;}
+.combo-card .price span{font-size:14px;color:#888;}
+.combo-card button{width:100%;padding:14px;background:#fff;color:#000;border:none;border-radius:30px;font-weight:900;cursor:pointer;margin-top:10px;}
+.combo-card.popular button{background:gold;}
+.form-box{max-width:600px;margin:30px auto;background:#fff;color:#111;border-radius:26px;padding:24px;position:relative;}
+.form-box h3{font-size:22px;font-weight:900;text-align:center;}
+.form-box input, .form-box textarea{width:100%;padding:14px;border-radius:12px;border:1.5px solid #ddd;margin-top:12px;font-size:15px;}
+.form-box button.send{width:100%;padding:16px;background:#000;color:#fff;border:none;border-radius:30px;font-weight:900;font-size:16px;margin-top:16px;cursor:pointer;}
+.closeX{position:absolute;top:14px;right:14px;background:#eee;border:none;width:32px;height:32px;border-radius:50%;font-weight:900;cursor:pointer;}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🤝 IZANDLA ZEZULU</h1>
+<a href="https://wa.me/27795100296">079 510 0296</a>
+</header>
+
+<section class="hero">
+<h2>✨️ Spotless Homes,<br>Happy Hearts <span>🤝</span></h2>
+<p style="margin-top:10px;color:#aaa;font-size:14px;">We don't just clean — we restore pride in your home. Quality costs, but spotless lasts.</p>
+<div class="badge">🤝 Direct Booking Only → WhatsApp 0795100296 • Pay to 1648002305</div>
+</section>
+
+<section class="services">
+<ul>
+<li>✨️ Deep House Cleaning - Bedrooms, Living Room, Kitchen, Bathroom</li>
+<li>✨️ Sneaker & Shoe Spa - Premium Wash + Polish (From R120)</li>
+<li>✨️ Window & Glass Sparkle Cleaning</li>
+<li>✨️ Oven, Fridge & Appliance Detail</li>
+<li>✨️ Laundry Wash, Iron & Fold (Quality Finish)</li>
+<li>✨️ Move-In / Move-Out Spotless Package</li>
+<li>✨️ Office & Shop Cleaning Priority</li>
+<li>🤝 Friendly Team • On Time • Quality Check • Empangeni & Surrounds</li>
+</ul>
+</section>
+
+<div class="combos">
+  <div class="combo-card">
+    <button class="closeX" onclick="this.parentElement.style.display='none'">X</button>
+    <div style="font-size:32px;">🔥</div>
+    <h3>COMBO R1500</h3>
+    <p style="color:#888;font-size:12px;">Spotless Home + Sneaker Wash</p>
+    <div class="price">R1500 <span>/ home</span></div>
+    <p style="font-size:12px;color:#aaa;">3 Bedrooms + Living + Kitchen + Bathroom + 2 Pairs Sneakers</p>
+    <button onclick="selectCombo('COMBO R1500','1500')">Select R1500 → Fill Form Below</button>
+  </div>
+
+  <div class="combo-card popular">
+    <button class="closeX" onclick="this.parentElement.style.display='none'">X</button>
+    <div style="font-size:32px;">🧹</div>
+    <h3>COMBO R1900 → Most Popular</h3>
+    <p style="color:#aaa;font-size:12px;">Full Spotless + Extras</p>
+    <div class="price">R1900 <span>/ home</span></div>
+    <p style="font-size:12px;color:#aaa;">4 Bedrooms + Full Deep + Windows + Oven + 3 Pairs Shoes + Deodorize</p>
+    <button onclick="selectCombo('COMBO R1900','1900')">Select R1900 → Fill Form Below</button>
+  </div>
+</div>
+
+<!-- MUST START HERE FORM - DIRECT TO WHATSAPP -->
+<div id="bookingSection" class="form-box">
+  <button class="closeX" onclick="closeForm()">X</button>
+  <h3>🧹 <span id="comboTitle">COMBO R1900 → WhatsApp 0795100296</span></h3>
+  <p style="text-align:center;color:#666;font-size:12px;margin-top:4px;">Direct to 0795100296 - Pay to 1648002305 • Must fill here first</p>
+  
+  <input id="fAddress" type="text" placeholder="Address + Date/Time *">
+  <input id="fName" type="text" placeholder="Name + Phone *">
+  <textarea id="fDetails" rows="3" placeholder="Details - How many rooms? Sneakers?"></textarea>
+
+  <div style="background:#f5f5f5;padding:12px;border-radius:12px;margin-top:14px;display:flex;justify-content:space-between;font-weight:900;">
+    <span>Total:</span><span id="fTotal">R1900</span>
+  </div>
+
+  <button class="send" onclick="sendToWhatsApp()">📲 SEND DIRECT TO WHATSAPP 0795100296</button>
+  <p style="text-align:center;margin-top:12px;font-size:12px;"><a href="#" onclick="closeForm()" style="color:#000;font-weight:bold;text-decoration:none;">Close X</a></p>
+  <p style="text-align:center;color:#999;font-size:10px;margin-top:10px;">You must start here → then we open WhatsApp 0795100296 automatically</p>
+</div>
+
+<footer style="text-align:center;padding:30px;color:#666;font-size:12px;">
+<p>🤝 IZANDLA ZEZULU • Spotless Homes</p>
+<p>WhatsApp: 079 510 0296 • Pay: 1648002305 • Empangeni</p>
+</footer>
+
+<script>
+let currentCombo='COMBO R1900';
+let currentPrice=1900;
+
+function selectCombo(title, price){
+  currentCombo=title;
+  currentPrice=price;
+  document.getElementById('comboTitle').innerText=title+' → WhatsApp 0795100296';
+  document.getElementById('fTotal').innerText='R'+price;
+  document.getElementById('bookingSection').style.display='block';
+  document.getElementById('bookingSection').scrollIntoView({behavior:'smooth'});
+}
+function closeForm(){
+  document.getElementById('bookingSection').style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function sendToWhatsApp(){
+  const address=document.getElementById('fAddress').value;
+  const name=document.getElementById('fName').value;
+  const details=document.getElementById('fDetails').value;
+  if(!address||!name){alert('Please fill Address + Date/Time and Name + Phone *');return;}
+  
+  const message=`🤝 NEW COMBO BOOKING - MUST START HERE%0A%0A${currentCombo}%0APrice: R${currentPrice}%0A%0AAddress + Date/Time: ${address}%0AName + Phone: ${name}%0ADetails: ${details}%0A%0ADirect to 0795100296%0APay to 1648002305%0AFrom: ndla-one.vercel.app/combo.html`;
+  
+  window.location.href=`https://wa.me/27795100296?text=${message}`;
+}
+
+// Auto select R1900 on load like screenshot
+window.onload=()=>{selectCombo('COMBO R1900','1900');}
+</script>
+
+</body>
+</html>                                                                                                                                                                                                                                                                                                               </html>
