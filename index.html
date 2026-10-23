@@ -94,7 +94,83 @@ header{position:sticky;top:0;z-index:50;background:linear-gradient(135deg,#0ea5e
 <div class="page-head"><button onclick="closePage('adminPage')">X</button><h3>Super Admin Mlondi99@1 - All Stores</h3><button onclick="stopAlarm()" style="background:#ff0000;color:#fff;padding:6px 10px;border-radius:20px;font-size:10px">STOP</button></div>
 <div id="adminLogin" class="card" style="background:#111;border-color:#222"><h3 style="color:#fff;font-weight:900">🔐 Super Admin Sign In</h3><input id="adminPass" class="input" type="password" placeholder="Mlondi99@1" style="background:#000;color:#fff"><button class="btn btn-sky" onclick="loginSuperAdmin()">Sign In All Stores</button><p id="adminLoginErr" style="color:red;font-size:11px;display:none;margin-top:6px">Wrong password</p></div>
 <div id="adminDash" style="display:none"><div class="card" style="background:linear-gradient(135deg,#0f172a,#0ea5e9);color:#fff;border:none"><h3>All Stores - <span id="adminRole">Super Admin</span> 🔔</h3><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px"><div style="background:rgba(255,255,255,0.15);padding:10px;border-radius:14px;text-align:center"><div id="totalOrders" style="font-size:20px;font-weight:900">0</div><div style="font-size:9px">Total</div></div><div style="background:rgba(34,197,94,0.3);padding:10px;border-radius:14px;text-align:center"><div id="successOrders" style="font-size:20px;font-weight:900">0</div><div style="font-size:9px">Finding Driver</div></div><div style="background:rgba(0,0,0,0.2);padding:10px;border-radius:14px;text-align:center"><div id="totalRevenue" style="font-size:20px;font-weight:900">R0</div><div style="font-size:9px">Revenue</div></div></div></div><div id="adminOrdersList"></div></div>
+</div><!-- ADMIN DRIVER ACCEPT / REJECT - ONLY YOU CONTROL -->
+<div class="card" style="border:3px solid #0f172a;background:#fff">
+<h3 style="font-weight:900">🚗 Driver Approvals - Only You Control - Accept / Reject</h3>
+<p style="font-size:11px">Drivers submit → pending here → you accept → active, you reject → disqualified</p>
+<div style="display:flex;gap:8px;margin:10px 0">
+<button class="btn btn-dark" onclick="loadPendingDrivers()" style="background:#0f172a">🔄 Refresh Pending</button>
+<button class="btn btn-dark" onclick="loadActiveDrivers()" style="background:#22c55e">✅ Active Drivers</button>
+<button class="btn btn-dark" onclick="loadRejectedDrivers()" style="background:#ef4444">❌ Rejected / Disqualified</button>
 </div>
+<div id="adminDriversList" style="max-height:500px;overflow-y:auto"></div>
+</div>
+
+<script>
+function loadPendingDrivers(){
+let pending=JSON.parse(localStorage.getItem('iz_pending_drivers')||'[]').filter(d=>d.status==='pending');
+let html='';
+if(pending.length===0) html='<div style="text-align:center;padding:20px;color:#94a3b8">No pending drivers - All cleared ✅</div>';
+pending.forEach(d=>{
+html+=`<div style="border:2px solid #f59e0b;border-radius:14px;padding:12px;margin-bottom:10px;background:#fef3c7">
+<div style="display:flex;justify-content:space-between;font-weight:900"><span>🚗 ${d.name} - ${d.id}</span><span style="color:orange">PENDING</span></div>
+<div style="font-size:11px;margin-top:6px">📞 ${d.phone} | 🪪 License: ${d.license} | 🎓 Learners: ${d.learners||'N/A'} | 🚙 Car: ${d.car||'N/A'} | 📅 ${d.date}</div>
+<div style="font-size:11px">Pics: ${d.licensePicName} | ${d.learnersPicName}</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+<button class="btn btn-dark" onclick="adminAcceptDriver('${d.id}')" style="background:#22c55e">✅ ACCEPT - Make Active</button>
+<button class="btn btn-dark" onclick="adminRejectPrompt('${d.id}')" style="background:#ef4444">❌ REJECT - Disqualify</button>
+</div>
+</div>`;
+});
+document.getElementById('adminDriversList').innerHTML=html;
+}
+function loadActiveDrivers(){
+let all=JSON.parse(localStorage.getItem('iz_all_drivers')||'[]').filter(d=>d.status==='active');
+let html=`<h4 style="font-weight:900;color:#22c55e">✅ Active Drivers: ${all.length}</h4>`;
+all.forEach(d=>{html+=`<div style="border:2px solid #22c55e;border-radius:12px;padding:8px;margin:5px 0;background:#f0fdf4;font-size:11px">✅ ${d.name} - ${d.license} - ${d.phone} - Active since ${d.date}</div>`});
+document.getElementById('adminDriversList').innerHTML=html;
+}
+function loadRejectedDrivers(){
+let all=JSON.parse(localStorage.getItem('iz_all_drivers')||'[]').filter(d=>d.status==='rejected');
+let html=`<h4 style="font-weight:900;color:#ef4444">❌ Rejected / Disqualified: ${all.length}</h4>`;
+all.forEach(d=>{html+=`<div style="border:2px solid #ef4444;border-radius:12px;padding:8px;margin:5px 0;background:#fef2f2;font-size:11px">❌ ${d.name} - ${d.license} - Reason: ${d.reason} - ${d.date}</div>`});
+document.getElementById('adminDriversList').innerHTML=html;
+}
+function adminAcceptDriver(id){
+let pending=JSON.parse(localStorage.getItem('iz_pending_drivers')||'[]');
+let all=JSON.parse(localStorage.getItem('iz_all_drivers')||'[]');
+pending=pending.filter(d=>d.id!==id);
+let driver=all.find(d=>d.id===id);
+if(driver){driver.status='active'; driver.approvedBy='admin'; driver.approvedAt=new Date().toLocaleString();}
+localStorage.setItem('iz_pending_drivers',JSON.stringify(pending));
+localStorage.setItem('iz_all_drivers',JSON.stringify(all));
+// Also add to real active drivers list if you have iz_drivers
+let active=JSON.parse(localStorage.getItem('iz_drivers')||'[]');
+if(!active.find(d=>d.id===id)) {active.push(driver); localStorage.setItem('iz_drivers',JSON.stringify(active));}
+alert('✅ Driver '+id+' ACCEPTED - Now Active - Can take trips');
+loadPendingDrivers();
+}
+function adminRejectPrompt(id){
+let reason=prompt('Why reject? Example: Wrong learners - Expired license - Fake picture - License not clear');
+if(!reason) return;
+adminRejectDriver(id,reason);
+}
+function adminRejectDriver(id,reason){
+let pending=JSON.parse(localStorage.getItem('iz_pending_drivers')||'[]');
+let all=JSON.parse(localStorage.getItem('iz_all_drivers')||'[]');
+pending=pending.filter(d=>d.id!==id);
+let driver=all.find(d=>d.id===id);
+if(driver){driver.status='rejected'; driver.reason=reason; driver.rejectedAt=new Date().toLocaleString();}
+localStorage.setItem('iz_pending_drivers',JSON.stringify(pending));
+localStorage.setItem('iz_all_drivers',JSON.stringify(all));
+alert('❌ Driver '+id+' REJECTED - Disqualified - Reason: '+reason);
+loadPendingDrivers();
+}
+// Auto load pending when admin opens
+if(document.getElementById('adminDriversList')){
+setTimeout(()=>{loadPendingDrivers();}, 800);
+}
+</script>
 
 <!-- STORE PAGES - EACH STORE HAS OWN DASHBOARD -->
 <div id="storePizzaHutPage" class="page"><div class="page-head"><button onclick="closePage('storePizzaHutPage')">X</button><h3>🍕 PizzaHut Dashboard - Malvern Main Road 60</h3></div>
