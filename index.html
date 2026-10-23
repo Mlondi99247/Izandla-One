@@ -126,7 +126,53 @@ header{position:sticky;top:0;z-index:50;background:linear-gradient(135deg,#0ea5e
 <div id="pedrosDash" style="display:none"><div class="card" style="background:linear-gradient(135deg,#0f172a,#0ea5e9);color:#fff;border:none"><h3>Pedro's Bizana - Today Orders 🔔</h3></div><div id="pedrosOrders"></div><div class="card"><div id="pedrosMenuList"></div><div style="display:flex;gap:6px;margin-top:8px"><input id="pedrosItemName" class="input" placeholder="New item" style="flex:2"><input id="pedrosItemPrice" class="input" type="number" placeholder="R" style="flex:1"></div><button class="btn btn-dark" onclick="addStoreMenu('Pedros')">Add</button></div></div></div>
 
 <!-- DRIVER -->
-<div id="driverPage" class="page"><div class="page-head"><button onclick="closePage('driverPage')">X</button><h3>🚗 Driver Dashboard - Finding a driver → Delivered = Successful</h3><button onclick="stopAlarm()" style="background:#ff0000;color:#fff;padding:6px 10px;border-radius:20px;font-size:10px">STOP</button></div><div id="driverOrders"></div><div class="card"><h3 style="font-weight:900">Driver Sign Up - 14 max</h3><input id="drName" class="input" placeholder="Full Name"><input id="drPhone" class="input" placeholder="Phone"><input id="drCode" class="input" placeholder="Code 1-14"><div class="upload"><input type="file" id="docID" accept="image/*"><div id="idPreview" style="font-size:10px"></div></div><button class="btn btn-dark" onclick="registerDriver()">Submit</button></div><div id="driverList" class="card"></div></div>
+<div id="driverPage" class="page"><div class="page-head"><button onclick="closePage('driverPage')">X</button><h3>🚗 Driver Dashboard - Finding a driver → Delivered = Successful</h3><button onclick="stopAlarm()" style="background:#ff0000;color:#fff;padding:6px 10px;border-radius:20px;font-size:10px">STOP</button></div><div id="driverOrders"></div><div class="card"><h3 style="font-weight:900">Driver Sign Up - 14 max</h3><input id="drName" class="input" placeholder="Full Name"><input id="drPhone" class="input" placeholder="Phone"><input id="drCode" class="input" placeholder="Code 1-14"><div class="upload"><input type="file" id="docID" accept="image/*"><div id="idPreview" style="font-size:10px"></div></div><button class="btn btn-dark" onclick="registerDriver()">Submit</button></div><div id="driverList" class="card"></div></div><!-- DRIVER PENDING LOGIC - ADD UNDER DRIVER FORM -->
+<script>
+function submitDriverForApproval(){
+let name=document.getElementById('driverName')?.value.trim()||document.getElementById('dName')?.value.trim();
+let phone=document.getElementById('driverPhone')?.value.trim()||document.getElementById('dPhone')?.value.trim();
+let license=document.getElementById('driverLicense')?.value.trim()||document.getElementById('dLicense')?.value.trim();
+let learners=document.getElementById('driverLearners')?.value.trim()||'';
+let car=document.getElementById('driverCar')?.value.trim()||document.getElementById('dCar')?.value.trim();
+let licPic=document.getElementById('driverLicensePic')?.files[0];
+let learnersPic=document.getElementById('driverLearnersPic')?.files[0];
+
+if(!name||!phone||!license){alert('Fill Name + Phone + License'); return;}
+if(!licPic){alert('Upload License picture - Must show license'); return;}
+
+let driverData={
+id:'D'+Date.now().toString().slice(-6),
+name:name,
+phone:phone,
+license:license,
+learners:learners,
+car:car,
+status:'pending', // PENDING - WAITING FOR YOUR ACCEPT
+reason:'',
+date:new Date().toLocaleString(),
+licensePicName:licPic?licPic.name:'',
+learnersPicName:learnersPic?learnersPic.name:''
+};
+
+let pending=JSON.parse(localStorage.getItem('iz_pending_drivers')||'[]');
+pending.push(driverData);
+localStorage.setItem('iz_pending_drivers',JSON.stringify(pending));
+
+// Also keep in all drivers list as pending
+let all=JSON.parse(localStorage.getItem('iz_all_drivers')||'[]');
+all.push(driverData);
+localStorage.setItem('iz_all_drivers',JSON.stringify(all));
+
+alert('✅ Submitted - Waiting for Admin Approval - You will be active after admin accepts - If wrong learners/license admin will reject');
+if(typeof closePage==='function') closePage('driverPage');
+if(typeof openPage==='function') openPage('driverPendingPage');
+document.getElementById('pendingMsg').innerHTML=`Driver ${name} ${license} submitted - Status: <b style="color:orange">PENDING APPROVAL</b> - Admin will accept/reject`;
+}
+</script>
+
+<!-- PENDING PAGE FOR DRIVER AFTER SUBMIT -->
+<div id="driverPendingPage" class="page"><div class="page-head"><button onclick="closePage('driverPendingPage')">X</button><h3>🚗 Driver Pending Approval</h3></div>
+<div class="card" style="background:linear-gradient(135deg,#0f172a,#f59e0b);color:#fff;text-align:center"><div style="font-size:40px">⏳</div><h3 id="pendingMsg">Waiting for admin...</h3><p style="font-size:11px">Admin checks license + learners - If wrong, rejected + disqualified - You control</p></div></div>
 
 <!-- CLEANING WORLD CLASS -->
 <div id="cleaningPage" class="page">
