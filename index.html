@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+⁶<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -571,114 +571,44 @@ window.addEventListener('load',()=>{renderNews(); renderFoodMenu(); renderAllOrd
 <div style="background:#fef3c7;border-radius:12px;padding:10px;display:flex;justify-content:space-between;font-weight:900;margin-bottom:8px"><span>Distance:</span><span id="checkoutKm">0 km</span></div>
 <div style="background:#22c55e;color:#fff;border-radius:12px;padding:12px;display:flex;justify-content:space-between;font-weight:900;font-size:18px;margin-bottom:10px"><span>Total Pay:</span><span id="checkoutTotal">R0</span></div>
 <input id="partnerNameCheckout" class="input" placeholder="Both Names + Phones *">
-<div class="upload"><p style="font-size:11px;font-weight:900">📸 Payment Screenshot * MUST SHOW R AMOUNT - Account 1648002305 - Amount <span id="must
-<!-- FIX DRIVER SHOW IN SUPER ADMIN - PASTE JUST BEFORE </body> -->
-<script>
-// OVERRIDE DRIVER SUBMIT - FORCE PENDING
-function forcePendingDriver(){
-let name=document.querySelector('#driverName, #dName, [id*="driver"][id*="Name"]')?.value.trim();
-let phone=document.querySelector('#driverPhone, #dPhone, [id*="driver"][id*="Phone"]')?.value.trim();
-let license=document.querySelector('#driverLicense, #dLicense, [id*="License"]')?.value.trim()||'LICENSE-'+Date.now();
-let car=document.querySelector('#driverCar, #dCar, [id*="Car"]')?.value.trim()||'';
-if(!name || !phone){ alert('Fill Name + Phone + License - Admin needs to see'); return;}
+<div class="upload"><p style="font-size:11px;font-weight:900">📸 Payment Screenshot * MUST SHOW R AMOUNT - Account 1648002305 - Amount <span id="mustfunction forcePendingDriver(){
+let name=document.querySelector('#driverName, #dName, [id*="driver"][id*="Name"], input[placeholder*="Name"]')?.value.trim();
+let phone=document.querySelector('#driverPhone, #dPhone, [id*="driver"][id*="Phone"], input[placeholder*="Phone"]')?.value.trim();
+let license=document.querySelector('#driverLicense, #dLicense, [id*="License"]')?.value.trim()||'LICENSE';
+let car=document.querySelector('#driverCar, #dCar')?.value.trim()||'';
+if(!name||!phone){alert('Fill Name + Phone'); return;}
 let d={
 id:'D'+Date.now().toString().slice(-6),
 name:name, phone:phone, license:license, car:car,
-status:'pending', reason:'', date:new Date().toLocaleString(),
-licensePic:'uploaded', learnersPic:'uploaded'
+status:'pending', date:new Date().toLocaleString()
 };
+// Save on driver phone too
 let pending=JSON.parse(localStorage.getItem('iz_pending_drivers')||'[]');
 pending.push(d); localStorage.setItem('iz_pending_drivers',JSON.stringify(pending));
-let all=JSON.parse(localStorage.getItem('iz_all_drivers')||'[]');
-all.push(d); localStorage.setItem('iz_all_drivers',JSON.stringify(all));
 localStorage.setItem('iz_last_driver_submit',JSON.stringify(d));
-alert('✅ Driver '+name+' submitted - Now check Super Admin - Will show for accept/reject');
-console.log('Driver pending saved', d);
-location.reload();
+
+// CREATE APPROVAL LINK FOR YOU - ADMIN
+let dataStr=btoa(JSON.stringify(d)); // encode
+let approveLink=`https://izandla-one.vercel.app/?approveDriver=${dataStr}#adminDriverInject`;
+let waMsg=`🚗 NEW DRIVER SUBMIT - WAITING APPROVAL%0AName: ${name}%0APhone: ${phone}%0ALicense: ${license}%0ACar: ${car}%0AID: ${d.id}%0A%0A👉 ADMIN CLICK TO ADD TO PENDING: ${approveLink}%0A%0AIf license wrong, you reject/disqualify`;
+
+window.open(`https://wa.me/27795100296?text=${waMsg}`,'_blank');
+alert('✅ Submitted - Approval request sent to Admin - Admin must click link you sent to make you appear in pending');
 }
-// Hijack all possible submit buttons
-setTimeout(()=>{
-document.querySelectorAll('button').forEach(b=>{
-if(b.innerText.toLowerCase().includes('submit') && b.innerText.toLowerCase().includes('driver') || b.innerText.toLowerCase().includes('become')){
-b.onclick=null; b.setAttribute('onclick','forcePendingDriver()');
+
+// WHEN ADMIN CLICKS APPROVAL LINK - ADD TO HIS PHONE
+window.addEventListener('load',()=>{
+let params=new URLSearchParams(window.location.search);
+let approve=params.get('approveDriver');
+if(approve){
+try{
+let d=JSON.parse(atob(approve));
+let pending=JSON.parse(localStorage.getItem('iz_pending_drivers')||'[]');
+if(!pending.find(x=>x.id===d.id)){ pending.push(d); localStorage.setItem('iz_pending_drivers',JSON.stringify(pending));}
+let all=JSON.parse(localStorage.getItem('iz_all_drivers')||'[]');
+if(!all.find(x=>x.id===d.id)){ all.push(d); localStorage.setItem('iz_all_drivers',JSON.stringify(all));}
+alert('✅ Driver '+d.name+' added to your pending - Now you can Accept/Reject');
+setTimeout(()=>{if(typeof showPending==='function') showPending();},1000);
+}catch(e){console.log(e);}
 }
 });
-},1000);
-
-// INJECT ACCEPT/REJECT INSIDE SUPER ADMIN MLONDI PAGE
-function injectAdminApproval(){
-let adminHeader=document.body.innerHTML.includes('Super Admin Mlondi');
-if(!adminHeader) return;
-if(document.getElementById('adminDriverInject')) return;
-let target=document.querySelector('.card')?.parentElement || document.body;
-let div=document.createElement('div');
-div.id='adminDriverInject';
-div.innerHTML=`
-<div style="background:#fff;border:4px solid #0f172a;border-radius:18px;padding:14px;margin:12px;">
-<h3 style="font-weight:900;color:#0f172a">🚗 Driver Approvals - YOU CONTROL - Accept / Reject</h3>
-<p style="font-size:11px">If wrong learners/license - Reject + Disqualify - Only you make active</p>
-<div style="display:flex;gap:6px;margin:8px 0">
-<button onclick="showPending()" style="background:#0f172a;color:#fff;border:none;border-radius:10px;padding:10px;font-weight:900">🔄 Pending</button>
-<button onclick="showActive()" style="background:#22c55e;color:#fff;border:none;border-radius:10px;padding:10px;font-weight:900">✅ Active</button>
-<button onclick="showRejected()" style="background:#ef4444;color:#fff;border:none;border-radius:10px;padding:10px;font-weight:900">❌ Rejected</button>
-</div>
-<div id="adminDriversList" style="max-height:600px;overflow-y:auto;background:#f8fafc;border-radius:12px;padding:8px"></div>
-</div>`;
-let superAdminTitle=document.evaluate("//*[contains(text(),'All Stores - Super Admin')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-if(superAdminTitle){ superAdminTitle.parentElement.parentElement.insertBefore(div, superAdminTitle.parentElement.nextSibling); } else { document.body.prepend(div); }
-showPending();
-}
-function showPending(){
-let pending=JSON.parse(localStorage.getItem('iz_pending_drivers')||'[]').filter(d=>d.status==='pending');
-let last=JSON.parse(localStorage.getItem('iz_last_driver_submit')||'null');
-let html='';
-if(last && !pending.find(d=>d.id===last.id)){ pending.unshift(last); }
-if(pending.length===0){ html='<div style="text-align:center;padding:20px">No pending drivers - Ask driver to submit again - Check if domain is izandla-one.vercel.app not ndla-one</div>';}
-else{ pending.forEach(d=>{
-html+=`<div style="border:2px solid #f59e0b;border-radius:12px;padding:10px;margin-bottom:8px;background:#fef3c7">
-<b>🚗 ${d.name} - ${d.id}</b><br>
-<span style="font-size:11px">📞 ${d.phone} | 🪪 ${d.license} | 🚙 ${d.car} | ${d.date}</span><br>
-<div style="display:flex;gap:6px;margin-top:8px">
-<button onclick="acceptDriver('${d.id}')" style="flex:1;background:#22c55e;color:#fff;border:none;border-radius:10px;padding:12px;font-weight:900">✅ ACCEPT</button>
-<button onclick="rejectDriver('${d.id}')" style="flex:1;background:#ef4444;color:#fff;border:none;border-radius:10px;padding:12px;font-weight:900">❌ REJECT</button>
-</div></div>`;
-});}
-document.getElementById('adminDriversList').innerHTML=html;
-}
-function showActive(){
-let all=JSON.parse(localStorage.getItem('iz_all_drivers')||'[]').filter(d=>d.status==='active');
-let html=`<b>✅ Active: ${all.length}</b><br>`; all.forEach(d=>{html+=`<div style="border:2px solid #22c55e;border-radius:10px;padding:6px;margin:4px 0;background:#f0fdf4;font-size:11px">✅ ${d.name} - ${d.license} - ${d.phone}</div>`});
-document.getElementById('adminDriversList').innerHTML=html;
-}
-function showRejected(){
-let all=JSON.parse(localStorage.getItem('iz_all_drivers')||'[]').filter(d=>d.status==='rejected');
-let html=`<b>❌ Rejected: ${all.length}</b><br>`; all.forEach(d=>{html+=`<div style="border:2px solid #ef4444;border-radius:10px;padding:6px;margin:4px 0;background:#fef2f2;font-size:11px">❌ ${d.name} - ${d.reason}</div>`});
-document.getElementById('adminDriversList').innerHTML=html;
-}
-function acceptDriver(id){
-let pending=JSON.parse(localStorage.getItem('iz_pending_drivers')||'[]');
-let all=JSON.parse(localStorage.getItem('iz_all_drivers')||'[]');
-pending=pending.filter(d=>d.id!==id);
-let d=all.find(x=>x.id===id); if(d){d.status='active';}
-localStorage.setItem('iz_pending_drivers',JSON.stringify(pending));
-localStorage.setItem('iz_all_drivers',JSON.stringify(all));
-let active=JSON.parse(localStorage.getItem('iz_drivers')||'[]');
-if(d && !active.find(x=>x.id===id)){ active.push(d); localStorage.setItem('iz_drivers',JSON.stringify(active));}
-alert('✅ ACCEPTED '+id+' - Now Active');
-showPending();
-}
-function rejectDriver(id){
-let reason=prompt('Why reject? e.g. Wrong learners, Expired license, Fake picture');
-if(!reason) return;
-let pending=JSON.parse(localStorage.getItem('iz_pending_drivers')||'[]');
-let all=JSON.parse(localStorage.getItem('iz_all_drivers')||'[]');
-pending=pending.filter(d=>d.id!==id);
-let d=all.find(x=>x.id===id); if(d){d.status='rejected'; d.reason=reason;}
-localStorage.setItem('iz_pending_drivers',JSON.stringify(pending));
-localStorage.setItem('iz_all_drivers',JSON.stringify(all));
-alert('❌ REJECTED '+id+' - Disqualified: '+reason);
-showPending();
-}
-setInterval(injectAdminApproval,1500);
-window.addEventListener('load',()=>{setTimeout(injectAdminApproval,2000);});
-</script>
