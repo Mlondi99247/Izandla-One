@@ -405,8 +405,8 @@ window.addEventListener('load',()=>{renderNews(); renderFoodMenu(); renderAllOrd
 
 </script>
 </body>
-  </html>
-<!-- 4 NEW WORLD CLASS BUTTONS - FIXED LINK AUTO PUT CODE -->
+  </html> 
+<!-- 4 NEW WORLD CLASS BUTTONS - FIXED LINK izandla-one.vercel.app -->
 <div class="grid" style="margin-top:8px">
 <div class="sky-btn" onclick="openPage('petrolPage')" style="background:linear-gradient(135deg,#fff 0%,#fef3c7 100%)"><div class="tag" style="background:#f59e0b">⛽ NEW</div><div style="font-size:28px">⛽</div><h3>Request Petrol</h3><p>1L to 10L gage - Extra ordinary - Find nearest driver + station</p></div>
 <div class="sky-btn" onclick="openPage('gasPage')" style="background:linear-gradient(135deg,#fff 0%,#dbeafe 100%)"><div class="tag" style="background:#0ea5e9">🔥 NEW</div><div style="font-size:28px">🔥</div><h3>Gas Swap</h3><p>9kg to 48kg</p></div>
@@ -428,7 +428,7 @@ let petrolLitres=5, petrolPricePerLitre=23; function selectPetrol(l){petrolLitre
 let gasKg=9, gasPrice=350; function selectGas(el,kg,price){document.querySelectorAll('#gasPage .combo').forEach(c=>c.classList.remove('selected')); el.classList.add('selected'); gasKg=kg; gasPrice=price; document.getElementById('gasSummary').innerText=kg+'kg Gas'; document.getElementById('gasTotal').innerText='R'+(price+calcPrice(autoKm||2)).toFixed(0);} function requestGas(){let total=gasPrice+calcPrice(autoKm||2); let msg=`GAS PAID ${gasKg}kg R${total.toFixed(0)} Address ${gasAddress.value} Name ${gasName.value} Ref ${gasPay.value}`; addOrder(`Gas ${gasKg}kg R${total.toFixed(0)}`,gasAddress.value,gasName.value,'General'); window.location.href=`https://wa.me/27795100296?text=${msg}`;}
 let massageType='Swedish 60min', massagePrice=400; function selectMassage(el,type,price){document.querySelectorAll('#massagePage .combo').forEach(c=>c.classList.remove('selected')); el.classList.add('selected'); massageType=type; massagePrice=price; document.getElementById('massageSummary').innerText=type; document.getElementById('massageTotal').innerText='R'+price;} function requestMassage(){let msg=`MASSAGE PAID ${massageType} R${massagePrice} Address ${massageAddress.value} Name ${massageName.value} Pref ${massagePref.value} Ref ${massagePay.value}`; addOrder(`Massage ${massageType} R${massagePrice}`,massageAddress.value,massageName.value,'General'); window.location.href=`https://wa.me/27795100296?text=${msg}`;}
 
-// PARTNER FIXED - LINK AUTO PUT CODE + AUTO ACCEPT
+// PARTNER FIXED - CORRECT LINK izandla-one.vercel.app - AUTO PUT CODE + AUTO ACCEPT
 let partnerAccepted={me:false,partner:false}, partnerCodeGen='', partnerData={};
 function sendPartnerInvite(){
 let myName=document.getElementById('partnerMyName').value.trim(), theirNum=document.getElementById('partnerTheirNumber').value.trim(), loc=document.getElementById('partnerLocation').value.trim(), date=document.getElementById('partnerDate').value.trim();
@@ -439,7 +439,7 @@ localStorage.setItem('iz_partner_code',partnerCodeGen);
 localStorage.setItem('iz_partner_data',JSON.stringify(partnerData));
 document.getElementById('partnerStep1').style.display='none';
 document.getElementById('partnerStep2').style.display='block';
-let deepLink=`https://ndla-one.vercel.app/?code=${partnerCodeGen}&accept=partner#partnerPage`;
+let deepLink=`https://izandla-one.vercel.app/?code=${partnerCodeGen}&accept=partner#partnerPage`;
 let waMsg=`💑 Izandla One Partner Request ✨%0A${myName} requests you as partner%0APickup: ${loc}%0ADate: ${date}%0AYour code: ${partnerCodeGen}%0A👉 CLICK TO ACCEPT DIRECT: ${deepLink}%0ACode auto put - Just click Accept%0AQuality uplifts the world🦄`;
 window.open(`https://wa.me/${theirNum.replace(/[^0-9]/g,'')}?text=${waMsg}`,'_blank');
 }
@@ -451,7 +451,7 @@ if(partnerAccepted.me && partnerAccepted.partner){document.getElementById('bothA
 function verifyPartnerPay(){let payFile=document.getElementById('partnerPayShot').files[0], picFile=document.getElementById('partnerPic').files[0], ref=document.getElementById('partnerPayRef').value.trim(); if(!payFile){alert('Upload payment screenshot'); return;} if(!picFile){alert('Upload partner picture verify human'); return;} if(ref.length<6){alert('Ref must include amount'); return;} document.getElementById('partnerWhats').style.opacity='1'; document.getElementById('partnerWhats').style.pointerEvents='auto';}
 function requestPartnerDriver(){let msg=`PARTNER PAID BOTH ACCEPTED 💑 Location ${partnerLocation.value} Date ${partnerDate.value} Names ${partnerNameCheckout.value} Ref ${partnerPayRef.value} Account 1648002305 Human verified`; addOrder(`Partner Pickup ${partnerLocation.value} R400`,partnerLocation.value,partnerNameCheckout.value||partnerMyName.value,'General'); window.location.href=`https://wa.me/27795100296?text=${msg}`;}
 
-// AUTO PUT CODE + AUTO ACCEPT WHEN LINK CLICKED
+// AUTO PUT CODE + AUTO ACCEPT WHEN LINK CLICKED - CORRECT DOMAIN
 window.addEventListener('load',()=>{
 let params=new URLSearchParams(window.location.search);
 let code=params.get('code');
@@ -470,4 +470,4 @@ setTimeout(()=>{ acceptPartner('partner'); }, 800);
 }, 700);
 }
 });
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </script>
+                                                                                                                                         </script>  
