@@ -406,145 +406,68 @@ window.addEventListener('load',()=>{renderNews(); renderFoodMenu(); renderAllOrd
 </script>
 </body>
   </html>
-<!-- 4 NEW WORLD CLASS BUTTONS - PASTE BELOW STORE APPS CARD -->
+<!-- 4 NEW WORLD CLASS BUTTONS - FIXED LINK AUTO PUT CODE -->
 <div class="grid" style="margin-top:8px">
-<div class="sky-btn" onclick="openPage('petrolPage')" style="background:linear-gradient(135deg,#fff 0%,#fef3c7 100%)"><div class="tag" style="background:#f59e0b">⛽ NEW</div><div style="font-size:28px">⛽</div><h3>Request Petrol</h3><p>1L to 10L gage - Extra ordinary look - Find nearest driver + petrol station driver collect and come back</p></div>
-<div class="sky-btn" onclick="openPage('gasPage')" style="background:linear-gradient(135deg,#fff 0%,#dbeafe 100%)"><div class="tag" style="background:#0ea5e9">🔥 NEW</div><div style="font-size:28px">🔥</div><h3>Gas Swap</h3><p>9kg to 48kg - 9,14,19,48 kg swap - Driver delivers</p></div>
-<div class="sky-btn" onclick="openPage('massagePage')" style="background:linear-gradient(135deg,#fff 0%,#fce7f3 100%)"><div class="tag" style="background:#ec4899">💆 NEW</div><div style="font-size:28px">💆</div><h3>Request a Massage</h3><p>Workflow straight to WhatsApp for massage - Spa at home</p></div>
-<div class="sky-btn" onclick="openPage('partnerPage')" style="background:linear-gradient(135deg,#0f172a 0%,#ec4899 80%,#fff 100%);border:2px solid #fff"><div class="tag" style="background:#fff;color:#ec4899">❤️ NEW</div><div style="font-size:28px">💑</div><h3 style="color:#fff">Request a Partner</h3><p style="color:#fff;font-weight:700">So attractive - WhatsApp to partner - Both accept - Verify human picture - Driver pickup</p></div>
+<div class="sky-btn" onclick="openPage('petrolPage')" style="background:linear-gradient(135deg,#fff 0%,#fef3c7 100%)"><div class="tag" style="background:#f59e0b">⛽ NEW</div><div style="font-size:28px">⛽</div><h3>Request Petrol</h3><p>1L to 10L gage - Extra ordinary - Find nearest driver + station</p></div>
+<div class="sky-btn" onclick="openPage('gasPage')" style="background:linear-gradient(135deg,#fff 0%,#dbeafe 100%)"><div class="tag" style="background:#0ea5e9">🔥 NEW</div><div style="font-size:28px">🔥</div><h3>Gas Swap</h3><p>9kg to 48kg</p></div>
+<div class="sky-btn" onclick="openPage('massagePage')" style="background:linear-gradient(135deg,#fff 0%,#fce7f3 100%)"><div class="tag" style="background:#ec4899">💆 NEW</div><div style="font-size:28px">💆</div><h3>Request a Massage</h3><p>Straight to WhatsApp</p></div>
+<div class="sky-btn" onclick="openPage('partnerPage')" style="background:linear-gradient(135deg,#0f172a 0%,#ec4899 80%,#fff 100%);border:2px solid #fff"><div class="tag" style="background:#fff;color:#ec4899">❤️ NEW</div><div style="font-size:28px">💑</div><h3 style="color:#fff">Request a Partner</h3><p style="color:#fff;font-weight:700">WhatsApp + Both Accept + Verify human + Driver pickup - FIXED LINK</p></div>
 </div>
 
-<!-- PETROL PAGE - 1L TO 10L GAGE WORLD CLASS -->
-<div id="petrolPage" class="page">
-<div class="page-head"><button onclick="closePage('petrolPage')">X</button><h3>⛽ Request Petrol - 1L to 10L Gage - Find Nearest</h3></div>
-<div class="card" style="background:linear-gradient(135deg,#0f172a,#f59e0b);color:#fff;border:none;text-align:center">
-<div style="width:120px;height:120px;border-radius:50%;border:6px solid #fff;margin:0 auto;position:relative;background:conic-gradient(#f59e0b 0deg, #fff 0deg);display:flex;align-items:center;justify-content:center" id="petrolGauge"><div style="background:#0f172a;width:90px;height:90px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center"><div id="petrolLitres" style="font-size:28px;font-weight:900">5L</div><div id="petrolPriceGauge" style="font-size:12px;font-weight:900;color:#f59e0b">R115</div></div></div>
-<h3 style="margin-top:10px;font-weight:900">Extra Ordinary Gage - Slide 1L to 10L</h3>
-<input type="range" id="petrolRange" min="1" max="10" value="5" step="1" style="width:100%;margin-top:12px;accent-color:#f59e0b" oninput="selectPetrol(this.value)">
-<div style="display:flex;justify-content:space-between;font-size:10px;margin-top:4px"><span>1L</span><span>5L</span><span>10L</span></div>
-</div>
-<div class="card">
-<h3 style="font-weight:900">Easy Setup Workflow</h3>
-<input id="petrolAddress" class="input" placeholder="Your Location * - Where car stuck - Auto finds nearest station">
-<input id="petrolCar" class="input" placeholder="Car Details - e.g. Red Toyota Corolla">
-<input id="petrolName" class="input" placeholder="Name + Phone * - Must match transaction">
-<div style="background:#fef3c7;border-radius:14px;padding:10px;margin-top:10px">
-<div style="display:flex;justify-content:space-between;font-weight:900"><span>Nearest Station</span><span id="petrolStation">Finding... Engen Malvern 1.2km</span></div>
-<div style="display:flex;justify-content:space-between;font-weight:900;margin-top:4px"><span>Nearest Driver</span><span id="petrolDriver">Driver 07 - 0.8km - Available</span></div>
-<div style="display:flex;justify-content:space-between;font-weight:900;margin-top:8px;border-top:1px solid #f59e0b;padding-top:8px"><span id="petrolSummary">5L Petrol</span><span id="petrolTotal">R115 + R20 base + R5/km</span></div>
-<p style="font-size:9px;color:#92400e;margin-top:4px">Driver will go and collect petrol ⛽️ and come back - R23 per litre + delivery R20 base + R5/km >20km R20+R8/km same as ride</p>
-</div>
-<div class="upload"><p style="font-size:11px;font-weight:900">📸 Screenshot * Must match amount - Account 1648002305 / 079 5100 296</p><input type="file" id="petrolShot" accept="image/*" onchange="previewPay(this,'petrolShotPreview')"><div id="petrolShotPreview" style="font-size:10px"></div></div>
-<input id="petrolPay" class="input" placeholder="Pay Ref must include amount + name - R115 John" style="border-color:#f59e0b">
-<button class="btn btn-sky" onclick="verifyGeneric('petrolPay','petrolShot','petrolWhats')" style="background:linear-gradient(135deg,#f59e0b,#0f172a)">✅ Verify Screenshot</button>
-<button id="petrolWhats" class="btn btn-dark" style="opacity:0.35;pointer-events:none" onclick="requestPetrol()">⛽ REQUEST PETROL - FIND NEAREST DRIVER + STATION</button>
-</div>
-</div>
+<div id="petrolPage" class="page"><div class="page-head"><button onclick="closePage('petrolPage')">X</button><h3>⛽ Petrol 1L-10L</h3></div><div class="card" style="background:linear-gradient(135deg,#0f172a,#f59e0b);color:#fff;border:none;text-align:center"><div style="width:120px;height:120px;border-radius:50%;border:6px solid #fff;margin:0 auto;position:relative;background:conic-gradient(#f59e0b 0deg, #fff 0deg);display:flex;align-items:center;justify-content:center" id="petrolGauge"><div style="background:#0f172a;width:90px;height:90px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center"><div id="petrolLitres" style="font-size:28px;font-weight:900">5L</div><div id="petrolPriceGauge" style="font-size:12px;font-weight:900;color:#f59e0b">R115</div></div></div><input type="range" id="petrolRange" min="1" max="10" value="5" step="1" style="width:100%;margin-top:12px;accent-color:#f59e0b" oninput="selectPetrol(this.value)"></div><div class="card"><input id="petrolAddress" class="input" placeholder="Your Location *"><input id="petrolCar" class="input" placeholder="Car Details"><input id="petrolName" class="input" placeholder="Name + Phone *"><div style="background:#fef3c7;border-radius:14px;padding:10px;margin-top:10px;display:flex;justify-content:space-between;font-weight:900"><span id="petrolSummary">5L Petrol</span><span id="petrolTotal">R115 + delivery</span></div><div class="upload"><input type="file" id="petrolShot" accept="image/*"><div id="petrolShotPreview"></div></div><input id="petrolPay" class="input" placeholder="Pay Ref must include amount"><button class="btn btn-sky" onclick="verifyGeneric('petrolPay','petrolShot','petrolWhats')" style="background:linear-gradient(135deg,#f59e0b,#0f172a)">✅ Verify</button><button id="petrolWhats" class="btn btn-dark" style="opacity:0.35;pointer-events:none" onclick="requestPetrol()">⛽ REQUEST PETROL</button></div></div>
 
-<!-- GAS SWAP 9 TO 48 KG -->
-<div id="gasPage" class="page">
-<div class="page-head"><button onclick="closePage('gasPage')">X</button><h3>🔥 Gas Swap - 9kg to 48kg</h3></div>
-<div class="card" style="background:linear-gradient(135deg,#0ea5e9,#0f172a);color:#fff;border:none"><h3 style="font-weight:900">Gas Swap - Extra Ordinary Look</h3><p style="font-size:11px">Driver collects empty and brings full - Swap</p></div>
-<div class="card">
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-<div class="combo selected" onclick="selectGas(this,9,350)"><b>🔥 9kg</b><div class="price">R350</div><div style="font-size:9px">Small home</div></div>
-<div class="combo" onclick="selectGas(this,14,500)"><b>🔥 14kg</b><div class="price">R500</div></div>
-<div class="combo" onclick="selectGas(this,19,650)"><b>🔥 19kg</b><div class="price">R650</div><div style="font-size:9px">Most popular</div></div>
-<div class="combo" onclick="selectGas(this,48,1450)"><b>🔥 48kg</b><div class="price">R1450</div><div style="font-size:9px">Big - Business</div></div>
-</div>
-<input id="gasAddress" class="input" placeholder="Address * - Where to swap" style="margin-top:10px">
-<input id="gasName" class="input" placeholder="Name + Phone *">
-<div style="background:#f0f9ff;border-radius:14px;padding:10px;margin-top:10px;display:flex;justify-content:space-between;font-weight:900"><span id="gasSummary">9kg Gas Swap</span><span id="gasTotal">R350 + delivery</span></div>
-<div class="upload"><input type="file" id="gasShot" accept="image/*"><div id="gasShotPreview" style="font-size:10px"></div></div>
-<input id="gasPay" class="input" placeholder="Pay Ref must include amount" style="border-color:#0ea5e9">
-<button class="btn btn-sky" onclick="verifyGeneric('gasPay','gasShot','gasWhats')">✅ Verify</button>
-<button id="gasWhats" class="btn btn-dark" style="opacity:0.35;pointer-events:none" onclick="requestGas()">🔥 REQUEST GAS SWAP</button>
-</div>
-</div>
+<div id="gasPage" class="page"><div class="page-head"><button onclick="closePage('gasPage')">X</button><h3>🔥 Gas Swap 9-48kg</h3></div><div class="card"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="combo selected" onclick="selectGas(this,9,350)"><b>9kg</b><div class="price">R350</div></div><div class="combo" onclick="selectGas(this,14,500)"><b>14kg</b><div class="price">R500</div></div><div class="combo" onclick="selectGas(this,19,650)"><b>19kg</b><div class="price">R650</div></div><div class="combo" onclick="selectGas(this,48,1450)"><b>48kg</b><div class="price">R1450</div></div></div><input id="gasAddress" class="input" placeholder="Address *"><input id="gasName" class="input" placeholder="Name + Phone *"><div style="display:flex;justify-content:space-between;font-weight:900;margin-top:10px"><span id="gasSummary">9kg Gas</span><span id="gasTotal">R350 + delivery</span></div><div class="upload"><input type="file" id="gasShot" accept="image/*"></div><input id="gasPay" class="input" placeholder="Pay Ref"><button class="btn btn-sky" onclick="verifyGeneric('gasPay','gasShot','gasWhats')">✅ Verify</button><button id="gasWhats" class="btn btn-dark" style="opacity:0.35;pointer-events:none" onclick="requestGas()">🔥 REQUEST GAS</button></div></div>
 
-<!-- MASSAGE - STRAIGHT TO WHATS FOR MASSAGE -->
-<div id="massagePage" class="page">
-<div class="page-head"><button onclick="closePage('massagePage')">X</button><h3>💆 Request a Massage - Straight to Whats</h3></div>
-<div class="card" style="background:linear-gradient(135deg,#ec4899,#0f172a);color:#fff;border:none"><h3 style="font-weight:900">Spa at Home - Attractive</h3><p style="font-size:11px">Therapist comes to you - Straight to WhatsApp for massage</p></div>
-<div class="card">
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-<div class="combo selected" onclick="selectMassage(this,'Swedish 60min',400)"><b>💆 Swedish 60min</b><div class="price">R400</div></div>
-<div class="combo" onclick="selectMassage(this,'Deep Tissue 60min',500)"><b>💪 Deep Tissue 60min</b><div class="price">R500</div></div>
-<div class="combo" onclick="selectMassage(this,'Hot Stone 90min',650)"><b>🪨 Hot Stone 90min</b><div class="price">R650</div></div>
-<div class="combo" onclick="selectMassage(this,'Couples 60min',750)"><b>💑 Couples 60min</b><div class="price">R750</div></div>
-</div>
-<input id="massageAddress" class="input" placeholder="Address * - Where massage" style="margin-top:10px">
-<input id="massageName" class="input" placeholder="Name + Phone * - Must match screenshot">
-<textarea id="massagePref" class="input" rows="2" placeholder="Preference - e.g. Female therapist, oil, etc *"></textarea>
-<div style="background:#fce7f3;border-radius:14px;padding:10px;margin-top:10px;display:flex;justify-content:space-between;font-weight:900"><span id="massageSummary">Swedish 60min</span><span id="massageTotal">R400</span></div>
-<div class="upload"><p style="font-size:11px;font-weight:900">📸 Screenshot * Must match - Account 1648002305</p><input type="file" id="massageShot" accept="image/*" onchange="previewPay(this,'massageShotPreview')"><div id="massageShotPreview" style="font-size:10px"></div></div>
-<input id="massagePay" class="input" placeholder="Pay Ref must include amount + name" style="border-color:#ec4899">
-<button class="btn btn-sky" onclick="verifyGeneric('massagePay','massageShot','massageWhats')" style="background:linear-gradient(135deg,#ec4899,#0f172a)">✅ Verify - Straight to Whats for Massage</button>
-<button id="massageWhats" class="btn btn-dark" style="opacity:0.35;pointer-events:none" onclick="requestMassage()">💆 REQUEST MASSAGE - DIRECT TO WHATSAPP 079 5100 296</button>
-</div>
-</div>
+<div id="massagePage" class="page"><div class="page-head"><button onclick="closePage('massagePage')">X</button><h3>💆 Massage - Straight to Whats</h3></div><div class="card"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="combo selected" onclick="selectMassage(this,'Swedish 60min',400)"><b>Swedish 60min</b><div class="price">R400</div></div><div class="combo" onclick="selectMassage(this,'Deep Tissue 60min',500)"><b>Deep Tissue 60min</b><div class="price">R500</div></div><div class="combo" onclick="selectMassage(this,'Hot Stone 90min',650)"><b>Hot Stone 90min</b><div class="price">R650</div></div><div class="combo" onclick="selectMassage(this,'Couples 60min',750)"><b>Couples 60min</b><div class="price">R750</div></div></div><input id="massageAddress" class="input" placeholder="Address *"><input id="massageName" class="input" placeholder="Name + Phone *"><textarea id="massagePref" class="input" rows="2" placeholder="Preference *"></textarea><div style="display:flex;justify-content:space-between;font-weight:900;margin-top:10px"><span id="massageSummary">Swedish 60min</span><span id="massageTotal">R400</span></div><div class="upload"><input type="file" id="massageShot" accept="image/*"></div><input id="massagePay" class="input" placeholder="Pay Ref"><button class="btn btn-sky" onclick="verifyGeneric('massagePay','massageShot','massageWhats')" style="background:linear-gradient(135deg,#ec4899,#0f172a)">✅ Verify</button><button id="massageWhats" class="btn btn-dark" style="opacity:0.35;pointer-events:none" onclick="requestMassage()">💆 REQUEST MASSAGE - DIRECT TO WHATSAPP</button></div></div>
 
-<!-- PARTNER - SO ATTRACTIVE - WHATSAPP + BOTH ACCEPT + VERIFY HUMAN + DRIVER PICKUP -->
-<div id="partnerPage" class="page">
-<div class="page-head"><button onclick="closePage('partnerPage')">X</button><h3>💑 Request a Partner - Attractive Workflow</h3></div>
-<div class="card" style="background:linear-gradient(135deg,#0f172a,#ec4899);color:#fff;border:none;text-align:center">
-<div style="font-size:40px">💑✨</div>
-<h3 style="font-weight:900">So Attractive - Request Your Partner</h3>
-<p style="font-size:11px;margin-top:4px">Partner gets WhatsApp from app with your number - Both click accept - Then checkout - Verify human picture - Driver pickup</p>
-</div>
-
-<div class="card" id="partnerStep1">
-<h3 style="font-weight:900">Step 1 - Your Details + Partner Number</h3>
-<input id="partnerMyName" class="input" placeholder="Your Name + Phone * - e.g. John 071 123 4567">
-<input id="partnerTheirNumber" class="input" placeholder="Partner WhatsApp Number * - e.g. 082 123 4567 - App sends WhatsApp">
-<input id="partnerLocation" class="input" placeholder="Pickup Location for Partner * - e.g. Malvern">
-<input id="partnerDate" class="input" placeholder="Date + Time * - e.g. Tonight 20:00">
-<button class="btn btn-dark" onclick="sendPartnerInvite()" style="background:linear-gradient(135deg,#ec4899,#0f172a)">💌 SEND WHATSAPP TO PARTNER + REQUEST</button>
-<p style="font-size:9px;color:#64748b;margin-top:6px">App sends WhatsApp: "💑 Your partner John requests you - Number 071... - Click accept in Izandla One app"</p>
-</div>
-
-<div class="card" id="partnerStep2" style="display:none;border:2px solid #ec4899">
-<h3 style="font-weight:900">Step 2 - Both Accept - Login and Click Accept</h3>
-<p style="font-size:11px;color:#64748b">Partner must login with code and accept - You accept below</p>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
-<div style="background:#f0f9ff;border-radius:14px;padding:10px;text-align:center"><div style="font-size:20px">🧑 You</div><button id="myAcceptBtn" class="btn btn-dark" style="margin-top:6px;background:#0f172a" onclick="acceptPartner('me')">Click Accept</button><div id="myAcceptStatus" style="font-size:10px;margin-top:4px">❌ Not accepted</div></div>
-<div style="background:#fce7f3;border-radius:14px;padding:10px;text-align:center"><div style="font-size:20px">💑 Partner</div><input id="partnerCode" class="input" placeholder="Partner code" style="font-size:10px;padding:8px"><button id="theirAcceptBtn" class="btn btn-dark" style="margin-top:6px;background:#ec4899" onclick="acceptPartner('partner')">Partner Accept</button><div id="theirAcceptStatus" style="font-size:10px;margin-top:4px">❌ Waiting partner</div></div>
-</div>
-<div id="bothAcceptedMsg" style="display:none;background:#22c55e;color:#fff;border-radius:14px;padding:10px;margin-top:10px;text-align:center;font-weight:900">✅ BOTH ACCEPTED - Continue to checkout</div>
-</div>
-
-<div class="card" id="partnerStep3" style="display:none">
-<h3 style="font-weight:900">Step 3 - Checkout - Screenshot + Partner Picture Verify Human</h3>
-<p style="font-size:11px;color:#64748b">Put screenshot for payments and your partners picture to verify if its a human then request goes to driver page</p>
-<input id="partnerNameCheckout" class="input" placeholder="Both Names + Phones *">
-<div class="upload"><p style="font-size:11px;font-weight:900">📸 Your Payment Screenshot * Must match - Account 1648002305</p><input type="file" id="partnerPayShot" accept="image/*" onchange="previewPay(this,'partnerPayPreview')"><div id="partnerPayPreview" style="font-size:10px"></div></div>
-<div class="upload" style="border-color:#ec4899"><p style="font-size:11px;font-weight:900">🖼️ Partner Picture * Verify if its a human - Compulsory</p><input type="file" id="partnerPic" accept="image/*" onchange="previewPay(this,'partnerPicPreview')"><div id="partnerPicPreview" style="font-size:10px;color:#ec4899"></div></div>
-<input id="partnerPayRef" class="input" placeholder="Pay Ref must include amount + both names" style="border-color:#ec4899">
-<button class="btn btn-sky" onclick="verifyPartnerPay()" style="background:linear-gradient(135deg,#ec4899,#0f172a)">✅ Verify Human + Screenshot</button>
-<button id="partnerWhats" class="btn btn-dark" style="opacity:0.35;pointer-events:none" onclick="requestPartnerDriver()">💑 SEND TO DRIVER PAGE - PICKUP YOUR PARTNER</button>
-</div>
-</div>
+<div id="partnerPage" class="page"><div class="page-head"><button onclick="closePage('partnerPage')">X</button><h3>💑 Request a Partner - FIXED LINK AUTO PUT CODE</h3></div><div class="card" style="background:linear-gradient(135deg,#0f172a,#ec4899);color:#fff;border:none;text-align:center"><div style="font-size:40px">💑✨</div><h3 style="font-weight:900">Link Auto Put Code + Auto Accept</h3><p style="font-size:11px">Partner clicks link → code auto filled → auto accepted → you accept → both → checkout</p></div><div class="card" id="partnerStep1"><h3 style="font-weight:900">Step 1 - Your Details + Partner Number</h3><input id="partnerMyName" class="input" placeholder="Your Name + Phone *"><input id="partnerTheirNumber" class="input" placeholder="Partner WhatsApp Number *"><input id="partnerLocation" class="input" placeholder="Pickup Location *"><input id="partnerDate" class="input" placeholder="Date + Time *"><button class="btn btn-dark" onclick="sendPartnerInvite()" style="background:linear-gradient(135deg,#ec4899,#0f172a)">💌 SEND WHATSAPP TO PARTNER - FIXED LINK</button></div><div class="card" id="partnerStep2" style="display:none;border:2px solid #ec4899"><h3 style="font-weight:900">Step 2 - Both Accept</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px"><div style="background:#f0f9ff;border-radius:14px;padding:10px;text-align:center"><div style="font-size:20px">🧑 You</div><button id="myAcceptBtn" class="btn btn-dark" style="margin-top:6px;background:#0f172a" onclick="acceptPartner('me')">Click Accept</button><div id="myAcceptStatus" style="font-size:10px;margin-top:4px">❌ Not accepted</div></div><div style="background:#fce7f3;border-radius:14px;padding:10px;text-align:center"><div style="font-size:20px">💑 Partner</div><input id="partnerCode" class="input" placeholder="Partner code - Auto put" style="font-size:12px;padding:10px;border:2px solid #ec4899"><button id="theirAcceptBtn" class="btn btn-dark" style="margin-top:6px;background:#ec4899" onclick="acceptPartner('partner')">Partner Accept</button><div id="theirAcceptStatus" style="font-size:10px;margin-top:4px">❌ Waiting</div></div></div><div id="bothAcceptedMsg" style="display:none;background:#22c55e;color:#fff;border-radius:14px;padding:10px;margin-top:10px;text-align:center;font-weight:900">✅ BOTH ACCEPTED - Continue to checkout</div></div><div class="card" id="partnerStep3" style="display:none"><h3 style="font-weight:900">Step 3 - Checkout - Screenshot + Partner Picture Verify Human</h3><input id="partnerNameCheckout" class="input" placeholder="Both Names + Phones *"><div class="upload"><p style="font-size:11px;font-weight:900">📸 Payment Screenshot * Account 1648002305</p><input type="file" id="partnerPayShot" accept="image/*"></div><div class="upload" style="border-color:#ec4899"><p style="font-size:11px;font-weight:900">🖼️ Partner Picture * Verify human</p><input type="file" id="partnerPic" accept="image/*"></div><input id="partnerPayRef" class="input" placeholder="Pay Ref must include amount + both names" style="border-color:#ec4899"><button class="btn btn-sky" onclick="verifyPartnerPay()" style="background:linear-gradient(135deg,#ec4899,#0f172a)">✅ Verify Human + Screenshot</button><button id="partnerWhats" class="btn btn-dark" style="opacity:0.35;pointer-events:none" onclick="requestPartnerDriver()">💑 SEND TO DRIVER - PICKUP PARTNER</button></div></div>
 
 <script>
-// PETROL LOGIC - 1L TO 10L GAGE
-let petrolLitres=5, petrolPricePerLitre=23;
-function selectPetrol(l){petrolLitres=parseInt(l); let price=petrolLitres*petrolPricePerLitre; let deg=(petrolLitres/10)*360; document.getElementById('petrolGauge').style.background=`conic-gradient(#f59e0b ${deg}deg, #fff ${deg}deg)`; document.getElementById('petrolLitres').innerText=petrolLitres+'L'; document.getElementById('petrolPriceGauge').innerText='R'+price; let delivery=calcPrice(autoKm||2); let total=price+delivery; document.getElementById('petrolSummary').innerText=petrolLitres+'L Petrol @ R23/L'; document.getElementById('petrolTotal').innerText='R'+total.toFixed(0)+' (R'+price+' petrol + R'+delivery.toFixed(0)+' delivery '+ (autoKm||2).toFixed(1)+'km)';}
-function requestPetrol(){let delivery=calcPrice(autoKm||2); let petrolCost=petrolLitres*petrolPricePerLitre; let total=petrolCost+delivery; let msg=`PETROL PAID - ${petrolLitres}L%0ACar: ${petrolCar.value}%0AStation: Engen Malvern 1.2km - Nearest%0ADriver: Driver 07 0.8km - Collect and come back%0ACost: R${petrolCost} petrol + R${delivery.toFixed(0)} delivery (${(autoKm||2).toFixed(1)}km R20 base + ${ (autoKm||2)>20?'R8':'R5'}/km)%0ATotal R${total.toFixed(0)}%0AAddress: ${petrolAddress.value}%0AName: ${petrolName.value}%0ARef: ${petrolPay.value}%0AAccount 1648002305%0A✅ Screenshot Verified`; addOrder(`Petrol ${petrolLitres}L R${total.toFixed(0)}`,petrolAddress.value,petrolName.value,'General'); window.location.href=`https://wa.me/27795100296?text=${msg}`;}
+// PETROL - GAS - MASSAGE
+let petrolLitres=5, petrolPricePerLitre=23; function selectPetrol(l){petrolLitres=parseInt(l); let price=petrolLitres*petrolPricePerLitre; let deg=(petrolLitres/10)*360; document.getElementById('petrolGauge').style.background=`conic-gradient(#f59e0b ${deg}deg, #fff ${deg}deg)`; document.getElementById('petrolLitres').innerText=petrolLitres+'L'; document.getElementById('petrolPriceGauge').innerText='R'+price; let delivery=calcPrice(autoKm||2); document.getElementById('petrolSummary').innerText=petrolLitres+'L Petrol @ R23/L'; document.getElementById('petrolTotal').innerText='R'+(price+delivery).toFixed(0);} function requestPetrol(){let delivery=calcPrice(autoKm||2); let total=petrolLitres*petrolPricePerLitre+delivery; let msg=`PETROL PAID ${petrolLitres}L R${total.toFixed(0)} Address ${petrolAddress.value} Name ${petrolName.value} Ref ${petrolPay.value} Account 1648002305`; addOrder(`Petrol ${petrolLitres}L R${total.toFixed(0)}`,petrolAddress.value,petrolName.value,'General'); window.location.href=`https://wa.me/27795100296?text=${msg}`;}
+let gasKg=9, gasPrice=350; function selectGas(el,kg,price){document.querySelectorAll('#gasPage .combo').forEach(c=>c.classList.remove('selected')); el.classList.add('selected'); gasKg=kg; gasPrice=price; document.getElementById('gasSummary').innerText=kg+'kg Gas'; document.getElementById('gasTotal').innerText='R'+(price+calcPrice(autoKm||2)).toFixed(0);} function requestGas(){let total=gasPrice+calcPrice(autoKm||2); let msg=`GAS PAID ${gasKg}kg R${total.toFixed(0)} Address ${gasAddress.value} Name ${gasName.value} Ref ${gasPay.value}`; addOrder(`Gas ${gasKg}kg R${total.toFixed(0)}`,gasAddress.value,gasName.value,'General'); window.location.href=`https://wa.me/27795100296?text=${msg}`;}
+let massageType='Swedish 60min', massagePrice=400; function selectMassage(el,type,price){document.querySelectorAll('#massagePage .combo').forEach(c=>c.classList.remove('selected')); el.classList.add('selected'); massageType=type; massagePrice=price; document.getElementById('massageSummary').innerText=type; document.getElementById('massageTotal').innerText='R'+price;} function requestMassage(){let msg=`MASSAGE PAID ${massageType} R${massagePrice} Address ${massageAddress.value} Name ${massageName.value} Pref ${massagePref.value} Ref ${massagePay.value}`; addOrder(`Massage ${massageType} R${massagePrice}`,massageAddress.value,massageName.value,'General'); window.location.href=`https://wa.me/27795100296?text=${msg}`;}
 
-// GAS LOGIC
-let gasKg=9, gasPrice=350;
-function selectGas(el,kg,price){document.querySelectorAll('#gasPage .combo').forEach(c=>c.classList.remove('selected')); el.classList.add('selected'); gasKg=kg; gasPrice=price; let delivery=calcPrice(autoKm||2); document.getElementById('gasSummary').innerText=kg+'kg Gas Swap'; document.getElementById('gasTotal').innerText='R'+(price+delivery).toFixed(0)+' (R'+price+' + R'+delivery.toFixed(0)+' delivery)';}
-function requestGas(){let delivery=calcPrice(autoKm||2); let total=gasPrice+delivery; let msg=`GAS SWAP PAID - ${gasKg}kg%0ATotal R${total.toFixed(0)} (R${gasPrice} gas + R${delivery.toFixed(0)} delivery)%0AAddress: ${gasAddress.value}%0AName: ${gasName.value}%0ARef: ${gasPay.value}%0AAccount 1648002305`; addOrder(`Gas ${gasKg}kg R${total.toFixed(0)}`,gasAddress.value,gasName.value,'General'); window.location.href=`https://wa.me/27795100296?text=${msg}`;}
-
-// MASSAGE LOGIC - STRAIGHT TO WHATS
-let massageType='Swedish 60min', massagePrice=400;
-function selectMassage(el,type,price){document.querySelectorAll('#massagePage .combo').forEach(c=>c.classList.remove('selected')); el.classList.add('selected'); massageType=type; massagePrice=price; document.getElementById('massageSummary').innerText=type; document.getElementById('massageTotal').innerText='R'+price;}
-function requestMassage(){let msg=`MASSAGE PAID - ${massageType}%0ATotal R${massagePrice}%0APref: ${massagePref.value}%0AAddress: ${massageAddress.value}%0AName: ${massageName.value}%0ARef: ${massagePay.value}%0AAccount 1648002305%0A✅ Straight to Whats for Massage`; addOrder(`Massage ${massageType} R${massagePrice}`,massageAddress.value,massageName.value,'General'); window.location.href=`https://wa.me/27795100296?text=${msg}`;}
-
-// PARTNER LOGIC - ATTRACTIVE - WHATSAPP + BOTH ACCEPT + VERIFY HUMAN + DRIVER
+// PARTNER FIXED - LINK AUTO PUT CODE + AUTO ACCEPT
 let partnerAccepted={me:false,partner:false}, partnerCodeGen='', partnerData={};
-function sendPartnerInvite(){let myName=partnerMyName.value.trim(), theirNum=partnerTheirNumber.value.trim(), loc=partnerLocation.value.trim(), date=partnerDate.value.trim(); if(!myName||!theirNum||!loc||!date){alert('Fill all - Your name + Partner WhatsApp number + Location + Date'); return;} partnerCodeGen='P'+Date.now().toString().slice(-6); partnerData={myName,theirNum,loc,date,code:partnerCodeGen}; localStorage.setItem('iz_partner_code',partnerCodeGen); localStorage.setItem('iz_partner_data',JSON.stringify(partnerData)); document.getElementById('partnerStep1').style.display='none'; document.getElementById('partnerStep2').style.display='block'; let waMsg=`💑 Izandla One Partner Request ✨%0A${myName} requests you as partner%0APickup: ${loc}%0ADate: ${date}%0AYour code: ${partnerCodeGen}%0AAccept in app: ndla-one.vercel.app - Enter code ${partnerCodeGen} and click Accept%0APartner number: ${myName.split(' ').slice(-2).join(' ')}%0AQuality uplifts the world🦄`; window.open(`https://wa.me/${theirNum.replace(/[^0-9]/g,'')}?text=${waMsg}`,'_blank'); showNotif('WhatsApp Sent to Partner',`Code ${partnerCodeGen} sent to ${theirNum} - Both must accept`);}
-function acceptPartner(who){if(who==='me'){partnerAccepted.me=true; document.getElementById('myAcceptBtn').innerText='✅ YOU ACCEPTED'; document.getElementById('myAcceptBtn').style.background='#22c55e'; document.getElementById('myAcceptStatus').innerText='✅ Accepted'; document.getElementById('myAcceptStatus').style.color='#22c55e';}else{let codeInput=document.getElementById('partnerCode').value.trim(); let savedCode=localStorage.getItem('iz_partner_code')||partnerCodeGen; if(codeInput!==savedCode && codeInput!=='' && codeInput!==partnerCodeGen){ if(codeInput.length<3){alert('Enter partner code sent via WhatsApp - Code: '+savedCode); return;} } partnerAccepted.partner=true; document.getElementById('theirAcceptBtn').innerText='✅ PARTNER ACCEPTED'; document.getElementById('theirAcceptBtn').style.background='#22c55e'; document.getElementById('theirAcceptStatus').innerText='✅ Partner Accepted'; document.getElementById('theirAcceptStatus').style.color='#22c55e';} if(partnerAccepted.me && partnerAccepted.partner){document.getElementById('bothAcceptedMsg').style.display='block'; document.getElementById('partnerStep3').style.display='block'; showNotif('Both Accepted 💑','Continue to checkout - Screenshot + Partner picture verify human - Then driver pickup');}}
-function verifyPartnerPay(){let payFile=document.getElementById('partnerPayShot').files[0], picFile=document.getElementById('partnerPic').files[0], ref=partnerPayRef.value.trim(); if(!payFile){alert('Upload payment screenshot compulsory - Account 1648002305'); return;} if(!picFile){alert('Upload partner picture to verify if its a human - Compulsory'); return;} if(ref.length<6){alert('Ref must include amount + both names - Must match screenshot'); return;} document.getElementById('partnerWhats').style.opacity='1'; document.getElementById('partnerWhats').style.pointerEvents='auto'; showNotif('Verified Human + Payment','Partner picture verified human + screenshot matches - Ready for driver pickup');}
-function requestPartnerDriver(){let total=400; let msg=`PARTNER PAID - BOTH ACCEPTED 💑%0AYou: ${partnerData.myName||partnerMyName.value}%0APartner: ${partnerTheirNumber.value}%0ALocation: ${partnerLocation.value}%0ADate: ${partnerDate.value}%0ABoth accepted: YES%0AHuman verified: YES - Partner picture verified%0APayment verified: YES%0ARef: ${partnerPayRef.value}%0ANames: ${partnerNameCheckout.value}%0AAccount 1648002305%0A✅ Driver will pickup partner`; addOrder(`Partner Pickup ${partnerLocation.value} R${total}`,partnerLocation.value,partnerNameCheckout.value||partnerMyName.value,'General'); window.location.href=`https://wa.me/27795100296?text=${msg}`;}
-  </script>
+function sendPartnerInvite(){
+let myName=document.getElementById('partnerMyName').value.trim(), theirNum=document.getElementById('partnerTheirNumber').value.trim(), loc=document.getElementById('partnerLocation').value.trim(), date=document.getElementById('partnerDate').value.trim();
+if(!myName||!theirNum||!loc||!date){alert('Fill all'); return;}
+partnerCodeGen='P'+Date.now().toString().slice(-6);
+partnerData={myName,theirNum,loc,date,code:partnerCodeGen};
+localStorage.setItem('iz_partner_code',partnerCodeGen);
+localStorage.setItem('iz_partner_data',JSON.stringify(partnerData));
+document.getElementById('partnerStep1').style.display='none';
+document.getElementById('partnerStep2').style.display='block';
+let deepLink=`https://ndla-one.vercel.app/?code=${partnerCodeGen}&accept=partner#partnerPage`;
+let waMsg=`💑 Izandla One Partner Request ✨%0A${myName} requests you as partner%0APickup: ${loc}%0ADate: ${date}%0AYour code: ${partnerCodeGen}%0A👉 CLICK TO ACCEPT DIRECT: ${deepLink}%0ACode auto put - Just click Accept%0AQuality uplifts the world🦄`;
+window.open(`https://wa.me/${theirNum.replace(/[^0-9]/g,'')}?text=${waMsg}`,'_blank');
+}
+function acceptPartner(who){
+if(who==='me'){partnerAccepted.me=true; document.getElementById('myAcceptBtn').innerText='✅ YOU ACCEPTED'; document.getElementById('myAcceptBtn').style.background='#22c55e'; document.getElementById('myAcceptStatus').innerText='✅ Accepted';}
+else{partnerAccepted.partner=true; document.getElementById('theirAcceptBtn').innerText='✅ PARTNER ACCEPTED'; document.getElementById('theirAcceptBtn').style.background='#22c55e'; document.getElementById('theirAcceptStatus').innerText='✅ Partner Accepted Code '+document.getElementById('partnerCode').value+' auto put';}
+if(partnerAccepted.me && partnerAccepted.partner){document.getElementById('bothAcceptedMsg').style.display='block'; document.getElementById('partnerStep3').style.display='block';}
+}
+function verifyPartnerPay(){let payFile=document.getElementById('partnerPayShot').files[0], picFile=document.getElementById('partnerPic').files[0], ref=document.getElementById('partnerPayRef').value.trim(); if(!payFile){alert('Upload payment screenshot'); return;} if(!picFile){alert('Upload partner picture verify human'); return;} if(ref.length<6){alert('Ref must include amount'); return;} document.getElementById('partnerWhats').style.opacity='1'; document.getElementById('partnerWhats').style.pointerEvents='auto';}
+function requestPartnerDriver(){let msg=`PARTNER PAID BOTH ACCEPTED 💑 Location ${partnerLocation.value} Date ${partnerDate.value} Names ${partnerNameCheckout.value} Ref ${partnerPayRef.value} Account 1648002305 Human verified`; addOrder(`Partner Pickup ${partnerLocation.value} R400`,partnerLocation.value,partnerNameCheckout.value||partnerMyName.value,'General'); window.location.href=`https://wa.me/27795100296?text=${msg}`;}
+
+// AUTO PUT CODE + AUTO ACCEPT WHEN LINK CLICKED
+window.addEventListener('load',()=>{
+let params=new URLSearchParams(window.location.search);
+let code=params.get('code');
+let accept=params.get('accept');
+if(code){
+setTimeout(()=>{
+if(typeof openPage==='function') openPage('partnerPage');
+document.getElementById('partnerStep1').style.display='none';
+document.getElementById('partnerStep2').style.display='block';
+document.getElementById('partnerCode').value=code;
+localStorage.setItem('iz_partner_code',code);
+partnerCodeGen=code;
+if(accept==='partner'){
+setTimeout(()=>{ acceptPartner('partner'); }, 800);
+}
+}, 700);
+}
+});
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </script>
