@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Izandla One - World Class</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+body{background:#e8f4ff;color:#0f172a;overflow-y:auto;-webkit-overflow-scrolling:touch}
+#homeContent{position:relative;z-index:10;padding:16px;padding-bottom:180px}
+.page{position:fixed;inset:0;z-index:99;background:#e8f4ff;overflow-y:auto;padding-bottom:120px;visibility:hidden;opacity:0;pointer-events:none}
+.page.active{visibility:visible;opacity:1;pointer-events:auto;z-index:100}
+.page-head{background:#0f172a;color:#fff;padding:14px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10}
+.page-head button{width:44px;height:44px;border-radius:50%;border:none;background:#fff;color:#0f172a;font-weight:900}
+.card{background:#fff;border-radius:20px;padding:16px;margin:12px;box-shadow:0 8px 24px rgba(0,0,0,.06)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px}
+.sky-btn{background:#fff;border-radius:22px;padding:20px;text-align:center;box-shadow:0 12px 28px rgba(0,0,0,.08);position:relative;min-height:175px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:none;width:100%}
+.tag{position:absolute;top:10px;left:10px;font-size:9px;font-weight:900;color:#fff;padding:5px 10px;border-radius:20px;pointer-events:none}
+.combo{background:#f8fafc;border:2px solid #e2e8f0;border-radius:16px;padding:14px;text-align:center;font-weight:900;cursor:pointer}
+.combo.selected{border-color:#0ea5e9;background:#f0f9ff}
+.input{width:100%;border:2px solid #e2e8f0;border-radius:14px;padding:14px;margin-top:10px;font-weight:700}
+.btn{width:100%;border:none;border-radius:14px;padding:16px;margin-top:10px;font-weight:900;color:#fff;cursor:pointer}
+.btn-sky{background:linear-gradient(135deg,#0ea5e9,#0f172a)}
+.btn-dark{background:#0f172a}
+.upload{border:2px dashed #0ea5e9;border-radius:14px;padding:12px;margin-top:10px;background:#f8fafc}
+.cart{background:#0f172a;color:#fff;border-radius:16px;padding:12px;margin-top:10px}
+.menu-item{background:#fff;border:2px solid #e2e8f0;border-radius:16px;padding:10px;text-align:center}
+.add{margin-top:6px;background:#0f172a;color:#fff;border:none;border-radius:10px;padding:8px 10px;font-weight:900;width:100%}
+</style>
+</head>
+<body>
+<div id="homeContent">
+<div style="background:linear-gradient(135deg,#0f172a,#0ea5e9);border-radius:22px;padding:18px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+<div><h2 style="font-weight:900">Izandla One 🦄</h2><p style="font-size:11px">Quality uplifts the world</p></div>
+<div style="display:flex;gap:6px"><button type="button" onclick="openPage('adminStoresPage')" style="background:#22c55e;color:#fff;border:none;border-radius:20px;padding:8px 12px;font-weight:900">🏪 Admin</button><button type="button" onclick="openPage('newsPage')" style="background:#fff;color:#0f172a;border:none;border-radius:20px;padding:8px 12px;font-weight:900">🗞️ News</button></div>
+</div>
+<button type="button" class="card" onclick="openPage('ridePage')" style="width:calc(100% - 24px);background:linear-gradient(135deg,#0f172a 0%,#f59e0b 50%,#fff 100%);color:#fff;display:flex;justify-content:space-between;align-items:center;border:3px solid #f59e0b;text-align:left"><div><h3 style="font-weight:900">🚖 Request a Ride</h3><p style="font-size:11px;font-weight:700">Pickup + Dropoff + Real geo + Amount auto + Quality uplifts the world 🦄</p></div><div style="font-size:36px">🚖</div></button>
+<div class="grid">
+<button type="button" class="sky-btn" onclick="openPage('storePage')" style="background:linear-gradient(135deg,#fff,#dbeafe)"><span class="tag" style="background:#0f172a">STORE</span><div style="font-size:40px">🏪</div><h3>Store Apps</h3><p>All stores - Alarm rings here</p></button>
+<button type="button" class="sky-btn" onclick="openPage('driverPage')" style="background:linear-gradient(135deg,#fff,#fef3c7);border:2px solid #f59e0b"><span class="tag" style="background:#f59e0b">DRIVER</span><div style="font-size:40px">🚗</div><h3>Driver Page</h3><p>Alarm rings
