@@ -1,0 +1,507 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101b2d">
+<title>Izandla One | One App, More Possibilities</title>
+
+<link rel="stylesheet"
+ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<style>
+:root {
+  --bg:#f3f6fb;
+  --navy:#101b2d;
+  --green:#087f5b;
+  --white:#fff;
+  --muted:#64748b;
+  --border:#e2e8f0;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--navy);
+  font-family:Arial,Helvetica,sans-serif;
+}
+header{
+  background:var(--navy);color:white;padding:20px;
+  position:sticky;top:0;z-index:1000;
+}
+.header-row{
+  max-width:1000px;margin:auto;display:flex;
+  align-items:center;justify-content:space-between;gap:12px;
+}
+.brand{font-size:22px;font-weight:900}
+.brand small{display:block;font-size:10px;letter-spacing:2px;margin-top:5px}
+button,.button{
+  cursor:pointer;border:0;border-radius:10px;padding:12px 15px;
+  font-weight:bold;text-decoration:none;display:inline-block;
+  background:var(--green);color:white;font-size:14px;
+}
+button.secondary,.button.secondary{
+  background:#e8eef5;color:var(--navy);
+}
+main{max-width:1000px;margin:auto;padding:18px}
+.hero{
+  padding:26px 20px;background:#dcefe7;border-radius:20px;
+  margin-bottom:18px;
+}
+.hero h1{font-size:32px;margin:8px 0}
+.hero p{line-height:1.6}
+section,.card{
+  background:white;border:1px solid var(--border);
+  border-radius:16px;padding:18px;margin-bottom:18px;
+}
+h2{font-size:21px;margin-top:0}
+h3{font-size:16px}
+.grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+.service{
+  border:1px solid var(--border);border-radius:14px;
+  padding:18px 12px;background:white;color:var(--navy);
+  text-align:left;min-height:110px;
+}
+.service span{display:block;font-size:27px;margin-bottom:8px}
+.service small{display:block;color:var(--muted);margin-top:5px}
+label{display:block;font-size:13px;font-weight:bold;margin:12px 0 6px}
+input,select,textarea{
+  width:100%;padding:13px;border:1px solid #cbd5e1;
+  border-radius:9px;background:white;font-size:16px;
+}
+textarea{min-height:75px}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
+#map{height:300px;border-radius:12px;margin-top:12px}
+.notice{background:#fff7df;padding:12px;border-radius:10px;
+  font-size:13px;line-height:1.5}
+.muted{color:var(--muted);font-size:13px;line-height:1.6}
+.price{font-size:27px;font-weight:900}
+.pill{display:inline-block;padding:5px 9px;background:#e8f5ee;
+  border-radius:30px;font-size:11px;font-weight:bold}
+.hidden{display:none!important}
+footer{text-align:center;padding:25px;color:var(--muted);font-size:12px}
+nav{
+  position:sticky;bottom:0;z-index:1000;background:white;
+  border-top:1px solid var(--border);display:flex;
+  justify-content:space-around;padding:10px 2px;
+}
+nav button{padding:9px 6px;background:transparent;color:var(--navy);
+  font-size:11px}
+@media(min-width:650px){
+  .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  main{padding:26px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-row">
+    <div class="brand">IZANDLA ONE
+      <small>ONE APP. MORE POSSIBILITIES.</small>
+    </div>
+    <button class="secondary" onclick="showSection('admin')">
+      Admin
+    </button>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <span class="pill">YOUR COMMUNITY, CONNECTED</span>
+    <h1>Everything you need, in one place.</h1>
+    <p>Cleaning, food delivery, rides, local partners and world updates.</p>
+    <button onclick="showSection('services')">Get started</button>
+  </div>
+
+  <section id="services">
+    <h2>Choose a service</h2>
+    <div class="grid">
+      <button class="service" onclick="showSection('cleaning')">
+        <span>🧹</span><b>Cleaning</b>
+        <small>Home and office services</small>
+      </button>
+      <button class="service" onclick="showSection('food')">
+        <span>🍔</span><b>Food delivery</b>
+        <small>Request food from a partner</small>
+      </button>
+      <button class="service" onclick="showSection('rides')">
+        <span>🚗</span><b>Rides</b>
+        <small>Pickup and destination</small>
+      </button>
+      <button class="service" onclick="showSection('news')">
+        <span>📰</span><b>News & scores</b>
+        <small>World news and sport</small>
+      </button>
+    </div>
+  </section>
+
+  <section id="cleaning" class="hidden">
+    <h2>🧹 Book cleaning</h2>
+    <p class="muted">Submit your cleaning requirements for a quotation.</p>
+    <form onsubmit="sendCleaning(event)">
+      <label>Your name</label>
+      <input id="cleanName" required>
+      <label>Cleaning service</label>
+      <select id="cleanType">
+        <option>Home cleaning</option>
+        <option>Office cleaning</option>
+        <option>Deep cleaning</option>
+        <option>Move-in / move-out cleaning</option>
+      </select>
+      <label>Service address</label>
+      <input id="cleanAddress" required placeholder="Street, suburb, town">
+      <label>Preferred date</label>
+      <input id="cleanDate" type="date" required>
+      <label>Additional details</label>
+      <textarea id="cleanDetails" placeholder="Rooms, size, special requests"></textarea>
+      <div class="actions">
+        <button type="submit">Request on WhatsApp</button>
+      </div>
+    </form>
+  </section>
+
+  <section id="food" class="hidden">
+    <h2>🍔 Food delivery</h2>
+    <p class="muted">Select your order and contact the business to confirm availability.</p>
+    <label>Restaurant or store</label>
+    <input id="foodStore" placeholder="Enter partner business" required>
+    <label>Your order</label>
+    <textarea id="foodOrder" placeholder="List food items and quantities" required></textarea>
+    <label>Delivery address</label>
+    <input id="foodAddress" required>
+    <label>Your name</label>
+    <input id="foodName" required>
+    <div class="actions">
+      <button onclick="sendFood(event)">Request order on WhatsApp</button>
+    </div>
+    <p class="notice">Menu prices, delivery fees and stock must be confirmed. No payment is collected by this demo.</p>
+  </section>
+
+  <section id="rides" class="hidden">
+    <h2>🚗 Request a ride</h2>
+    <label>Your name</label>
+    <input id="rideName" placeholder="Full name">
+    <label>Pickup address</label>
+    <input id="pickup" placeholder="Where should the driver collect you?">
+    <label>Destination</label>
+    <input id="destination" placeholder="Where are you going?">
+    <div class="actions">
+      <button onclick="showMap()">Show map</button>
+      <button class="secondary" onclick="openRoute()">Open Google Maps directions</button>
+    </div>
+    <div id="map"></div>
+    <p id="mapStatus" class="muted">The map will load when you open this section.</p>
+    <div class="notice">
+      <b>Proposed request fee</b>
+      <div class="price">R20 + R5/km</div>
+      This is a proposed pricing rule, not a verified quote. Road distance must be calculated before a final fee is shown.
+    </div>
+    <div class="actions">
+      <button onclick="sendRide()">Request ride on WhatsApp</button>
+    </div>
+    <p class="muted">This sends a request for review. It does not dispatch a driver or collect payment.</p>
+  </section>
+
+  <section id="news" class="hidden">
+    <h2>📰 News & live scores</h2>
+    <p class="muted">Open trusted public news and sports websites. Live feeds inside Izandla One require a connected data provider.</p>
+    <div class="grid">
+      <a class="button" href="https://www.bbc.com/news" target="_blank" rel="noopener">World news</a>
+      <a class="button" href="https://www.news24.com/" target="_blank" rel="noopener">News24 South Africa</a>
+      <a class="button" href="https://www.espn.com/soccer/" target="_blank" rel="noopener">Football scores</a>
+      <a class="button" href="https://www.sofascore.com/" target="_blank" rel="noopener">Live sports scores</a>
+    </div>
+    <p class="notice">These links open external sites. This section does not yet import or automatically refresh live headlines or scores.</p>
+  </section>
+
+  <section id="partners">
+    <h2>🏪 Local stores & restaurants</h2>
+    <p class="muted">Partner directory — add verified businesses, contact details, menus and prices before accepting orders.</p>
+    <label>Find a business</label>
+    <input id="partnerSearch" placeholder="Search business name or category" oninput="filterPartners()">
+    <div id="partnerList">
+      <div class="card partner-item">
+        <b>Partner registration</b>
+        <p class="muted">Businesses can request to join the platform.</p>
+        <button onclick="showSection('driver')">Register as a partner</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="driver" class="hidden">
+    <h2>🛵 Driver & partner registration</h2>
+    <form onsubmit="registerPartner(event)">
+      <label>Full name / business name</label>
+      <input id="partnerName" required>
+      <label>Mobile number</label>
+      <input id="partnerPhone" type="tel" required>
+      <label>Service area</label>
+      <input id="partnerArea" required placeholder="Town or suburb">
+      <label>Registration type</label>
+      <select id="partnerType">
+        <option>Driver</option>
+        <option>Cleaning service</option>
+        <option>Restaurant</option>
+        <option>Supermarket</option>
+        <option>Liquor store</option>
+      </select>
+      <button type="submit">Prepare registration request</button>
+    </form>
+    <p class="notice">Registration is not approval. Identity checks, partner accounts, order dispatch and alerts need a secure backend.</p>
+  </section>
+
+  <section id="admin" class="hidden">
+    <h2>🔒 Administration</h2>
+    <p class="notice">This single-file demo does not provide secure administrator authentication. Do not enter your real admin password here. A password embedded in HTML can be discovered by website visitors.</p>
+    <p>Production admin features should include:</p>
+    <ul>
+      <li>Secure administrator sign-in</li>
+      <li>Separate dashboards for each store and restaurant</li>
+      <li>Partner approvals and product management</li>
+      <li>Order monitoring and driver dispatch</li>
+      <li>Payment records and audit logs</li>
+    </ul>
+    <p class="muted">Implement these features with a backend and server-enforced permissions before handling real customer data.</p>
+  </section>
+
+  <section>
+    <h2>💳 Payments & pricing</h2>
+    <p>Proposed delivery/request fee: R20 base + R5 per verified road kilometre.</p>
+    <p class="muted">A live payment gateway, server-side price validation, transaction verification and refunds have not been configured. Do not mark orders as paid based only on a browser message.</p>
+  </section>
+</main>
+
+<nav>
+  <button onclick="window.scrollTo({top:0,behavior:'smooth'})">⌂ Home</button>
+  <button onclick="showSection('food')">🍔 Food</button>
+  <button onclick="showSection('rides')">🚗 Rides</button>
+  <button onclick="showSection('driver')">🛵 Partner</button>
+  <button onclick="showSection('admin')">🔒 Admin</button>
+</nav>
+
+<footer>
+  <b>IZANDLA ONE</b><br>
+  One app. More possibilities.<br>
+  Demo version — live services require configuration.
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* Replace this with your official business WhatsApp number.
+   Use country code without +, spaces or punctuation.
+   Example format: 27XXXXXXXXX
+*/
+const BUSINESS_WHATSAPP = "";
+
+let mapInstance = null;
+let pickupMarker = null;
+let destinationMarker = null;
+let pickupCoords = null;
+let destinationCoords = null;
+
+function showSection(id) {
+  document.querySelectorAll("main section").forEach(section => {
+    section.classList.add("hidden");
+  });
+
+  const section = document.getElementById(id);
+  if (section) {
+    section.classList.remove("hidden");
+    section.scrollIntoView({behavior:"smooth",block:"start"});
+  }
+
+  if (id === "rides") {
+    setTimeout(initMap, 250);
+  }
+}
+
+function initMap() {
+  const mapElement = document.getElementById("map");
+  if (!mapElement || typeof L === "undefined") {
+    document.getElementById("mapStatus").textContent =
+      "Map library failed to load. Check your internet connection.";
+    return;
+  }
+
+  if (!mapInstance) {
+    mapInstance = L.map("map").setView([-29.8587,31.0218],10);
+
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom:19,
+      attribution:'&copy; OpenStreetMap contributors'
+    }).addTo(mapInstance);
+
+    mapInstance.on("click", event => {
+      if (!pickupCoords) {
+        pickupCoords = event.latlng;
+        if (pickupMarker) mapInstance.removeLayer(pickupMarker);
+        pickupMarker = L.marker(event.latlng).addTo(mapInstance)
+          .bindPopup("Selected pickup").openPopup();
+      } else {
+        destinationCoords = event.latlng;
+        if (destinationMarker) mapInstance.removeLayer(destinationMarker);
+        destinationMarker = L.marker(event.latlng).addTo(mapInstance)
+          .bindPopup("Selected destination").openPopup();
+      }
+
+      document.getElementById("mapStatus").textContent =
+        "Map point selected. Enter the corresponding addresses above too.";
+    });
+  }
+
+  setTimeout(() => mapInstance.invalidateSize(),100);
+}
+
+function showMap() {
+  initMap();
+  if (!mapInstance) return;
+
+  if (!navigator.geolocation) {
+    document.getElementById("mapStatus").textContent =
+      "Location is not supported by this browser.";
+    return;
+  }
+
+  document.getElementById("mapStatus").textContent =
+    "Requesting your location. Allow location access if prompted.";
+
+  navigator.geolocation.getCurrentPosition(
+    position => {
+      const coords = [
+        position.coords.latitude,
+        position.coords.longitude
+      ];
+      mapInstance.setView(coords,15);
+
+      if (pickupMarker) mapInstance.removeLayer(pickupMarker);
+      pickupMarker = L.marker(coords).addTo(mapInstance)
+        .bindPopup("Your current location").openPopup();
+
+      pickupCoords = L.latLng(coords[0],coords[1]);
+      document.getElementById("mapStatus").textContent =
+        "Current location shown. You can also select points on the map.";
+    },
+    () => {
+      document.getElementById("mapStatus").textContent =
+        "Location unavailable or permission denied. You can still select points on the map.";
+    },
+    {enableHighAccuracy:true,timeout:12000}
+  );
+}
+
+function openRoute() {
+  const pickup = document.getElementById("pickup").value.trim();
+  const destination = document.getElementById("destination").value.trim();
+
+  if (!pickup || !destination) {
+    alert("Enter both pickup and destination addresses first.");
+    return;
+  }
+
+  const url = "https://www.google.com/maps/dir/?api=1" +
+    "&origin=" + encodeURIComponent(pickup) +
+    "&destination=" + encodeURIComponent(destination) +
+    "&travelmode=driving";
+
+  window.open(url,"_blank","noopener");
+}
+
+function sendWhatsApp(message) {
+  if (!BUSINESS_WHATSAPP) {
+    alert("Set BUSINESS_WHATSAPP in index.html to your official business number before sending requests.");
+    return;
+  }
+
+  const url = "https://wa.me/" + BUSINESS_WHATSAPP +
+    "?text=" + encodeURIComponent(message);
+
+  window.open(url,"_blank","noopener");
+}
+
+function sendCleaning(event) {
+  event.preventDefault();
+
+  const message =
+    "IZANDLA ONE - CLEANING REQUEST\n" +
+    "Name: " + document.getElementById("cleanName").value + "\n" +
+    "Service: " + document.getElementById("cleanType").value + "\n" +
+    "Address: " + document.getElementById("cleanAddress").value + "\n" +
+    "Preferred date: " + document.getElementById("cleanDate").value + "\n" +
+    "Details: " + document.getElementById("cleanDetails").value;
+
+  sendWhatsApp(message);
+}
+
+function sendFood(event) {
+  if (event) event.preventDefault();
+
+  const store = document.getElementById("foodStore").value.trim();
+  const order = document.getElementById("foodOrder").value.trim();
+  const address = document.getElementById("foodAddress").value.trim();
+  const name = document.getElementById("foodName").value.trim();
+
+  if (!store || !order || !address || !name) {
+    alert("Complete all food order fields first.");
+    return;
+  }
+
+  sendWhatsApp(
+    "IZANDLA ONE - FOOD REQUEST\n" +
+    "Customer: " + name + "\n" +
+    "Business: " + store + "\n" +
+    "Order: " + order + "\n" +
+    "Delivery address: " + address
+  );
+}
+
+function sendRide() {
+  const name = document.getElementById("rideName").value.trim();
+  const pickup = document.getElementById("pickup").value.trim();
+  const destination = document.getElementById("destination").value.trim();
+
+  if (!name || !pickup || !destination) {
+    alert("Enter your name, pickup and destination first.");
+    return;
+  }
+
+  sendWhatsApp(
+    "IZANDLA ONE - RIDE REQUEST\n" +
+    "Name: " + name + "\n" +
+    "Pickup: " + pickup + "\n" +
+    "Destination: " + destination + "\n" +
+    "Status: Request only; please confirm availability and price."
+  );
+}
+
+function registerPartner(event) {
+  event.preventDefault();
+
+  const name = document.getElementById("partnerName").value;
+  const phone = document.getElementById("partnerPhone").value;
+  const area = document.getElementById("partnerArea").value;
+  const type = document.getElementById("partnerType").value;
+
+  sendWhatsApp(
+    "IZANDLA ONE - PARTNER REGISTRATION\n" +
+    "Name/business: " + name + "\n" +
+    "Phone: " + phone + "\n" +
+    "Area: " + area + "\n" +
+    "Type: " + type
+  );
+}
+
+function filterPartners() {
+  const query = document.getElementById("partnerSearch")
+    .value.toLowerCase();
+
+  document.querySelectorAll(".partner-item").forEach(item => {
+    item.style.display =
+      item.textContent.toLowerCase().includes(query) ? "" : "none";
+  });
+}
+</script>
+</body>
+</html>
