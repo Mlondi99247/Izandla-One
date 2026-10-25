@@ -505,3 +505,212 @@ function filterPartners() {
 </script>
 </body>
 </html>
+
+<!-- IZANDLA ONE - NEW CLEANING SERVICES -->
+<style>
+  #izandla-extra-services {
+    padding: 20px 14px;
+    margin: 20px auto;
+    max-width: 900px;
+    font-family: Arial, sans-serif;
+    color: #172033;
+  }
+
+  #izandla-extra-services h2 {
+    text-align: center;
+    margin-bottom: 8px;
+    font-size: 23px;
+  }
+
+  #izandla-extra-services .service-intro {
+    text-align: center;
+    color: #64748b;
+    margin-bottom: 18px;
+  }
+
+  #izandla-extra-services .service-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  #izandla-extra-services .service-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 15px;
+    padding: 16px 10px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,.06);
+  }
+
+  #izandla-extra-services .service-icon {
+    font-size: 32px;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  #izandla-extra-services .service-card h3 {
+    font-size: 15px;
+    margin: 5px 0 8px;
+  }
+
+  #izandla-extra-services .service-card p {
+    font-size: 12px;
+    color: #64748b;
+    min-height: 30px;
+    line-height: 1.4;
+  }
+
+  #izandla-extra-services .service-card button {
+    width: 100%;
+    border: 0;
+    border-radius: 9px;
+    padding: 11px 6px;
+    background: #075fe4;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 13px;
+  }
+
+  #izandla-extra-services .service-card button:active {
+    transform: scale(.98);
+  }
+
+  #izandla-extra-services .service-note {
+    margin-top: 16px;
+    text-align: center;
+    font-size: 12px;
+    color: #64748b;
+  }
+
+  @media (min-width: 600px) {
+    #izandla-extra-services .service-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>
+
+<section id="izandla-extra-services">
+  <h2>More Services</h2>
+  <p class="service-intro">
+    Book a cleaning or maintenance service with Izandla One.
+  </p>
+
+  <div class="service-grid">
+
+    <article class="service-card">
+      <span class="service-icon">🚰</span>
+      <h3>JoJo Tank Cleaning</h3>
+      <p>Water tank cleaning and maintenance enquiries.</p>
+      <button onclick="izandlaBookService('JoJo Tank Cleaning')">
+        Book Service
+      </button>
+    </article>
+
+    <article class="service-card">
+      <span class="service-icon">🌿</span>
+      <h3>Yard Cleaning</h3>
+      <p>Yard tidying, sweeping and outdoor cleaning.</p>
+      <button onclick="izandlaBookService('Yard Cleaning')">
+        Book Service
+      </button>
+    </article>
+
+    <article class="service-card">
+      <span class="service-icon">🏠</span>
+      <h3>House Washing</h3>
+      <p>Exterior house washing and cleaning enquiries.</p>
+      <button onclick="izandlaBookService('House Washing')">
+        Book Service
+      </button>
+    </article>
+
+    <article class="service-card">
+      <span class="service-icon">🏫</span>
+      <h3>School Washing</h3>
+      <p>School premises and building cleaning.</p>
+      <button onclick="izandlaBookService('School Washing')">
+        Book Service
+      </button>
+    </article>
+
+    <article class="service-card">
+      <span class="service-icon">🛠️</span>
+      <h3>Maintenance</h3>
+      <p>General repairs and property maintenance enquiries.</p>
+      <button onclick="izandlaBookService('Maintenance')">
+        Book Service
+      </button>
+    </article>
+
+    <article class="service-card">
+      <span class="service-icon">🚘</span>
+      <h3>Auto Valet & Car Polishing</h3>
+      <p>Vehicle cleaning, polishing and valet enquiries.</p>
+      <button onclick="izandlaBookService('Auto Valet & Car Polishing')">
+        Book Service
+      </button>
+    </article>
+
+    <article class="service-card">
+      <span class="service-icon">👟</span>
+      <h3>Sneaker Cleaning</h3>
+      <p>Sneaker washing and footwear care enquiries.</p>
+      <button onclick="izandlaBookService('Sneaker Cleaning')">
+        Book Service
+      </button>
+    </article>
+
+  </div>
+
+  <p class="service-note">
+    Service requests are enquiries; a booking is not confirmed
+    until the provider responds.
+  </p>
+</section>
+
+<script>
+(function () {
+  window.izandlaBookService = function (serviceName) {
+    const message =
+      "Hello Izandla One, I would like to enquire about: " +
+      serviceName +
+      ". Please provide pricing and availability.";
+
+    // Use WhatsApp if a customer-service number is configured.
+    // Replace the empty value with your business WhatsApp number
+    // including country code, without + or spaces.
+    const whatsappNumber = "";
+
+    if (whatsappNumber) {
+      const url =
+        "https://wa.me/" +
+        whatsappNumber +
+        "?text=" +
+        encodeURIComponent(message);
+
+      window.open(url, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    // Fallback: allow the customer to copy their enquiry.
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(message)
+        .then(function () {
+          alert(
+            "Service selected: " + serviceName +
+            "\n\nYour enquiry was copied. Paste it into WhatsApp " +
+            "or send it to your service provider."
+          );
+        })
+        .catch(function () {
+          prompt("Copy your service enquiry:", message);
+        });
+    } else {
+      prompt("Copy your service enquiry:", message);
+    }
+  };
+})();
+</script>
+<!-- END IZANDLA ONE NEW SERVICES -->
