@@ -1600,7 +1600,6 @@ window.addEventListener("load", function () {
 
 <script>
 (function () {
-  const db = window.izandlaSupabase;
   const storeSelect = document.getElementById("dashboardStore");
   const status = document.getElementById("connectionStatus");
   const output = document.getElementById("incomingOrders");
@@ -1715,7 +1714,9 @@ window.addEventListener("load", function () {
   }
 
   async function loadOrders(initial = true) {
-    if (!db) {
+    if (!db) const db =
+  window.izandlaSupabase ||
+  window.izandlasupabase;{
       status.textContent =
         "Supabase client not found. Check window.izandlaSupabase.";
       return;
