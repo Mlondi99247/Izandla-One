@@ -531,8 +531,41 @@ window.izandlaStores = [
     select.appendChild(option);
   });
 })();
-</script>
-<!-- END IZANDLA ONE STORE SELECTOR -->
+</script><!-- IZANDLA ONE: 8 STORES -->
+<div id="izandla-stores">
+  <h3>Choose Your Store</h3>
+
+  <label for="izandlaStore">Select a store:</label>
+
+  <select id="izandlaStore" name="store" required>
+    <option value="">-- Choose your store --</option>
+    <option value="Food Lovers Market Queensburgh">
+      Food Lovers Market — Queensburgh
+    </option>
+    <option value="Pizza Hut Queensburgh">
+      Pizza Hut — Queensburgh
+    </option>
+    <option value="Burger King Queensburgh">
+      Burger King — Queensburgh
+    </option>
+    <option value="Fish Plaice Durban North">
+      Fish Plaice — Durban North
+    </option>
+    <option value="Shoprite Bizana">
+      Shoprite — Bizana
+    </option>
+    <option value="Pedros Bizana">
+      Pedros — Bizana
+    </option>
+    <option value="Honchos Bizana">
+      Honchos — Bizana
+    </option>
+    <option value="Hungry Lion Bizana">
+      Hungry Lion — Bizana
+    </option>
+  </select>
+</div>
+<!-- END IZANDLA ONE STORES -->
 
     <form onsubmit="submitRequest(event,'Food order')">
       <label>Your name</label>
