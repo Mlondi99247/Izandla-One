@@ -1019,3 +1019,50 @@ populateFoodStores();
 </script>
 </body>
 </html>
+
+<!-- IZANDLA ONE: SUPABASE CONNECTION -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  // Your Supabase project
+  const IZANDLA_SUPABASE_URL =
+    "https://ejsdxxapryebecgmkekf.supabase.co";
+
+  const IZANDLA_SUPABASE_KEY =
+    "sb_publishable_hvKxq3KkZNrmKMSNXlyYWg_hmFm5AYd";
+
+  // Avoid declaring a duplicate global client.
+  window.izandlaSupabase = window.supabase.createClient(
+    IZANDLA_SUPABASE_URL,
+    IZANDLA_SUPABASE_KEY
+  );
+
+  // Show the connection status on the page.
+  window.addEventListener("load", async function () {
+    const status = document.createElement("div");
+    status.id = "izandla-backend-status";
+    status.style.cssText =
+      "position:fixed;bottom:8px;right:8px;z-index:99999;" +
+      "background:#fff;color:#222;padding:10px 14px;" +
+      "border:1px solid #ccc;border-radius:8px;font-size:13px;";
+    status.textContent = "Izandla One: checking backend...";
+    document.body.appendChild(status);
+
+    try {
+      const { error } = await window.izandlaSupabase
+        .from("stores")
+        .select("id")
+        .limit(1);
+
+      if (error) throw error;
+
+      status.textContent = "Izandla One: backend connected";
+      status.style.borderColor = "green";
+      console.log("Supabase connection successful.");
+    } catch (error) {
+      status.textContent = "Backend error: " + error.message;
+      status.style.borderColor = "red";
+      console.error("Supabase connection failed:", error);
+    }
+  });
+</script>
