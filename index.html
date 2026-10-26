@@ -324,6 +324,146 @@
       <button class="btn" type="submit">Send cleaning request on WhatsApp</button>
     </form>
   </section>
+<section id="izandla-cleaning" style="font-family:Arial,sans-serif;color:#222;padding:16px;max-width:800px;margin:auto">
+  <h2>IZANDLA CLEANING SERVICES</h2>
+  <p>Quality uplifts the world</p>
+  <p>Professional cleaning. Reliable service. Easy booking.</p>
+
+  <div id="izandla-service-list" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+
+    <article class="iz-service" style="border:1px solid #ddd;border-radius:12px;padding:16px">
+      <h3>School & Classroom Cleaning</h3>
+      <p>Classrooms, desks, floors and general school cleaning.</p>
+      <strong>Request a quote</strong>
+      <button onclick="selectIzandlaService('School & Classroom Cleaning','quote')" style="display:block;margin-top:12px;padding:12px;width:100%">Book service</button>
+    </article>
+
+    <article class="iz-service" style="border:1px solid #ddd;border-radius:12px;padding:16px">
+      <h3>Yard & Wall Cleaning</h3>
+      <p>Yard sweeping, outdoor washing and boundary walls.</p>
+      <strong>Request a quote</strong>
+      <button onclick="selectIzandlaService('Yard & Wall Cleaning','quote')" style="display:block;margin-top:12px;padding:12px;width:100%">Book service</button>
+    </article>
+
+    <article class="iz-service" style="border:1px solid #ddd;border-radius:12px;padding:16px">
+      <h3>Auto Valet</h3>
+      <p>Vehicle washing and interior/exterior cleaning.</p>
+      <strong>R600</strong>
+      <button onclick="selectIzandlaService('Auto Valet','600')" style="display:block;margin-top:12px;padding:12px;width:100%">Book service</button>
+    </article>
+
+    <article class="iz-service" style="border:1px solid #ddd;border-radius:12px;padding:16px">
+      <h3>Car Polishing</h3>
+      <p>Exterior polishing and shine enhancement.</p>
+      <strong>R200</strong>
+      <button onclick="selectIzandlaService('Car Polishing','200')" style="display:block;margin-top:12px;padding:12px;width:100%">Book service</button>
+    </article>
+
+    <article class="iz-service" style="border:1px solid #ddd;border-radius:12px;padding:16px">
+      <h3>Sneaker Wash</h3>
+      <p>Careful cleaning and freshening for your sneakers.</p>
+      <strong>R100</strong>
+      <button onclick="selectIzandlaService('Sneaker Wash','100')" style="display:block;margin-top:12px;padding:12px;width:100%">Book service</button>
+    </article>
+  </div>
+
+  <div id="izandla-booking" style="display:none;margin-top:20px;border:1px solid #ddd;border-radius:12px;padding:16px">
+    <h3>Request a booking</h3>
+    <form id="izandla-booking-form">
+      <label>Selected service</label>
+      <input id="iz-service-name" readonly required style="display:block;width:100%;padding:10px;margin:6px 0 12px;box-sizing:border-box">
+
+      <label>Your full name</label>
+      <input id="iz-customer-name" required maxlength="100" style="display:block;width:100%;padding:10px;margin:6px 0 12px;box-sizing:border-box">
+
+      <label>Phone number</label>
+      <input id="iz-customer-phone" type="tel" required maxlength="25" style="display:block;width:100%;padding:10px;margin:6px 0 12px;box-sizing:border-box">
+
+      <label>Service address</label>
+      <textarea id="iz-service-address" required maxlength="500" style="display:block;width:100%;padding:10px;margin:6px 0 12px;box-sizing:border-box"></textarea>
+
+      <label>Preferred date and time</label>
+      <input id="iz-booking-time" type="datetime-local" required style="display:block;width:100%;padding:10px;margin:6px 0 12px;box-sizing:border-box">
+
+      <label>Job details</label>
+      <textarea id="iz-job-details" maxlength="1000" placeholder="For school, yard or wall cleaning, describe the size of the job." style="display:block;width:100%;padding:10px;margin:6px 0 12px;box-sizing:border-box"></textarea>
+
+      <p id="iz-price-display"></p>
+      <button type="submit" style="padding:12px;width:100%">Submit booking request</button>
+      <button type="button" onclick="document.getElementById('izandla-booking').style.display='none'" style="padding:12px;width:100%;margin-top:8px">Cancel</button>
+      <p id="iz-booking-message" role="status"></p>
+    </form>
+  </div>
+</section>
+
+<script>
+  let izSelectedPrice = "quote";
+
+  function selectIzandlaService(name, price) {
+    izSelectedPrice = price;
+    document.getElementById("iz-service-name").value = name;
+    document.getElementById("iz-price-display").textContent =
+      price === "quote" ? "Final price: quote required" : "Listed price: R" + price;
+    document.getElementById("iz-booking-message").textContent = "";
+    document.getElementById("izandla-booking").style.display = "block";
+    document.getElementById("izandla-booking").scrollIntoView({behavior:"smooth"});
+  }
+
+  document.getElementById("izandla-booking-form").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const message = document.getElementById("iz-booking-message");
+    const client = window.izandlaSupabase;
+
+    if (!client) {
+      message.textContent = "Connection unavailable. Please try again later.";
+      return;
+    }
+
+    const dateValue = document.getElementById("iz-booking-time").value;
+    const bookingDate = new Date(dateValue);
+
+    if (!dateValue || Number.isNaN(bookingDate.getTime()) || bookingDate <= new Date()) {
+      message.textContent = "Choose a valid future booking date and time.";
+      return;
+    }
+
+    const price = izSelectedPrice === "quote" ? 0 : Number(izSelectedPrice);
+
+    const booking = {
+      customer_name: document.getElementById("iz-customer-name").value.trim(),
+      customer_phone: document.getElementById("iz-customer-phone").value.trim(),
+      service_type: document.getElementById("iz-service-name").value,
+      service_address: document.getElementById("iz-service-address").value.trim(),
+      booking_time: bookingDate.toISOString(),
+      price: price,
+      status: "pending"
+    };
+
+    if (!booking.customer_name || !booking.customer_phone || !booking.service_address) {
+      message.textContent = "Please complete all required fields.";
+      return;
+    }
+
+    message.textContent = "Submitting your request...";
+
+    const { error } = await client
+      .from("cleaning_bookings")
+      .insert(booking);
+
+    if (error) {
+      console.error("Booking submission failed:", error.message);
+      message.textContent = "Booking could not be saved. Please try again later.";
+      return;
+    }
+
+    message.textContent =
+      "Booking request received! The team must confirm your booking and final price.";
+
+    document.getElementById("izandla-booking-form").reset();
+  });
+</script>
+
 
   <!-- FOOD -->
   <section id="food" class="panel hidden">
