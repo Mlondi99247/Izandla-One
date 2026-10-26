@@ -1,0 +1,1021 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10271d">
+  <meta name="description" content="Izandla One - cleaning, food delivery, rides and news.">
+  <title>Izandla One</title>
+
+  <link rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+  <style>
+    :root {
+      --green: #123c2b;
+      --green2: #1b6846;
+      --gold: #f3bd42;
+      --bg: #f4f7f4;
+      --white: #fff;
+      --text: #19271f;
+      --muted: #66746a;
+      --border: #dce5dd;
+      --red: #b52b2b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    header {
+      background: var(--green);
+      color: white;
+      padding: 18px 16px;
+      position: relative;
+    }
+
+    .topbar {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: .3px;
+    }
+
+    .brand span { color: var(--gold); }
+
+    .tagline {
+      margin-top: 5px;
+      font-size: 12px;
+      color: #dce9df;
+    }
+
+    .admin-open {
+      color: white;
+      background: transparent;
+      border: 1px solid #8ba998;
+      border-radius: 9px;
+      padding: 9px 11px;
+    }
+
+    main {
+      width: min(1100px, 100%);
+      margin: auto;
+      padding: 18px 14px 42px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #123c2b, #27764f);
+      color: white;
+      padding: 25px 20px;
+      border-radius: 18px;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 { margin: 0 0 9px; font-size: 27px; }
+    .hero p { margin: 0; line-height: 1.55; color: #e0eee4; }
+
+    .status {
+      display: inline-block;
+      background: #e5f4e9;
+      color: #175b34;
+      padding: 6px 10px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-top: 14px;
+    }
+
+    .section-title { margin: 25px 0 12px; font-size: 20px; }
+
+    .services {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .service {
+      text-align: left;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 17px 14px;
+      color: var(--text);
+      min-height: 125px;
+      box-shadow: 0 3px 10px #183d2010;
+    }
+
+    .service:active { transform: scale(.98); }
+    .service .emoji { font-size: 29px; }
+    .service h3 { margin: 10px 0 5px; font-size: 17px; }
+    .service p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+    .panel {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 17px;
+      margin-top: 16px;
+    }
+
+    .panel h2 { margin: 0 0 8px; font-size: 20px; }
+    .hint { color: var(--muted); font-size: 13px; line-height: 1.5; }
+
+    label {
+      display: block;
+      margin: 14px 0 6px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    input, select, textarea {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cbd8cd;
+      border-radius: 9px;
+      background: white;
+      color: var(--text);
+    }
+
+    textarea { min-height: 85px; resize: vertical; }
+
+    .btn {
+      border: 0;
+      border-radius: 9px;
+      background: var(--green2);
+      color: white;
+      font-weight: bold;
+      padding: 12px 15px;
+      margin-top: 14px;
+      width: 100%;
+    }
+
+    .btn.gold { background: var(--gold); color: #272313; }
+    .btn.dark { background: var(--green); }
+    .btn.secondary { background: #e9f0ea; color: var(--green); }
+    .btn.danger { background: var(--red); }
+    .btn.small { width: auto; padding: 8px 10px; margin: 5px 4px 0 0; }
+
+    .two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    #map {
+      height: 310px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-top: 12px;
+      z-index: 1;
+    }
+
+    .route-result {
+      background: #edf6ee;
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 10px;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .hidden { display: none !important; }
+
+    .news-links a {
+      display: block;
+      color: var(--green2);
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .record {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      overflow-wrap: anywhere;
+    }
+
+    .record:last-child { border-bottom: 0; }
+
+    .record small {
+      display: block;
+      color: var(--muted);
+      margin-top: 5px;
+      line-height: 1.5;
+    }
+
+    .record select { margin-top: 8px; }
+    .notice { font-size: 13px; line-height: 1.5; margin-top: 12px; }
+
+    footer {
+      text-align: center;
+      padding: 24px 12px;
+      background: #e8eee9;
+      color: #536359;
+      font-size: 12px;
+    }
+
+    @media (min-width: 650px) {
+      .services { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .hero h1 { font-size: 34px; }
+      .forms-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    }
+
+    @media (max-width: 360px) {
+      .brand { font-size: 20px; }
+      .hero h1 { font-size: 23px; }
+      .two { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="topbar">
+    <div>
+      <div class="brand">IZANDLA <span>ONE</span></div>
+      <div class="tagline">Local services. One place.</div>
+    </div>
+    <button class="admin-open" onclick="showAdmin()">Admin</button>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>Welcome to Izandla One</h1>
+    <p>Book cleaning, order food, request a ride and explore news and sports coverage — all from one place.</p>
+    <span class="status">Customer service portal</span>
+  </section>
+
+  <h2 class="section-title">Choose a service</h2>
+
+  <section class="services">
+    <button class="service" onclick="showService('cleaning')">
+      <div class="emoji">🧹</div>
+      <h3>Cleaning</h3>
+      <p>Home, office and other cleaning requests.</p>
+    </button>
+
+    <button class="service" onclick="showService('food')">
+      <div class="emoji">🍔</div>
+      <h3>Food delivery</h3>
+      <p>Send an order request to a store.</p>
+    </button>
+
+    <button class="service" onclick="showService('rides')">
+      <div class="emoji">🚗</div>
+      <h3>Rides</h3>
+      <p>Request a pickup and destination.</p>
+    </button>
+
+    <button class="service" onclick="showService('news')">
+      <div class="emoji">🌍</div>
+      <h3>News & scores</h3>
+      <p>Explore current news and live sports coverage.</p>
+    </button>
+  </section>
+
+  <!-- CLEANING -->
+  <section id="cleaning" class="panel hidden">
+    <h2>🧹 Cleaning request</h2>
+    <p class="hint">Submit your details to request a cleaning service. Price and availability must be confirmed.</p>
+
+    <form onsubmit="submitRequest(event,'Cleaning')">
+      <label>Your name</label>
+      <input name="name" required maxlength="100" placeholder="Full name">
+
+      <label>Cleaning service</label>
+      <select name="service" required>
+        <option value="">Choose a service</option>
+        <option>Home cleaning</option>
+        <option>Office cleaning</option>
+        <option>Deep cleaning</option>
+        <option>Move-in / move-out cleaning</option>
+        <option>Other cleaning</option>
+      </select>
+
+      <label>Service address</label>
+      <input name="address" required maxlength="250" placeholder="Area, street or building">
+
+      <label>Preferred date and time</label>
+      <input name="date" type="datetime-local">
+
+      <label>Extra details</label>
+      <textarea name="details" maxlength="1000" placeholder="Rooms, size, special requests..."></textarea>
+
+      <button class="btn" type="submit">Send cleaning request on WhatsApp</button>
+    </form>
+  </section>
+
+  <!-- FOOD -->
+  <section id="food" class="panel hidden">
+    <h2>🍔 Food delivery</h2>
+    <p class="hint">Choose a participating store and send the order request. The store must confirm availability, total price and delivery.</p>
+
+    <form onsubmit="submitRequest(event,'Food order')">
+      <label>Your name</label>
+      <input name="name" required maxlength="100" placeholder="Full name">
+
+      <label>Participating store</label>
+      <select id="foodStore" name="store" required>
+        <option value="">Choose a store</option>
+      </select>
+
+      <label>Food items and quantities</label>
+      <textarea name="items" required maxlength="1500" placeholder="2 burgers, 1 chips..."></textarea>
+
+      <label>Delivery address</label>
+      <input name="address" required maxlength="250" placeholder="Delivery address">
+
+      <label>Customer phone number</label>
+      <input name="phone" required inputmode="tel" maxlength="30" placeholder="Your contact number">
+
+      <label>Payment preference</label>
+      <select name="payment" required>
+        <option>Pay on delivery (confirm with store)</option>
+        <option>Pay directly to store (confirm first)</option>
+      </select>
+
+      <button class="btn" type="submit">Send order request on WhatsApp</button>
+    </form>
+  </section>
+
+  <!-- RIDES -->
+  <section id="rides" class="panel hidden">
+    <h2>🚗 Request a ride</h2>
+    <p class="hint">Enter pickup and destination. Route estimates depend on internet access and the public routing service.</p>
+
+    <form id="rideForm" onsubmit="submitRide(event)">
+      <label>Your name</label>
+      <input name="name" required maxlength="100" placeholder="Full name">
+
+      <label>Pickup location</label>
+      <input id="pickup" name="pickup" required maxlength="250" placeholder="e.g. The Pavilion, Westville">
+
+      <label>Destination</label>
+      <input id="destination" name="destination" required maxlength="250" placeholder="e.g. Umhlanga Rocks">
+
+      <div class="two">
+        <button type="button" class="btn secondary" onclick="useMyLocation()">Use my location</button>
+        <button type="button" class="btn secondary" onclick="calculateRoute()">Estimate route</button>
+      </div>
+
+      <div id="routeResult" class="route-result" aria-live="polite">
+        Enter pickup and destination, then select Estimate route.
+      </div>
+
+      <div id="map"></div>
+
+      <label>Passengers</label>
+      <select name="passengers">
+        <option>1 passenger</option>
+        <option>2 passengers</option>
+        <option>3 passengers</option>
+        <option>4 passengers</option>
+        <option>5 or more (confirm availability)</option>
+      </select>
+
+      <label>Pickup time</label>
+      <input name="date" type="datetime-local">
+
+      <label>Contact number</label>
+      <input name="phone" required inputmode="tel" maxlength="30" placeholder="Your phone number">
+
+      <button class="btn" type="submit">Request ride on WhatsApp</button>
+    </form>
+    <p class="hint">A route estimate is not a confirmed fare. Confirm driver availability and the price before travelling.</p>
+  </section>
+
+  <!-- NEWS -->
+  <section id="news" class="panel hidden">
+    <h2>🌍 News and sports</h2>
+    <p class="hint">Open these sources for current headlines, scores and coverage. These links do not mean Izandla One has its own live news feed yet.</p>
+
+    <div class="news-links">
+      <a href="https://www.google.com/search?q=South+Africa+latest+news" target="_blank" rel="noopener">🇿🇦 South African news ↗</a>
+      <a href="https://www.bbc.com/news" target="_blank" rel="noopener">🌍 BBC World News ↗</a>
+      <a href="https://www.reuters.com/world/africa/" target="_blank" rel="noopener">📰 Reuters Africa ↗</a>
+      <a href="https://www.espn.com/scores" target="_blank" rel="noopener">🏆 Live sports scores — ESPN ↗</a>
+      <a href="https://www.sofascore.com/" target="_blank" rel="noopener">⚽ Football and other live scores — Sofascore ↗</a>
+      <a href="https://www.google.com/search?q=South+African+football+live+scores" target="_blank" rel="noopener">⚽ South African football scores ↗</a>
+    </div>
+  </section>
+
+  <!-- ADMIN -->
+  <section id="admin" class="panel hidden">
+    <h2>🔐 Izandla One admin</h2>
+    <p class="hint">This is a basic local demonstration dashboard. It is not secure authentication and its records are stored only in this browser.</p>
+
+    <div id="adminLogin">
+      <form onsubmit="loginAdmin(event)">
+        <label>Admin password</label>
+        <input id="adminPassword" type="password" required autocomplete="current-password" placeholder="Enter admin password">
+        <button class="btn dark" type="submit">Unlock dashboard</button>
+      </form>
+      <p id="loginError" class="notice" style="color:#b52b2b"></p>
+    </div>
+
+    <div id="adminDashboard" class="hidden">
+      <button class="btn secondary" onclick="logoutAdmin()">Lock dashboard</button>
+
+      <h3>Store and service directory</h3>
+      <p class="hint">Add participating stores or service providers. For each provider, enter its WhatsApp number using international format, e.g. 27721234567.</p>
+
+      <form onsubmit="addStore(event)">
+        <label>Business name</label>
+        <input name="name" required maxlength="100" placeholder="Business name">
+
+        <label>Business type</label>
+        <select name="type" required>
+          <option>Restaurant</option>
+          <option>Food store</option>
+          <option>Liquor store</option>
+          <option>Cleaning provider</option>
+          <option>Ride provider</option>
+          <option>Other</option>
+        </select>
+
+        <label>WhatsApp number (international format)</label>
+        <input name="phone" required inputmode="tel" maxlength="20" placeholder="27721234567">
+
+        <label>Address or service area</label>
+        <input name="address" maxlength="250" placeholder="e.g. Durban">
+
+        <button class="btn" type="submit">Add business</button>
+      </form>
+
+      <h3>Registered businesses</h3>
+      <div id="storeList"></div>
+
+      <h3>Requests recorded on this device</h3>
+      <p class="hint">These are local browser records, not a shared live database. Clearing browser data can erase them.</p>
+      <button class="btn secondary" onclick="exportRequests()">Export local requests as CSV</button>
+      <div id="requestList"></div>
+    </div>
+  </section>
+
+  <div id="message" class="notice" aria-live="polite"></div>
+</main>
+
+<footer>
+  <strong>IZANDLA ONE</strong><br>
+  Customer requests are not bookings until the relevant provider confirms them.<br>
+  Maps © OpenStreetMap contributors.
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+"use strict";
+
+/*
+  CONFIGURATION
+  South African WhatsApp number in international digits.
+  Update SUPPORT_WHATSAPP if your correct business number changes.
+*/
+const SUPPORT_WHATSAPP = "27795100296";
+const ADMIN_PASSWORD = "Mlondi99@1";
+
+/*
+  This standalone version uses localStorage.
+  It does not sync records across phones or browsers.
+*/
+const STORAGE = {
+  stores: "izandla_one_stores_v1",
+  requests: "izandla_one_requests_v1"
+};
+
+let routeMap = null;
+let routeLayer = null;
+let routeInfo = null;
+let adminUnlocked = false;
+
+function readData(key, fallback) {
+  try {
+    const value = JSON.parse(localStorage.getItem(key));
+    return Array.isArray(value) ? value : fallback;
+  } catch (error) {
+    return fallback;
+  }
+}
+
+function writeData(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch (error) {
+    alert("Could not save locally. Check available browser storage.");
+    return false;
+  }
+}
+
+function showMessage(message) {
+  document.getElementById("message").textContent = message;
+}
+
+function showService(id) {
+  ["cleaning", "food", "rides", "news", "admin"].forEach(function(name) {
+    document.getElementById(name).classList.add("hidden");
+  });
+
+  document.getElementById(id).classList.remove("hidden");
+  showMessage("");
+  document.getElementById(id).scrollIntoView({ behavior: "smooth", block: "start" });
+
+  if (id === "rides") {
+    setTimeout(initializeMap, 150);
+  }
+}
+
+function showAdmin() {
+  showService("admin");
+}
+
+function whatsappUrl(phone, message) {
+  const cleanPhone = String(phone || "").replace(/\D/g, "");
+  const number = cleanPhone || SUPPORT_WHATSAPP;
+  return "https://wa.me/" + number + "?text=" + encodeURIComponent(message);
+}
+
+function openWhatsApp(phone, message) {
+  const url = whatsappUrl(phone, message);
+  const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+
+  if (!newWindow) {
+    window.location.href = url;
+  }
+}
+
+function recordRequest(request) {
+  const requests = readData(STORAGE.requests, []);
+  requests.unshift({
+    id: "IZ-" + Date.now(),
+    createdAt: new Date().toISOString(),
+    status: "New",
+    ...request
+  });
+
+  return writeData(STORAGE.requests, requests);
+}
+
+function submitRequest(event, category) {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const data = Object.fromEntries(new FormData(form).entries());
+
+  const request = { category: category, ...data };
+
+  if (!recordRequest(request)) return;
+
+  const lines = [
+    "IZANDLA ONE — " + category.toUpperCase(),
+    "",
+    ...Object.entries(data).map(function(entry) {
+      return entry[0].toUpperCase() + ": " + (entry[1] || "Not provided");
+    }),
+    "",
+    "Please confirm availability and the total price."
+  ];
+
+  let recipient = SUPPORT_WHATSAPP;
+
+  if (category === "Food order") {
+    const stores = readData(STORAGE.stores, []);
+    const chosen = stores.find(function(store) {
+      return store.name === data.store;
+    });
+
+    if (chosen && chosen.phone) recipient = chosen.phone;
+  }
+
+  openWhatsApp(recipient, lines.join("\n"));
+  form.reset();
+  showMessage("Request saved in this browser. Finish sending the WhatsApp message and wait for confirmation.");
+}
+
+function submitRide(event) {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const data = Object.fromEntries(new FormData(form).entries());
+
+  const request = {
+    category: "Ride request",
+    ...data,
+    estimatedKm: routeInfo ? routeInfo.km : "Not calculated",
+    estimatedMinutes: routeInfo ? routeInfo.minutes : "Not calculated"
+  };
+
+  if (!recordRequest(request)) return;
+
+  const message = [
+    "IZANDLA ONE — RIDE REQUEST",
+    "",
+    "Name: " + data.name,
+    "Pickup: " + data.pickup,
+    "Destination: " + data.destination,
+    "Passengers: " + (data.passengers || "Not provided"),
+    "Pickup time: " + (data.date || "To be confirmed"),
+    "Contact: " + data.phone,
+    "Estimated road distance: " + (routeInfo ? routeInfo.km + " km" : "Not calculated"),
+    "Estimated route time: " + (routeInfo ? routeInfo.minutes + " minutes" : "Not calculated"),
+    "",
+    "Please confirm driver availability and fare before travel."
+  ].join("\n");
+
+  openWhatsApp(SUPPORT_WHATSAPP, message);
+  showMessage("Ride request saved locally. Finish sending the WhatsApp message and await confirmation.");
+}
+
+function initializeMap() {
+  const mapElement = document.getElementById("map");
+  if (!mapElement || !window.L) {
+    document.getElementById("routeResult").textContent =
+      "The map library did not load. Check your internet connection.";
+    return;
+  }
+
+  if (!routeMap) {
+    routeMap = L.map("map").setView([-29.8587, 31.0218], 10);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(routeMap);
+  }
+
+  setTimeout(function() { routeMap.invalidateSize(); }, 100);
+}
+
+async function geocode(place) {
+  const url = "https://nominatim.openstreetmap.org/search?format=json&limit=1&q=" +
+    encodeURIComponent(place + ", South Africa");
+
+  const response = await fetch(url, {
+    headers: { "Accept": "application/json" }
+  });
+
+  if (!response.ok) throw new Error("Location lookup failed");
+  const results = await response.json();
+
+  if (!results.length) {
+    throw new Error("Location not found: " + place);
+  }
+
+  return [Number(results[0].lat), Number(results[0].lon)];
+}
+
+async function calculateRoute() {
+  const pickup = document.getElementById("pickup").value.trim();
+  const destination = document.getElementById("destination").value.trim();
+  const output = document.getElementById("routeResult");
+
+  if (!pickup || !destination) {
+    output.textContent = "Enter both pickup and destination first.";
+    return;
+  }
+
+  output.textContent = "Finding locations and calculating the road route...";
+  routeInfo = null;
+
+  try {
+    initializeMap();
+
+    const start = await geocode(pickup);
+    const end = await geocode(destination);
+
+    const routeUrl =
+      "https://router.project-osrm.org/route/v1/driving/" +
+      start[1] + "," + start[0] + ";" +
+      end[1] + "," + end[0] +
+      "?overview=full&geometries=geojson";
+
+    const response = await fetch(routeUrl);
+    if (!response.ok) throw new Error("Routing service unavailable");
+
+    const result = await response.json();
+
+    if (!result.routes || !result.routes.length) {
+      throw new Error("No driving route was found");
+    }
+
+    const route = result.routes[0];
+    const km = Math.round(route.distance / 100) / 10;
+    const minutes = Math.max(1, Math.round(route.duration / 60));
+
+    routeInfo = { km: km, minutes: minutes };
+
+    if (routeLayer) routeMap.removeLayer(routeLayer);
+
+    routeLayer = L.geoJSON(route.geometry, {
+      style: { color: "#1b6846", weight: 5 }
+    }).addTo(routeMap);
+
+    L.marker(start).addTo(routeMap).bindPopup("Pickup");
+    L.marker(end).addTo(routeMap).bindPopup("Destination");
+
+    routeMap.fitBounds(routeLayer.getBounds(), { padding: [25, 25] });
+
+    output.textContent =
+      "Estimated road distance: " + km + " km. " +
+      "Estimated driving time: " + minutes +
+      " minutes. This is not a fare quote or a guarantee of actual travel time.";
+
+  } catch (error) {
+    output.textContent =
+      "Could not calculate the route: " + error.message +
+      ". Try a more specific address or area, or try again later.";
+  }
+}
+
+function useMyLocation() {
+  const output = document.getElementById("routeResult");
+
+  if (!navigator.geolocation) {
+    output.textContent = "Location is not supported by this browser.";
+    return;
+  }
+
+  output.textContent = "Requesting location permission...";
+
+  navigator.geolocation.getCurrentPosition(
+    async function(position) {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+
+      try {
+        const url = "https://nominatim.openstreetmap.org/reverse?format=json&lat=" +
+          lat + "&lon=" + lon;
+
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Address lookup failed");
+
+        const result = await response.json();
+        document.getElementById("pickup").value =
+          result.display_name || (lat + ", " + lon);
+
+        initializeMap();
+        routeMap.setView([lat, lon], 15);
+        L.marker([lat, lon]).addTo(routeMap).bindPopup("Your approximate pickup").openPopup();
+
+        output.textContent = "Pickup location filled in. Enter your destination and select Estimate route.";
+      } catch (error) {
+        document.getElementById("pickup").value = lat + ", " + lon;
+        output.textContent = "Coordinates added as pickup. Enter your destination and estimate the route.";
+      }
+    },
+    function(error) {
+      output.textContent =
+        "Could not access location. Allow location permission in Chrome or enter your pickup manually.";
+    },
+    { enableHighAccuracy: false, timeout: 12000, maximumAge: 60000 }
+  );
+}
+
+/* ADMIN: demo-only password gate, not secure authentication */
+function loginAdmin(event) {
+  event.preventDefault();
+
+  const password = document.getElementById("adminPassword").value;
+
+  if (password !== ADMIN_PASSWORD) {
+    document.getElementById("loginError").textContent = "Incorrect password.";
+    return;
+  }
+
+  adminUnlocked = true;
+  document.getElementById("adminLogin").classList.add("hidden");
+  document.getElementById("adminDashboard").classList.remove("hidden");
+  document.getElementById("loginError").textContent = "";
+
+  renderStores();
+  renderRequests();
+}
+
+function logoutAdmin() {
+  adminUnlocked = false;
+  document.getElementById("adminLogin").classList.remove("hidden");
+  document.getElementById("adminDashboard").classList.add("hidden");
+  document.getElementById("adminPassword").value = "";
+}
+
+function requireAdmin() {
+  if (!adminUnlocked) {
+    alert("Unlock the admin dashboard first.");
+    return false;
+  }
+  return true;
+}
+
+function addStore(event) {
+  event.preventDefault();
+  if (!requireAdmin()) return;
+
+  const data = Object.fromEntries(new FormData(event.currentTarget).entries());
+  data.id = "BIZ-" + Date.now();
+  data.phone = data.phone.replace(/\D/g, "");
+
+  if (data.phone.length < 10) {
+    alert("Enter a valid WhatsApp number in international format.");
+    return;
+  }
+
+  const stores = readData(STORAGE.stores, []);
+  stores.push(data);
+
+  if (!writeData(STORAGE.stores, stores)) return;
+
+  event.currentTarget.reset();
+  renderStores();
+  populateFoodStores();
+}
+
+function renderStores() {
+  if (!adminUnlocked) return;
+
+  const list = document.getElementById("storeList");
+  const stores = readData(STORAGE.stores, []);
+
+  list.replaceChildren();
+
+  if (!stores.length) {
+    list.textContent = "No businesses added yet.";
+    return;
+  }
+
+  stores.forEach(function(store) {
+    const item = document.createElement("div");
+    item.className = "record";
+
+    const title = document.createElement("strong");
+    title.textContent = store.name + " — " + store.type;
+
+    const details = document.createElement("small");
+    details.textContent =
+      "WhatsApp: " + store.phone + " | Area: " + (store.address || "Not provided");
+
+    const button = document.createElement("button");
+    button.className = "btn small danger";
+    button.textContent = "Remove";
+    button.onclick = function() {
+      if (!requireAdmin()) return;
+      if (!confirm("Remove " + store.name + " from this browser?")) return;
+
+      const updated = readData(STORAGE.stores, []).filter(function(s) {
+        return s.id !== store.id;
+      });
+
+      writeData(STORAGE.stores, updated);
+      renderStores();
+      populateFoodStores();
+    };
+
+    item.append(title, details, button);
+    list.appendChild(item);
+  });
+}
+
+function populateFoodStores() {
+  const select = document.getElementById("foodStore");
+  const previous = select.value;
+  select.replaceChildren();
+
+  const first = document.createElement("option");
+  first.value = "";
+  first.textContent = "Choose a store";
+  select.appendChild(first);
+
+  readData(STORAGE.stores, [])
+    .filter(function(store) {
+      return ["Restaurant", "Food store"].includes(store.type);
+    })
+    .forEach(function(store) {
+      const option = document.createElement("option");
+      option.value = store.name;
+      option.textContent = store.name + (store.address ? " — " + store.address : "");
+      select.appendChild(option);
+    });
+
+  if ([...select.options].some(function(option) {
+    return option.value === previous;
+  })) {
+    select.value = previous;
+  }
+}
+
+function renderRequests() {
+  if (!adminUnlocked) return;
+
+  const list = document.getElementById("requestList");
+  const requests = readData(STORAGE.requests, []);
+
+  list.replaceChildren();
+
+  if (!requests.length) {
+    list.textContent = "No requests recorded on this device yet.";
+    return;
+  }
+
+  requests.forEach(function(request) {
+    const item = document.createElement("div");
+    item.className = "record";
+
+    const title = document.createElement("strong");
+    title.textContent = request.id + " — " + request.category;
+
+    const details = document.createElement("small");
+    details.textContent =
+      "Created: " + request.createdAt +
+      " | Status: " + request.status +
+      " | Name: " + (request.name || "Not provided") +
+      " | Pickup/address: " + (request.pickup || request.address || "Not provided") +
+      " | Destination: " + (request.destination || "Not provided");
+
+    const status = document.createElement("select");
+    ["New", "Contacted", "Confirmed", "Completed", "Cancelled"].forEach(function(value) {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = value;
+      status.appendChild(option);
+    });
+
+    status.value = request.status;
+    status.onchange = function() {
+      if (!requireAdmin()) return;
+
+      const updated = readData(STORAGE.requests, []).map(function(r) {
+        if (r.id === request.id) r.status = status.value;
+        return r;
+      });
+
+      writeData(STORAGE.requests, updated);
+    };
+
+    item.append(title, details, status);
+    list.appendChild(item);
+  });
+}
+
+function exportRequests() {
+  if (!requireAdmin()) return;
+
+  const requests = readData(STORAGE.requests, []);
+  if (!requests.length) {
+    alert("There are no requests to export.");
+    return;
+  }
+
+  const columns = [...new Set(requests.flatMap(function(r) {
+    return Object.keys(r);
+  }))];
+
+  function csvCell(value) {
+    let text = String(value == null ? "" : value);
+    if (/^[=+\-@\t\r]/.test(text)) text = "'" + text;
+    return '"' + text.replace(/"/g, '""') + '"';
+  }
+
+  const csv = [
+    columns.map(csvCell).join(","),
+    ...requests.map(function(request) {
+      return columns.map(function(column) {
+        return csvCell(request[column]);
+      }).join(",");
+    })
+  ].join("\r\n");
+
+  const blob = new Blob(["\uFEFF" + csv], {
+    type: "text/csv;charset=utf-8;"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "izandla-one-requests.csv";
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+populateFoodStores();
+</script>
+</body>
+</html>
