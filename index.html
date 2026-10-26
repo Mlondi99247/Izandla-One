@@ -1319,4 +1319,135 @@ window.addEventListener("load", function () {
   }
 });
 
+<!-- IZANDLA ONE: STORE AND DRIVER ALERTS -->
+<div id="izandla-alert-panel" style="padding:16px;margin:12px 0;border:1px solid #ddd;border-radius:12px;background:#fff;color:#222">
+  <h3>🔔 Izandla One — Live Alerts</h3>
+  <p id="izandla-alert-status">Connecting to order alerts...</p>
+
+  <label for="izandla-store-select">Store account</label>
+  <select id="izandla-store-select" style="display:block;width:100%;padding:10px;margin:8px 0">
+    <option>Food Lovers — Queensburgh</option>
+    <option>Pizza Hut — Queensburgh</option>
+    <option>Burger King — Queensburgh</option>
+    <option>Fish Plaice — Durban North</option>
+    <option>Shoprite — Bizana</option>
+    <option>Hungry Lion — Bizana</option>
+    <option>Pedro's — Bizana</option>
+    <option>Ponchos — Bizana</option>
+  </select>
+
+  <button id="izandla-enable-alerts" type="button"
+    style="padding:12px;background:#087443;color:white;border:0;border-radius:8px">
+    Enable sound and notifications
+  </button>
+  <div id="izandla-alert-message" role="status" aria-live="polite"
+    style="margin-top:12px">Waiting for new orders.</div>
+</div>
+
+<script>
+(function () {
+  if (window.izandlaAlertsStarted) return;
+  window.izandlaAlertsStarted = true;
+
+  const status = document.getElementById("izandla-alert-status");
+  const message = document.getElementById("izandla-alert-message");
+  const enable = document.getElementById("izandla-enable-alerts");
+
+  if (!status || !message || !enable) return;
+
+  const db = window.izandlaSupabase;
+  let audioContext = null;
+  let soundEnabled = false;
+  let lastAlert = "";
+
+  enable.addEventListener("click", async function () {
+    try {
+      const AudioCtx = window.AudioContext ||
+        window.webkitAudioContext;
+      if (AudioCtx) {
+        audioContext = audioContext || new AudioCtx();
+        await audioContext.resume();
+        soundEnabled = true;
+      }
+
+      if ("Notification" in window &&
+          Notification.permission === "default") {
+        await Notification.requestPermission();
+      }
+
+      message.textContent =
+        "Alert settings enabled where supported.";
+      beep();
+    } catch (err) {
+      message.textContent =
+        "Sound could not start. Check browser permissions.";
+    }
+  });
+
+  function beep() {
+    if (!soundEnabled || !audioContext) return;
+    try {
+      const oscillator = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      oscillator.connect(gain);
+      gain.connect(audioContext.destination);
+      oscillator.frequency.value = 880;
+      gain.gain.value = 0.15;
+      oscillator.start();
+      oscillator.stop(audioContext.currentTime + 0.4);
+    } catch (err) {
+      console.warn("Alarm sound unavailable", err);
+    }
+  }
+
+  function alertNewOrder(order) {
+    const id = String(order.id || order.created_at ||
+      JSON.stringify(order));
+
+    if (id === lastAlert) return;
+    lastAlert = id;
+
+    const store = document.getElementById(
+      "izandla-store-select"
+    ).value;
+
+    message.textContent =
+      "🔔 NEW ORDER — " + store +
+      ". Check the dashboard for order details.";
+
+    beep();
+
+    if ("Notification" in window &&
+        Notification.permission === "granted") {
+      new Notification("Izandla One: New Order", {
+        body: "A new order was recorded. Check the dashboard."
+      });
+    }
+  }
+
+  if (!db || typeof db.channel !== "function") {
+    status.textContent =
+      "Supabase client not found. Check your existing connection.";
+    return;
+  }
+
+  status.textContent =
+    "Connecting to Izandla order updates...";
+
+  db.channel("izandla-live-order-alerts")
+    .on("postgres_changes", {
+      event: "INSERT",
+      schema: "public",
+      table: "izandla_orders"
+    }, function (payload) {
+      alertNewOrder(payload.new || {});
+    })
+    .subscribe(function (state) {
+      status.textContent = state === "SUBSCRIBED"
+        ? "Connected — listening for new orders."
+        : "Alert connection: " + state;
+    });
+})();
+</script>
+
 </script>
