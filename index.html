@@ -1227,4 +1227,96 @@ populateFoodStores();
       console.error("Supabase connection failed:", error);
     }
   });
+async function saveIzandlaFoodOrder(event) {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const fields = Array.from(
+    form.querySelectorAll("input, textarea, select")
+  ).filter(el => el.type !== "submit" && el.type !== "button");
+
+  const storeField = form.querySelector("#foodStore");
+  const itemsField = form.querySelector("textarea");
+
+  const findField = (words) =>
+    fields.find(el => {
+      const info = (
+        (el.name || "") + " " +
+        (el.id || "") + " " +
+        (el.placeholder || "") +
+        " " + (el.getAttribute("aria-label") || "")
+      ).toLowerCase();
+      return words.some(word => info.includes(word));
+    });
+
+  const nameField = findField(["customer_name", "customername", "full name", "your name", "name"]);
+  const phoneField = findField(["phone", "mobile", "cell"]);
+  const addressField = findField(["address", "delivery location"]);
+  const paymentField = findField(["payment"]);
+
+  const customerName = nameField?.value.trim();
+  const customerPhone = phoneField?.value.trim();
+  const deliveryAddress = addressField?.value.trim();
+  const storeName = storeField?.selectedOptions?.[0]?.textContent?.trim();
+  const itemText = itemsField?.value.trim();
+
+  if (!window.izandlaSupabase) {
+    alert("Connection not ready. Please refresh the page and try again.");
+    return;
+  }
+
+  if (!customerName || !customerPhone || !deliveryAddress || !itemText ||
+      !storeField?.value) {
+    alert("Please complete your name, phone, store, food items and delivery address.");
+    return;
+  }
+
+  const button = form.querySelector('button[type="submit"], button:not([type])');
+  if (button) {
+    button.disabled = true;
+    button.dataset.originalText = button.textContent;
+    button.textContent = "Saving order...";
+  }
+
+  try {
+    const { data, error } = await window.izandlaSupabase
+      .from("orders")
+      .insert([{
+        customer_name: customerName,
+        customer_phone: customerPhone,
+        store_name: storeName,
+        items: [{ description: itemText }],
+        delivery_address: deliveryAddress,
+        total_amount: 0,
+        status: "pending"
+      }])
+      .select("id")
+      .single();
+
+    if (error) throw error;
+
+    alert(
+      "Your order request was saved successfully! Reference: " +
+      data.id +
+      ". Payment and store confirmation are still pending."
+    );
+    form.reset();
+  } catch (error) {
+    console.error("Izandla order error:", error);
+    alert("Order was not saved: " + error.message);
+  } finally {
+    if (button) {
+      button.disabled = false;
+      button.textContent = button.dataset.originalText || "Send order request on WhatsApp";
+    }
+  }
+}
+
+window.addEventListener("load", function () {
+  const foodForm = document.querySelector("#food form");
+  if (foodForm) {
+    foodForm.onsubmit = saveIzandlaFoodOrder;
+  }
+});
+
 </script>
