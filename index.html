@@ -1563,4 +1563,209 @@ window.addEventListener("load", function () {
 })();
 </script>
 
+<!-- IZANDLA ONE: STORE + DRIVER DASHBOARDS -->
+<section id="izandla-dashboard" style="padding:20px;font-family:Arial,sans-serif">
+  <h2>IZANDLA ONE OPERATIONS</h2>
+
+  <label for="dashboardStore">Store dashboard</label>
+  <select id="dashboardStore">
+    <option>Food Lovers Market Queensburgh</option>
+    <option>Pizza Hut Queensburgh</option>
+    <option>Burger King Queensburgh</option>
+    <option>Fish Plaice Durban North</option>
+    <option>Shoprite Bizana</option>
+    <option>Pedros Bizana</option>
+    <option>Honchos Bizana</option>
+    <option>Hungry Lion Bizana</option>
+  </select>
+
+  <button id="enableAlarm" type="button">
+    ENABLE LOUD ALARM
+  </button>
+
+  <button id="storePageButton" type="button">
+    STORE ORDERS
+  </button>
+
+  <button id="driverPageButton" type="button">
+    DRIVER APP
+  </button>
+
+  <h3 id="dashboardTitle">Store Orders</h3>
+  <p id="connectionStatus">Connecting to order service...</p>
+  <div id="incomingOrders" aria-live="polite">
+    Orders will appear here when connected.
+  </div>
+</section>
+
+<script>
+(function () {
+  const db = window.izandlaSupabase;
+  const storeSelect = document.getElementById("dashboardStore");
+  const status = document.getElementById("connectionStatus");
+  const output = document.getElementById("incomingOrders");
+  const title = document.getElementById("dashboardTitle");
+
+  let mode = "store";
+  let alarmEnabled = false;
+  let audioContext = null;
+  let lastIds = new Set();
+  let alarmTimer = null;
+
+  function stopAlarm() {
+    if (alarmTimer) clearInterval(alarmTimer);
+    alarmTimer = null;
+  }
+
+  function beep() {
+    if (!alarmEnabled || !audioContext) return;
+
+    try {
+      const oscillator = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+
+      oscillator.type = "square";
+      oscillator.frequency.value = 1100;
+      gain.gain.value = 0.25;
+
+      oscillator.connect(gain);
+      gain.connect(audioContext.destination);
+      oscillator.start();
+      oscillator.stop(audioContext.currentTime + 0.45);
+    } catch (e) {
+      console.error("Alarm sound error", e);
+    }
+  }
+
+  document.getElementById("enableAlarm").onclick = async function () {
+    const Audio = window.AudioContext || window.webkitAudioContext;
+
+    if (!Audio) {
+      alert("This browser does not support the alarm sound.");
+      return;
+    }
+
+    audioContext = audioContext || new Audio();
+
+    if (audioContext.state === "suspended") {
+      await audioContext.resume();
+    }
+
+    alarmEnabled = true;
+    beep();
+    alert("Alarm enabled. Keep this page open for browser alerts.");
+  };
+
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, c => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;",
+      '"': "&quot;", "'": "&#39;"
+    }[c]));
+  }
+
+  function showOrders(rows, initial) {
+    const selected = storeSelect.value;
+
+    // Store matching is a convenience filter only.
+    // Secure store access must also be enforced by Supabase RLS.
+    const visible = mode === "driver"
+      ? rows.filter(o =>
+          /accepted|ready|delivery|driver/i.test(
+            String(o.status ?? "")
+          )
+        )
+      : rows.filter(o =>
+          String(o.store_name ?? "").toLowerCase() ===
+          selected.toLowerCase()
+        );
+
+    if (!initial) {
+      const newOrders = visible.filter(o => {
+        const id = String(o.id ?? o.order_id ?? "");
+        return id && !lastIds.has(id);
+      });
+
+      if (newOrders.length && alarmEnabled) {
+        stopAlarm();
+        beep();
+        alarmTimer = setInterval(beep, 1600);
+      }
+    }
+
+    rows.forEach(o => {
+      const id = String(o.id ?? o.order_id ?? "");
+      if (id) lastIds.add(id);
+    });
+
+    if (!visible.length) {
+      output.textContent = mode === "store"
+        ? "No matching orders found. Check the store field and database connection."
+        : "No delivery orders found.";
+      return;
+    }
+
+    output.innerHTML = visible.map(o => `
+      <article style="border:1px solid #aaa;border-radius:8px;padding:12px;margin:10px 0">
+        <strong>Order: ${escapeHTML(o.id ?? o.order_id ?? "Pending ID")}</strong>
+        <p>Status: ${escapeHTML(o.status ?? "Pending")}</p>
+        <p>Store: ${escapeHTML(o.store_name ?? "Store field not found")}</p>
+        <p>Details: ${escapeHTML(o.items ?? o.description ?? "Open order record to inspect details")}</p>
+      </article>
+    `).join("");
+  }
+
+  async function loadOrders(initial = true) {
+    if (!db) {
+      status.textContent =
+        "Supabase client not found. Check window.izandlaSupabase.";
+      return;
+    }
+
+    status.textContent = "Loading orders...";
+
+    // Uses your existing order table. Column names must match
+    // your actual schema; this code does not create missing columns.
+    const { data, error } = await db
+      .from("Izandla_orders")
+      .select("*")
+      .limit(100);
+
+    if (error) {
+      status.textContent = "Order connection error: " + error.message;
+      return;
+    }
+
+    status.textContent = "Connected. Latest order records loaded.";
+    showOrders(data || [], initial);
+  }
+
+  document.getElementById("storePageButton").onclick = function () {
+    mode = "store";
+    title.textContent = "Store Orders";
+    lastIds.clear();
+    stopAlarm();
+    loadOrders(true);
+  };
+
+  document.getElementById("driverPageButton").onclick = function () {
+    mode = "driver";
+    title.textContent = "Driver Delivery Orders";
+    lastIds.clear();
+    stopAlarm();
+    loadOrders(true);
+  };
+
+  storeSelect.onchange = function () {
+    lastIds.clear();
+    loadOrders(true);
+  };
+
+  loadOrders(true);
+
+  // Refresh for new orders while the page is open.
+  setInterval(() => loadOrders(false), 10000);
+})();
+</script>
+<!-- END IZANDLA ONE DASHBOARDS -->
+
 </script>
