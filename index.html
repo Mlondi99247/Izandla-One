@@ -559,6 +559,44 @@ window.izandlaStores = [
 
       <button class="btn" type="submit">Send order request on WhatsApp</button>
     </form>
+<script>
+// IZANDLA ONE — STORE ORDER ROUTING
+
+window.izandlaStores = [
+  { name: "Food Lovers Market", area: "Queensburgh" },
+  { name: "Pizza Hut", area: "Queensburgh" },
+  { name: "Burger King", area: "Queensburgh" },
+  { name: "Fish Plaice", area: "Durban North" },
+  { name: "Shoprite", area: "Branch to confirm" },
+  { name: "Pedros", area: "Bizana" },
+  { name: "Honchos", area: "Bizana" },
+  { name: "Hungry Lion", area: "Bizana" }
+];
+
+window.getIzandlaSelectedStore = function () {
+  const select = document.getElementById("izandlaStoreSelect");
+
+  if (!select || !select.value) {
+    alert("Please choose a store before ordering.");
+    return null;
+  }
+
+  const store = window.izandlaStores.find(
+    item => item.name === select.value
+  );
+
+  if (!store) {
+    alert("Please select a valid Izandla One store.");
+    return null;
+  }
+
+  return {
+    store_name: store.name,
+    store_area: store.area
+  };
+};
+</script>
+
   </section>
 
   <!-- RIDES -->
