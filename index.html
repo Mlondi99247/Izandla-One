@@ -1373,7 +1373,10 @@ async function saveIzandlaFoodOrder(event) {
   const storeName = storeField?.selectedOptions?.[0]?.textContent?.trim();
   const itemText = itemsField?.value.trim();
 
-  if (!window.izandlaSupabase) {
+  if (!window.izandlaSupabase)window.izandlaSupabase = window.supabase.createClient(
+  'YOUR_EXISTING_SUPABASE_URL',
+  'YOUR_EXISTING_SUPABASE_ANON_KEY'
+); {
     alert("Connection not ready. Please refresh the page and try again.");
     return;
   }
