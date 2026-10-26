@@ -492,6 +492,47 @@
     <h2>🍔 Food delivery</h2>
     <p class="hint">Choose a participating store and send the order request. The store must confirm availability, total price and delivery.</p>
 
+<!-- IZANDLA ONE: 8 STORE SELECTOR -->
+<div id="izandla-store-section">
+  <label for="izandlaStoreSelect">
+    Choose your store
+  </label>
+
+  <select id="izandlaStoreSelect" required>
+    <option value="">-- Select a store --</option>
+  </select>
+</div>
+
+<script>
+window.izandlaStores = [
+  { name: "Food Lovers Market", area: "Queensburgh" },
+  { name: "Pizza Hut", area: "Queensburgh" },
+  { name: "Burger King", area: "Queensburgh" },
+  { name: "Fish Plaice", area: "Durban North" },
+  { name: "Shoprite", area: "Branch to confirm" },
+  { name: "Pedros", area: "Bizana" },
+  { name: "Honchos", area: "Bizana" },
+  { name: "Hungry Lion", area: "Bizana" }
+];
+
+(function () {
+  const select = document.getElementById(
+    "izandlaStoreSelect"
+  );
+
+  if (!select) return;
+
+  window.izandlaStores.forEach(function (store) {
+    const option = document.createElement("option");
+    option.value = store.name;
+    option.textContent =
+      store.name + " — " + store.area;
+    select.appendChild(option);
+  });
+})();
+</script>
+<!-- END IZANDLA ONE STORE SELECTOR -->
+
     <form onsubmit="submitRequest(event,'Food order')">
       <label>Your name</label>
       <input name="name" required maxlength="100" placeholder="Full name">
