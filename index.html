@@ -1752,13 +1752,12 @@ window.addEventListener("load", function () {
   }
 
   async function loadOrders(initial = true) {
-    if (!db) const db =
-  window.izandlaSupabase ||
-  window.izandlasupabase;{
-      status.textContent =
-        "Supabase client not found. Check window.izandlaSupabase.";
-      return;
-    }
+    const db = window.izandlaSupabase || window.izandlasupabase;
+
+if (!db) {
+  status.textContent = "Supabase client not found. Check window.izandlaSupabase.";
+  return;
+}
 
     status.textContent = "Loading orders...";
 
