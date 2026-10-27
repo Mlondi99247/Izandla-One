@@ -1,0 +1,696 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#102b25">
+  <title>Izandla | Services at Your Fingertips</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --green: #123b30;
+      --green2: #1c624a;
+      --gold: #f5b942;
+      --bg: #f3f6f4;
+      --white: #ffffff;
+      --text: #17251f;
+      --muted: #66736c;
+      --border: #e0e7e2;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    button, input, select, textarea { font: inherit; }
+
+    button { cursor: pointer; }
+
+    .top {
+      background: var(--green);
+      color: white;
+      padding: 24px 18px 30px;
+      border-radius: 0 0 25px 25px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .logo span { color: var(--gold); }
+
+    .tagline {
+      color: #d7e8de;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .connection {
+      font-size: 11px;
+      border: 1px solid #6b897c;
+      padding: 8px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .hero {
+      max-width: 900px;
+      margin: 28px auto 0;
+    }
+
+    .hero h1 {
+      font-size: clamp(27px, 6vw, 40px);
+      line-height: 1.12;
+      margin: 0 0 10px;
+    }
+
+    .hero p {
+      color: #d7e8de;
+      font-size: 14px;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    main {
+      max-width: 900px;
+      padding: 20px 14px 45px;
+      margin: auto;
+    }
+
+    .section-title {
+      font-size: 20px;
+      margin: 12px 0 5px;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 0 0 17px;
+      line-height: 1.5;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .service {
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      background: white;
+      padding: 16px 13px;
+      text-align: left;
+      min-width: 0;
+      color: var(--text);
+      box-shadow: 0 3px 12px #14291b08;
+      transition: border-color .15s, transform .15s;
+    }
+
+    .service:hover { border-color: var(--green2); }
+    .service:active { transform: scale(.98); }
+
+    .emoji {
+      display: block;
+      font-size: 31px;
+      margin-bottom: 11px;
+    }
+
+    .service strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .service small {
+      display: block;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 12px;
+    }
+
+    .number {
+      display: inline-block;
+      color: var(--green2);
+      background: #e8f3ec;
+      border-radius: 6px;
+      padding: 3px 7px;
+      font-size: 11px;
+      margin-bottom: 9px;
+      font-weight: bold;
+    }
+
+    .panel {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 19px;
+      margin-top: 22px;
+    }
+
+    .hidden { display: none !important; }
+
+    .panel h2 { margin: 0 0 7px; font-size: 21px; }
+
+    .field { margin-top: 15px; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    input, select, textarea {
+      display: block;
+      width: 100%;
+      border: 1px solid #d6dfd9;
+      border-radius: 10px;
+      padding: 12px;
+      background: white;
+      color: var(--text);
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--green2);
+      box-shadow: 0 0 0 2px #1c624a18;
+    }
+
+    textarea { min-height: 90px; resize: vertical; }
+
+    .two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .primary {
+      width: 100%;
+      background: var(--green);
+      color: white;
+      border: 0;
+      padding: 15px;
+      border-radius: 11px;
+      font-weight: bold;
+      margin-top: 19px;
+    }
+
+    .primary:disabled { opacity: .6; cursor: wait; }
+
+    .secondary {
+      background: #edf2ee;
+      color: var(--green);
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .notice {
+      font-size: 13px;
+      line-height: 1.55;
+      padding: 12px;
+      border-radius: 10px;
+      margin-top: 14px;
+      overflow-wrap: anywhere;
+    }
+
+    .success { background: #e8f7ec; color: #155c30; }
+    .error { background: #fff0ee; color: #9b2921; }
+    .info { background: #edf4f0; color: #344d40; }
+
+    .news-links {
+      display: grid;
+      gap: 10px;
+      margin-top: 17px;
+    }
+
+    .news-link {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--green);
+      font-weight: bold;
+      background: white;
+    }
+
+    .news-link span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: normal;
+      margin-top: 5px;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      padding: 22px 10px;
+    }
+
+    @media (min-width: 650px) {
+      .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .news-links { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .panel { padding: 25px; }
+    }
+
+    @media (max-width: 360px) {
+      .connection { font-size: 10px; padding: 7px; }
+      .two { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="top">
+    <div class="nav">
+      <div>
+        <div class="logo">IZANDLA<span>.</span></div>
+        <div class="tagline">Services at your fingertips</div>
+      </div>
+      <div class="connection" id="connection">Checking backend...</div>
+    </div>
+
+    <div class="hero">
+      <h1>What do you need today?</h1>
+      <p>One place for everyday services, deliveries, transport and more.</p>
+    </div>
+  </header>
+
+  <main>
+    <h2 class="section-title">Our Services</h2>
+    <p class="sub">Choose a service below to get started.</p>
+
+    <div class="grid">
+      <button class="service" data-service="Cleaning Services">
+        <span class="number">01</span>
+        <span class="emoji">🧹</span>
+        <strong>Cleaning Services</strong>
+        <small>Home, office and other cleaning requests.</small>
+      </button>
+
+      <button class="service" data-service="Food Delivery">
+        <span class="number">02</span>
+        <span class="emoji">🍔</span>
+        <strong>Food Delivery</strong>
+        <small>Request a meal or food delivery.</small>
+      </button>
+
+      <button class="service" data-service="Rides">
+        <span class="number">03</span>
+        <span class="emoji">🚗</span>
+        <strong>Rides</strong>
+        <small>Request transport from A to B.</small>
+      </button>
+
+      <button class="service" data-service="News Updates">
+        <span class="number">04</span>
+        <span class="emoji">📰</span>
+        <strong>News Updates</strong>
+        <small>Read news from real news websites.</small>
+      </button>
+
+      <button class="service" data-service="Petrol or Diesel">
+        <span class="number">05</span>
+        <span class="emoji">⛽</span>
+        <strong>Petrol or Diesel</strong>
+        <small>Request fuel at your location.</small>
+      </button>
+
+      <button class="service" data-service="Gas Swap">
+        <span class="number">06</span>
+        <span class="emoji">🔥</span>
+        <strong>Gas Swap</strong>
+        <small>Request a gas cylinder exchange.</small>
+      </button>
+
+      <button class="service" data-service="Doctor / Veterinary Technician">
+        <span class="number">07</span>
+        <span class="emoji">🩺</span>
+        <strong>Doctor / Vet</strong>
+        <small>Request a healthcare or animal-care professional.</small>
+      </button>
+    </div>
+
+    <section id="newsPanel" class="panel hidden">
+      <h2>📰 News Updates</h2>
+      <p class="sub">Select a news provider to open its website. Headlines and live updates are supplied by each publisher.</p>
+
+      <div class="news-links">
+        <a class="news-link" href="https://www.sabcnews.com/" target="_blank" rel="noopener noreferrer">
+          SABC News <span>South African news and current affairs</span>
+        </a>
+        <a class="news-link" href="https://www.news24.com/" target="_blank" rel="noopener noreferrer">
+          News24 <span>South African and international news</span>
+        </a>
+        <a class="news-link" href="https://www.enca.com/" target="_blank" rel="noopener noreferrer">
+          eNCA <span>News and live coverage</span>
+        </a>
+        <a class="news-link" href="https://www.gov.za/newsroom" target="_blank" rel="noopener noreferrer">
+          SA Government Newsroom <span>Official government announcements</span>
+        </a>
+      </div>
+
+      <button class="secondary" id="closeNews">Back to services</button>
+    </section>
+
+    <section id="requestPanel" class="panel hidden">
+      <h2 id="formTitle">Request a Service</h2>
+      <p id="formIntro" class="sub">Enter your details below.</p>
+
+      <form id="requestForm">
+        <div class="field">
+          <label for="customerName">Your full name *</label>
+          <input id="customerName" name="customerName" required maxlength="100"
+            autocomplete="name" placeholder="Enter your name">
+        </div>
+
+        <div class="field">
+          <label for="phone">Phone number *</label>
+          <input id="phone" name="phone" required type="tel" maxlength="25"
+            autocomplete="tel" placeholder="e.g. 079 000 0000">
+        </div>
+
+        <div id="dynamicFields"></div>
+
+        <button class="primary" id="submitButton" type="submit">
+          Submit Request
+        </button>
+
+        <div id="message" class="notice hidden" role="status" aria-live="polite"></div>
+      </form>
+
+      <button class="secondary" id="backButton" type="button">
+        ← Back to services
+      </button>
+    </section>
+
+    <div class="notice info">
+      <strong>How it works</strong><br>
+      Choose a service, submit your details, and your request is saved in the
+      Izandla database. A submitted request does not mean a provider or driver
+      has already accepted it.
+    </div>
+  </main>
+
+  <footer>IZANDLA · Everyday services, made simple.</footer>
+
+  <script>
+    // STEP 1: Replace these two values with your own Supabase project details.
+    const SUPABASE_URL = "PASTE_YOUR_SUPABASE_PROJECT_URL_HERE";
+    const SUPABASE_PUBLISHABLE_KEY = "PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE";
+
+    let db = null;
+
+    const connection = document.getElementById("connection");
+    const requestPanel = document.getElementById("requestPanel");
+    const newsPanel = document.getElementById("newsPanel");
+    const requestForm = document.getElementById("requestForm");
+    const dynamicFields = document.getElementById("dynamicFields");
+    const formTitle = document.getElementById("formTitle");
+    const formIntro = document.getElementById("formIntro");
+    const message = document.getElementById("message");
+    const submitButton = document.getElementById("submitButton");
+
+    let selectedService = "";
+
+    function connectBackend() {
+      if (
+        !window.supabase ||
+        !SUPABASE_URL.startsWith("https://") ||
+        SUPABASE_PUBLISHABLE_KEY.includes("PASTE_YOUR")
+      ) {
+        connection.textContent = "Backend needs setup";
+        connection.style.color = "#ffd47c";
+        return;
+      }
+
+      try {
+        db = window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_PUBLISHABLE_KEY
+        );
+
+        connection.textContent = "Backend configured";
+        connection.style.color = "#a8f0bc";
+      } catch (error) {
+        db = null;
+        connection.textContent = "Backend setup error";
+        console.error("Supabase setup error:", error);
+      }
+    }
+
+    const fields = {
+      "Cleaning Services": [
+        { name: "jobType", label: "Cleaning type", type: "select",
+          options: ["Home cleaning", "Office cleaning", "Deep cleaning", "Other"] },
+        { name: "address", label: "Cleaning address", placeholder: "Where is the job?" },
+        { name: "preferredDate", label: "Preferred date", type: "date" },
+        { name: "description", label: "Job details", type: "textarea",
+          placeholder: "Rooms, size, special requirements..." }
+      ],
+
+      "Food Delivery": [
+        { name: "food", label: "Food / restaurant", placeholder: "What would you like?" },
+        { name: "pickupAddress", label: "Restaurant or pickup address", placeholder: "Where should food be collected?" },
+        { name: "address", label: "Delivery address", placeholder: "Where should food be delivered?" },
+        { name: "description", label: "Order details", type: "textarea",
+          placeholder: "Meals, quantities and special instructions..." }
+      ],
+
+      "Rides": [
+        { name: "pickupAddress", label: "Pickup location", placeholder: "Where should the driver collect you?" },
+        { name: "destination", label: "Destination", placeholder: "Where are you going?" },
+        { name: "passengers", label: "Number of passengers", type: "select",
+          options: ["1", "2", "3", "4", "5 or more"] },
+        { name: "preferredDate", label: "Travel date", type: "date" },
+        { name: "description", label: "Additional instructions", type: "textarea",
+          placeholder: "Pickup time or other details..." }
+      ],
+
+      "Petrol or Diesel": [
+        { name: "fuelType", label: "Fuel type", type: "select",
+          options: ["Petrol", "Diesel"] },
+        { name: "quantity", label: "Quantity in litres", type: "select",
+          options: ["5 litres", "10 litres", "20 litres", "Other quantity"] },
+        { name: "address", label: "Delivery location", placeholder: "Where is the vehicle?" },
+        { name: "vehicle", label: "Vehicle details", placeholder: "Vehicle make or description" },
+        { name: "description", label: "Extra instructions", type: "textarea",
+          placeholder: "Explain what you need..." }
+      ],
+
+      "Gas Swap": [
+        { name: "cylinderSize", label: "Cylinder size", type: "select",
+          options: ["9 kg", "14 kg", "19 kg", "48 kg", "Other size"] },
+        { name: "requestType", label: "Gas request", type: "select",
+          options: ["Swap empty for full", "New cylinder and gas", "Gas refill inquiry"] },
+        { name: "address", label: "Delivery address", placeholder: "Where should gas be delivered?" },
+        { name: "description", label: "Extra instructions", type: "textarea",
+          placeholder: "Cylinder type or other details..." }
+      ],
+
+      "Doctor / Veterinary Technician": [
+        { name: "careType", label: "Who needs care?", type: "select",
+          options: ["Human doctor", "Veterinary technician"] },
+        { name: "address", label: "Location", placeholder: "Where is the patient or animal?" },
+        { name: "preferredDate", label: "Preferred appointment date", type: "date" },
+        { name: "description", label: "Reason for request", type: "textarea",
+          placeholder: "Briefly describe the assistance needed..." }
+      ]
+    };
+
+    function addField(field) {
+      const wrap = document.createElement("div");
+      wrap.className = "field";
+
+      const label = document.createElement("label");
+      label.htmlFor = "field_" + field.name;
+      label.textContent = field.label + (
+        ["address", "pickupAddress", "destination", "food",
+          "fuelType", "cylinderSize", "careType", "jobType"].includes(field.name)
+          ? " *" : ""
+      );
+      wrap.appendChild(label);
+
+      let input;
+
+      if (field.type === "textarea") {
+        input = document.createElement("textarea");
+        input.placeholder = field.placeholder || "";
+      } else if (field.type === "select") {
+        input = document.createElement("select");
+        const first = document.createElement("option");
+        first.value = "";
+        first.textContent = "Choose an option";
+        input.appendChild(first);
+
+        field.options.forEach(function (option) {
+          const item = document.createElement("option");
+          item.value = option;
+          item.textContent = option;
+          input.appendChild(item);
+        });
+      } else {
+        input = document.createElement("input");
+        input.type = field.type || "text";
+        input.placeholder = field.placeholder || "";
+        if (field.type === "date") {
+          input.min = new Date().toISOString().slice(0, 10);
+        }
+      }
+
+      input.id = "field_" + field.name;
+      input.name = field.name;
+      input.maxLength = 2000;
+
+      if (label.textContent.endsWith("*")) {
+        input.required = true;
+      }
+
+      wrap.appendChild(input);
+      dynamicFields.appendChild(wrap);
+    }
+
+    function showMessage(text, type) {
+      message.textContent = text;
+      message.className = "notice " + type;
+      message.classList.remove("hidden");
+    }
+
+    function openService(service) {
+      if (service === "News Updates") {
+        requestPanel.classList.add("hidden");
+        newsPanel.classList.remove("hidden");
+        newsPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+
+      selectedService = service;
+      newsPanel.classList.add("hidden");
+      requestPanel.classList.remove("hidden");
+      requestForm.reset();
+      dynamicFields.replaceChildren();
+      message.className = "notice hidden";
+      submitButton.disabled = false;
+      submitButton.textContent = "Submit Request";
+
+      formTitle.textContent = service;
+      formIntro.textContent = "Complete the form to send your " +
+        service.toLowerCase() + " request.";
+
+      (fields[service] || []).forEach(addField);
+
+      requestPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    document.querySelectorAll("[data-service]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        openService(button.dataset.service);
+      });
+    });
+
+    document.getElementById("closeNews").addEventListener("click", function () {
+      newsPanel.classList.add("hidden");
+      document.querySelector(".section-title").scrollIntoView({
+        behavior: "smooth", block: "start"
+      });
+    });
+
+    document.getElementById("backButton").addEventListener("click", function () {
+      requestPanel.classList.add("hidden");
+      message.className = "notice hidden";
+    });
+
+    requestForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      if (!db) {
+        showMessage(
+          "The app is not connected yet. Add your real Supabase URL and publishable key in the code, then refresh.",
+          "error"
+        );
+        return;
+      }
+
+      const customerName = document.getElementById("customerName").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+
+      if (!customerName || !phone || !selectedService) {
+        showMessage("Please complete your name, phone number and service details.", "error");
+        return;
+      }
+
+      const details = {};
+      dynamicFields.querySelectorAll("input, select, textarea").forEach(function (input) {
+        details[input.name] = input.value.trim();
+      });
+
+      const record = {
+        service: selectedService,
+        customer_name: customerName,
+        phone: phone,
+        details: details,
+        status: "New"
+      };
+
+      submitButton.disabled = true;
+      submitButton.textContent = "Submitting...";
+      message.className = "notice hidden";
+
+      try {
+        const result = await db
+          .from("izandla_requests")
+          .insert([record])
+          .select("id")
+          .single();
+
+        if (result.error) throw result.error;
+
+        showMessage(
+          "Your request has been submitted successfully! Reference: IZ-" +
+          result.data.id + ". Keep this reference for your records.",
+          "success"
+        );
+
+        requestForm.reset();
+        dynamicFields.replaceChildren();
+        submitButton.textContent = "Request Submitted";
+      } catch (error) {
+        console.error("Request submission failed:", error);
+        showMessage(
+          "Your request could not be saved. Check the Supabase URL, publishable key, table name and database permissions. Details: " +
+          (error.message || "Unknown error"),
+          "error"
+        );
+        submitButton.disabled = false;
+        submitButton.textContent = "Try Again";
+      }
+    });
+
+    connectBackend();
+  </script>
+</body>
+</html>
