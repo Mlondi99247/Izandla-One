@@ -1019,5 +1019,120 @@ async function enableNotifications() {
 
 renderRequests();
 </script>
+<!-- IZANDLA ADMIN AND STORE DASHBOARDS -->
+<section id="izandla-dashboard" style="font-family:Arial,sans-serif;padding:16px;background:#f3f6f8;color:#17212b;border-radius:12px">
+  <h2>IZANDLA DASHBOARDS</h2>
+  <p id="izandla-db-status">Connecting to Supabase...</p>
+
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button onclick="izandlaLoadOrders('all')">Admin: All Orders</button>
+    <button onclick="izandlaLoadOrders('store')">Store: My Orders</button>
+    <button onclick="izandlaLoadOrders('all')">Refresh</button>
+  </div>
+
+  <div id="izandla-dashboard-stats" style="display:flex;gap:10px;flex-wrap:wrap;margin:16px 0"></div>
+  <div style="overflow-x:auto">
+    <table style="width:100%;background:white;border-collapse:collapse">
+      <thead>
+        <tr>
+          <th style="padding:10px;text-align:left">Order</th>
+          <th style="padding:10px;text-align:left">Store</th>
+          <th style="padding:10px;text-align:left">Status</th>
+          <th style="padding:10px;text-align:left">Details</th>
+        </tr>
+      </thead>
+      <tbody id="izandla-orders-list">
+        <tr><td colspan="4" style="padding:10px">Waiting for orders...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<script>
+(function () {
+  const status = document.getElementById("izandla-db-status");
+  const list = document.getElementById("izandla-orders-list");
+  const stats = document.getElementById("izandla-dashboard-stats");
+
+  window.izandlaLoadOrders = async function (view) {
+    const db = window.izandlaSupabase || window.izandlasupabase;
+
+    if (!db) {
+      status.textContent =
+        "Supabase client not found. Check your existing connection code.";
+      return;
+    }
+
+    status.textContent = "Loading orders...";
+    list.innerHTML = "";
+    stats.innerHTML = "";
+
+    try {
+      const { data, error } = await db
+        .from("izandla_orders")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(100);
+
+      if (error) throw error;
+
+      const orders = data || [];
+
+      if (view === "store") {
+        status.textContent =
+          "Store view requires your store login and store ID filter to be connected.";
+      } else {
+        status.textContent = "Loaded " + orders.length + " orders.";
+      }
+
+      const card = (label, value) =>
+        '<div style="background:white;padding:14px;border-radius:8px;min-width:110px">' +
+        '<strong>' + label + '</strong><div style="font-size:22px;margin-top:6px">' +
+        value + '</div></div>';
+
+      stats.innerHTML =
+        card("Total orders", orders.length) +
+        card("Pending", orders.filter(o =>
+          String(o.status || "").toLowerCase().includes("pending")
+        ).length) +
+        card("Completed", orders.filter(o =>
+          String(o.status || "").toLowerCase().includes("complete")
+        ).length);
+
+      if (!orders.length) {
+        list.innerHTML =
+          '<tr><td colspan="4" style="padding:10px">No orders found.</td></tr>';
+        return;
+      }
+
+      orders.forEach(function (order) {
+        const tr = document.createElement("tr");
+        const values = [
+          order.id ?? order.order_id ?? "—",
+          order.store_name ?? order.store_id ?? "—",
+          order.status ?? "Unknown",
+          order.description ?? order.delivery_address ?? "—"
+        ];
+
+        values.forEach(function (value) {
+          const td = document.createElement("td");
+          td.style.cssText = "padding:10px;border-top:1px solid #ddd";
+          td.textContent = String(value);
+          tr.appendChild(td);
+        });
+
+        list.appendChild(tr);
+      });
+    } catch (error) {
+      status.textContent = "Order loading error: " + error.message;
+      list.innerHTML =
+        '<tr><td colspan="4" style="padding:10px">Check the table name, columns and Supabase permissions.</td></tr>';
+    }
+  };
+
+  window.izandlaLoadOrders("all");
+})();
+</script>
+
 </body>
 </html>
