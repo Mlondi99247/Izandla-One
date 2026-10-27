@@ -1,0 +1,565 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Izandla Services</title>
+<style>
+:root {
+  --blue:#087fce;
+  --dark:#07518a;
+  --pale:#eaf6ff;
+  --white:#fff;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  font-family:Arial,sans-serif;
+  color:#17324a;
+  background:#f4f9fe;
+}
+header {
+  background:linear-gradient(135deg,#087fce,#07518a);
+  color:white;
+  padding:22px 16px;
+}
+header h1 { margin:0 0 7px; }
+header p { margin:0; }
+nav {
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:12px;
+  background:white;
+  position:sticky;
+  top:0;
+  z-index:2;
+}
+nav a {
+  white-space:nowrap;
+  text-decoration:none;
+  color:#07518a;
+  background:#eaf6ff;
+  padding:10px 13px;
+  border-radius:20px;
+  font-weight:bold;
+}
+main { max-width:850px; margin:auto; padding:15px; }
+.panel {
+  background:white;
+  padding:18px;
+  margin-bottom:16px;
+  border-radius:16px;
+  box-shadow:0 3px 14px #12334412;
+}
+h2 { color:#07518a; margin-top:0; }
+.grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+.service {
+  border:1px solid #d5eafa;
+  background:#f8fcff;
+  padding:15px 10px;
+  border-radius:13px;
+  cursor:pointer;
+  text-align:left;
+  color:#17324a;
+}
+.service strong { display:block; margin-bottom:6px; }
+.service:focus,.service:hover {
+  border-color:var(--blue);
+  background:#eaf6ff;
+}
+label {
+  display:block;
+  font-weight:bold;
+  margin-top:13px;
+}
+input,select,textarea {
+  display:block;
+  width:100%;
+  margin-top:6px;
+  padding:12px;
+  border:1px solid #c8d9e8;
+  border-radius:9px;
+  background:white;
+  font:inherit;
+}
+textarea { min-height:90px; }
+button,.primary {
+  display:inline-block;
+  border:0;
+  border-radius:10px;
+  padding:13px 16px;
+  margin-top:14px;
+  background:var(--blue);
+  color:white;
+  font-weight:bold;
+  font-size:15px;
+  cursor:pointer;
+  text-decoration:none;
+}
+button:disabled { opacity:.6; }
+.muted { color:#5c7184; font-size:14px; }
+#status {
+  background:#eaf6ff;
+  padding:12px;
+  border-radius:10px;
+  overflow-wrap:anywhere;
+}
+.store-card {
+  background:#f8fcff;
+  border:1px solid #d5eafa;
+  border-radius:12px;
+  padding:12px;
+}
+footer {
+  text-align:center;
+  padding:24px;
+  color:#5c7184;
+}
+@media(max-width:430px) {
+  .grid { grid-template-columns:1fr 1fr; }
+  main { padding:10px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🤝 IZANDLA</h1>
+  <p>Cleaning • Food delivery • Rides • Everyday services</p>
+</header>
+
+<nav>
+  <a href="#services">Services</a>
+  <a href="#food">Food</a>
+  <a href="#booking">Book</a>
+  <a href="#payment">Payment</a>
+  <a href="#dashboard">Dashboard</a>
+</nav>
+
+<main>
+<section class="panel">
+  <h2>Welcome to Izandla</h2>
+  <p>One place to request services, order food and request a ride.</p>
+  <p id="status">Connecting to your backend...</p>
+</section>
+
+<section class="panel" id="services">
+  <h2>Choose a service</h2>
+  <div class="grid">
+    <button class="service" onclick="choose('Home cleaning')">
+      <strong>🧹 Home cleaning</strong>House cleaning
+    </button>
+    <button class="service" onclick="choose('Deep cleaning')">
+      <strong>✨ Deep cleaning</strong>Detailed cleaning
+    </button>
+    <button class="service" onclick="choose('Office cleaning')">
+      <strong>🏢 Office cleaning</strong>Workplaces
+    </button>
+    <button class="service" onclick="choose('Move-in/out cleaning')">
+      <strong>🏠 Move-in/out</strong>Property cleaning
+    </button>
+    <button class="service" onclick="choose('Carpet and upholstery cleaning')">
+      <strong>🛋️ Carpet cleaning</strong>Carpets and sofas
+    </button>
+    <button class="service" onclick="choose('Laundry')">
+      <strong>👕 Laundry</strong>Washing requests
+    </button>
+    <button class="service" onclick="choose('Food delivery')">
+      <strong>🍔 Food delivery</strong>Choose a store below
+    </button>
+    <button class="service" onclick="choose('Ride request')">
+      <strong>🚗 Rides</strong>Pickup and destination
+    </button>
+    <button class="service" onclick="choose('Gas swap')">
+      <strong>🔥 Gas swap</strong>Request a gas exchange
+    </button>
+    <button class="service" onclick="choose('Bulk petrol request')">
+      <strong>⛽ Bulk petrol</strong>Request a quotation
+    </button>
+  </div>
+</section>
+
+<section class="panel" id="food">
+  <h2>Our food stores</h2>
+  <p class="muted">Choose a store to attach it to your request.</p>
+  <div id="stores" class="grid">
+    <p>Loading stores...</p>
+  </div>
+</section>
+
+<section class="panel" id="booking">
+  <h2>Make a booking or order</h2>
+  <form id="bookingForm">
+    <label for="service">Service</label>
+    <select id="service" required>
+      <option value="">Choose a service</option>
+      <option>Home cleaning</option>
+      <option>Deep cleaning</option>
+      <option>Office cleaning</option>
+      <option>Move-in/out cleaning</option>
+      <option>Carpet and upholstery cleaning</option>
+      <option>Laundry</option>
+      <option>Food delivery</option>
+      <option>Ride request</option>
+      <option>Gas swap</option>
+      <option>Bulk petrol request</option>
+    </select>
+
+    <label for="store">Food store (for food orders)</label>
+    <select id="store">
+      <option value="">No store selected</option>
+    </select>
+
+    <label for="customer">Your full name</label>
+    <input id="customer" required autocomplete="name">
+
+    <label for="phone">Phone number</label>
+    <input id="phone" type="tel" required autocomplete="tel">
+
+    <label for="area">Area / pickup address</label>
+    <input id="area" required placeholder="Enter your area or pickup point">
+
+    <label for="destination">Destination (for rides)</label>
+    <input id="destination" placeholder="Where should you go?">
+
+    <label for="date">Preferred date and time</label>
+    <input id="date" type="datetime-local">
+
+    <label for="details">Order, cleaning or ride details</label>
+    <textarea id="details" required
+      placeholder="Food items, cleaning needs, number of passengers, gas size or fuel quantity..."></textarea>
+
+    <label for="amount">Estimated amount in rand (optional)</label>
+    <input id="amount" type="number" min="0" step="0.01"
+      placeholder="Leave blank if you need a quote">
+
+    <section id="payment">
+      <h2 style="margin-top:20px">Payment preference</h2>
+      <label for="paymethod">Preferred payment method</label>
+      <select id="paymethod" required>
+        <option value="">Choose payment method</option>
+        <option>Pay on confirmation</option>
+        <option>Cash on delivery/service</option>
+        <option>Electronic funds transfer (EFT)</option>
+        <option>Online payment - not yet connected</option>
+      </select>
+      <p class="muted">
+        No money is taken by this form. Your payment remains pending
+        until a payment provider or manual confirmation is connected.
+      </p>
+    </section>
+
+    <button id="submitBtn" type="submit">Submit request</button>
+  </form>
+  <p id="result" role="status"></p>
+</section>
+
+<section class="panel" id="dashboard">
+  <h2>Store / admin dashboard login</h2>
+  <p class="muted">
+    Sign in with a Supabase account assigned to the appropriate role.
+    Database permissions must restrict each store to its own orders.
+  </p>
+  <form id="loginForm">
+    <label for="email">Account email</label>
+    <input id="email" type="email" required autocomplete="username">
+    <label for="password">Account password</label>
+    <input id="password" type="password" required autocomplete="current-password">
+    <button type="submit">Sign in</button>
+    <button type="button" onclick="signOut()">Sign out</button>
+  </form>
+  <p id="loginStatus" role="status"></p>
+  <div id="dashboardOrders"></div>
+</section>
+</main>
+
+<footer>
+  IZANDLA • Serving customers with care<br>
+  WhatsApp: 079 510 0296
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* REPLACE BOTH VALUES BELOW with your own Supabase project details. */
+const SUPABASE_URL = "PASTE_YOUR_SUPABASE_PROJECT_URL_HERE";
+const SUPABASE_PUBLISHABLE_KEY = "PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE";
+const WHATSAPP_NUMBER = "27795100296";
+
+let db = null;
+let storeList = [];
+
+const statusBox = document.getElementById("status");
+const resultBox = document.getElementById("result");
+
+function setStatus(message) {
+  statusBox.textContent = message;
+}
+
+function choose(service) {
+  document.getElementById("service").value = service;
+  document.getElementById("booking").scrollIntoView({behavior:"smooth"});
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;",
+    '"':"&quot;", "'":"&#39;"
+  })[ch]);
+}
+
+async function startApp() {
+  if (!window.supabase || !window.supabase.createClient) {
+    setStatus("Supabase library did not load. Check your internet connection.");
+    return;
+  }
+
+  if (
+    SUPABASE_URL.includes("PASTE_YOUR") ||
+    SUPABASE_PUBLISHABLE_KEY.includes("PASTE_YOUR")
+  ) {
+    setStatus("Add your Supabase Project URL and Publishable key in the code.");
+    document.getElementById("stores").innerHTML =
+      "<p>Enter your Supabase details to load stores.</p>";
+    return;
+  }
+
+  try {
+    db = window.supabase.createClient(
+      SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY
+    );
+
+    const { data, error } = await db
+      .from("izandla_stores")
+      .select("id,name,whatsapp")
+      .eq("active", true)
+      .order("name");
+
+    if (error) throw error;
+
+    storeList = data || [];
+    renderStores();
+
+    setStatus("Backend connected. You can submit service requests.");
+  } catch (error) {
+    setStatus("Backend connection problem: " + error.message);
+  }
+}
+
+function renderStores() {
+  const container = document.getElementById("stores");
+  const select = document.getElementById("store");
+
+  select.innerHTML = '<option value="">No store selected</option>';
+
+  if (!storeList.length) {
+    container.innerHTML = "<p>No active stores found. Check your Supabase stores table.</p>";
+    return;
+  }
+
+  container.innerHTML = "";
+
+  storeList.forEach(store => {
+    const option = document.createElement("option");
+    option.value = store.id;
+    option.textContent = store.name;
+    select.appendChild(option);
+
+    const card = document.createElement("div");
+    card.className = "store-card";
+
+    const title = document.createElement("strong");
+    title.textContent = store.name;
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Order from this store";
+    button.onclick = () => {
+      select.value = store.id;
+      document.getElementById("service").value = "Food delivery";
+      document.getElementById("booking").scrollIntoView({behavior:"smooth"});
+    };
+
+    card.append(title, document.createElement("br"), button);
+    container.appendChild(card);
+  });
+}
+
+document.getElementById("bookingForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  if (!db) {
+    resultBox.textContent = "Connect your Supabase project first.";
+    return;
+  }
+
+  const service = document.getElementById("service").value;
+  const storeId = document.getElementById("store").value || null;
+  const customer = document.getElementById("customer").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const area = document.getElementById("area").value.trim();
+  const destination = document.getElementById("destination").value.trim();
+  const date = document.getElementById("date").value;
+  const details = document.getElementById("details").value.trim();
+  const paymentMethod = document.getElementById("paymethod").value;
+  const amountText = document.getElementById("amount").value;
+  const amount = amountText === "" ? null : Number(amountText);
+  const selectedStore = storeList.find(s => s.id === storeId);
+
+  if (service === "Food delivery" && !storeId) {
+    resultBox.textContent = "Please choose a food store first.";
+    return;
+  }
+
+  if (amount !== null && (!Number.isFinite(amount) || amount < 0)) {
+    resultBox.textContent = "Please enter a valid amount.";
+    return;
+  }
+
+  const submitButton = document.getElementById("submitBtn");
+  submitButton.disabled = true;
+  resultBox.textContent = "Submitting your request...";
+
+  const record = {
+    service,
+    customer_name: customer,
+    phone,
+    store_id: storeId,
+    status: "new",
+    details: {
+      area,
+      destination,
+      preferred_date: date || null,
+      description: details,
+      store_name: selectedStore ? selectedStore.name : null,
+      estimated_amount_rand: amount,
+      payment_method: paymentMethod,
+      payment_status: "pending"
+    }
+  };
+
+  try {
+    const { data, error } = await db
+      .from("izandla_requests")
+      .insert(record)
+      .select("id")
+      .single();
+
+    if (error) throw error;
+
+    const reference = data?.id ?? "submitted";
+    resultBox.textContent =
+      "Request submitted. Reference: " + reference +
+      ". Payment is not yet confirmed.";
+
+    const message = [
+      "IZANDLA SERVICE REQUEST",
+      "Reference: " + reference,
+      "Service: " + service,
+      "Customer: " + customer,
+      "Phone: " + phone,
+      "Area/pickup: " + area,
+      "Destination: " + destination,
+      "Store: " + (selectedStore?.name || "Not applicable"),
+      "Details: " + details,
+      "Preferred time: " + (date || "Not specified"),
+      "Estimated amount: " + (amount === null ? "Quote needed" : "R" + amount.toFixed(2)),
+      "Payment method: " + paymentMethod,
+      "Payment status: Pending"
+    ].join("\n");
+
+    window.open(
+      "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message),
+      "_blank"
+    );
+  } catch (error) {
+    resultBox.textContent =
+      "Could not save request: " + error.message +
+      ". Check the table permissions and required fields in Supabase.";
+  } finally {
+    submitButton.disabled = false;
+  }
+});
+
+document.getElementById("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  if (!db) return;
+
+  const output = document.getElementById("loginStatus");
+  output.textContent = "Signing in...";
+
+  const { error } = await db.auth.signInWithPassword({
+    email: document.getElementById("email").value.trim(),
+    password: document.getElementById("password").value
+  });
+
+  if (error) {
+    output.textContent = "Sign-in failed: " + error.message;
+    return;
+  }
+
+  output.textContent = "Signed in. Loading orders...";
+  await loadDashboard();
+});
+
+async function loadDashboard() {
+  const output = document.getElementById("dashboardOrders");
+  if (!db) return;
+
+  const { data: sessionData } = await db.auth.getSession();
+  if (!sessionData.session) {
+    output.textContent = "Please sign in.";
+    return;
+  }
+
+  const { data, error } = await db
+    .from("izandla_requests")
+    .select("id,created_at,service,customer_name,phone,details,status,store_id")
+    .order("created_at", {ascending:false})
+    .limit(100);
+
+  if (error) {
+    output.textContent = "Orders could not load: " + error.message;
+    return;
+  }
+
+  if (!data || !data.length) {
+    output.textContent = "No orders are visible to this account.";
+    return;
+  }
+
+  output.innerHTML = "";
+  data.forEach(order => {
+    const card = document.createElement("div");
+    card.className = "store-card";
+    const store = storeList.find(s => s.id === order.store_id);
+    card.innerHTML =
+      "<strong>Request #" + escapeHTML(order.id) + "</strong>" +
+      "<p>" + escapeHTML(order.service) + "</p>" +
+      "<p>Customer: " + escapeHTML(order.customer_name) + "</p>" +
+      "<p>Phone: " + escapeHTML(order.phone) + "</p>" +
+      "<p>Store: " + escapeHTML(store?.name || order.details?.store_name || "General") + "</p>" +
+      "<p>Status: " + escapeHTML(order.status) + "</p>" +
+      "<p>Payment: " + escapeHTML(order.details?.payment_status || "Pending") + "</p>" +
+      "<p>Details: " + escapeHTML(order.details?.description || "") + "</p>";
+    output.appendChild(card);
+  });
+}
+
+async function signOut() {
+  if (!db) return;
+  const { error } = await db.auth.signOut();
+  document.getElementById("loginStatus").textContent =
+    error ? error.message : "Signed out.";
+  document.getElementById("dashboardOrders").textContent = "";
+}
+
+startApp();
+</script>
+</body>
+</html>
