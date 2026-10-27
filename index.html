@@ -337,6 +337,541 @@ hr { border:0; border-top:1px solid #e0ebf2; margin:18px 0; }
   </div>
 </section>
 
+<!-- IZANDLA: THREE NEW SERVICE BUTTONS -->
+<style>
+  .iz-new-services {
+    max-width: 900px;
+    margin: 22px auto;
+    padding: 14px;
+    font-family: Arial, sans-serif;
+  }
+
+  .iz-service-button {
+    width: 100%;
+    min-height: 78px;
+    margin: 10px 0;
+    padding: 18px;
+    border: 0;
+    border-radius: 15px;
+    background: #075e36;
+    color: white;
+    font-size: 21px;
+    font-weight: bold;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: 0 3px 8px #0002;
+  }
+
+  .iz-service-button:active {
+    transform: scale(.99);
+  }
+
+  .iz-service-panel {
+    display: none;
+    margin: 12px 0 22px;
+    padding: 18px;
+    border: 1px solid #d6dfd8;
+    border-radius: 14px;
+    background: #fff;
+    color: #222;
+  }
+
+  .iz-service-panel h3 {
+    color: #075e36;
+  }
+
+  .iz-service-panel input,
+  .iz-service-panel select,
+  .iz-service-panel textarea {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 8px 0 14px;
+    padding: 13px;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    font-size: 16px;
+    background: white;
+    color: #222;
+  }
+
+  .iz-action {
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 6px 0;
+    padding: 14px;
+    border: 0;
+    border-radius: 9px;
+    background: #087443;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .iz-whatsapp {
+    background: #128c50;
+  }
+
+  .iz-note {
+    padding: 11px;
+    border-radius: 8px;
+    background: #f0f5f1;
+    font-size: 14px;
+  }
+
+  .iz-distance {
+    font-weight: bold;
+    color: #075e36;
+  }
+</style>
+
+<section class="iz-new-services">
+
+  <!-- BUTTON 1: REQUEST A PARTNER -->
+  <button class="iz-service-button"
+    onclick="izOpenService('izPartner')">
+    🤝 REQUEST A PARTNER
+    <br><small>Connect • Agree • Book</small>
+  </button>
+
+  <div class="iz-service-panel" id="izPartner">
+    <h3>Request a Partner</h3>
+    <p>Enter the partner's WhatsApp number and your trip details.</p>
+
+    <label>Your name</label>
+    <input id="izPName" placeholder="Your full name">
+
+    <label>Partner WhatsApp number</label>
+    <input id="izPPhone" type="tel"
+      placeholder="e.g. 27821234567">
+
+    <label>Pickup location</label>
+    <input id="izPPickup"
+      placeholder="Pickup address or place name">
+
+    <label>Drop-off location</label>
+    <input id="izPDrop"
+      placeholder="Destination address or place name">
+
+    <button class="iz-action"
+      onclick="izCalculateRoute('P')">
+      Calculate road distance
+    </button>
+
+    <p id="izPDistance" class="iz-distance">
+      Distance not calculated yet.
+    </p>
+
+    <label>Agreed price (R)</label>
+    <input id="izPPrice" type="number" min="0" step="0.01"
+      placeholder="Enter agreed price">
+
+    <p class="iz-note">
+      Both you and the partner must accept the same request
+      before payment. Sending a WhatsApp message is not proof
+      of acceptance. The live acceptance system must be connected
+      to Supabase.
+    </p>
+
+    <button class="iz-action iz-whatsapp"
+      onclick="izPartnerRequest()">
+      Send request to partner WhatsApp
+    </button>
+
+    <a class="iz-action" id="izPMap"
+      href="https://www.openstreetmap.org/"
+      target="_blank" rel="noopener">
+      Open OpenStreetMap
+    </a>
+
+    <p id="izPStatus" role="status"></p>
+  </div>
+
+  <!-- BUTTON 2: DOCTOR / VETERINARY -->
+  <button class="iz-service-button"
+    onclick="izOpenService('izDoctor')">
+    🩺 REQUEST A DOCTOR / VETERINARY
+    <br><small>Medical professional • Animal care</small>
+  </button>
+
+  <div class="iz-service-panel" id="izDoctor">
+    <h3>Request a Doctor / Veterinary</h3>
+
+    <p>
+      Create a request to share with a relevant professional.
+      For emergencies, contact local emergency services directly.
+    </p>
+
+    <label>Your name</label>
+    <input id="izDName" placeholder="Your name">
+
+    <label>Professional type</label>
+    <select id="izDType">
+      <option value="Doctor">Doctor</option>
+      <option value="Veterinarian">Veterinarian</option>
+    </select>
+
+    <label>Your contact WhatsApp number</label>
+    <input id="izDPhone" type="tel"
+      placeholder="e.g. 27821234567">
+
+    <label>Pickup / consultation location</label>
+    <input id="izDPickup"
+      placeholder="Enter location">
+
+    <label>Drop-off location (optional)</label>
+    <input id="izDDrop"
+      placeholder="Hospital, clinic or other destination">
+
+    <label>Brief request (avoid unnecessary private medical details)</label>
+    <textarea id="izDDetails" rows="3"
+      placeholder="Describe the service needed"></textarea>
+
+    <button class="iz-action"
+      onclick="izCalculateRoute('D')">
+      Calculate road distance
+    </button>
+
+    <p id="izDDistance" class="iz-distance">
+      Distance not calculated yet.
+    </p>
+
+    <a class="iz-action" id="izDMap"
+      href="https://www.google.com/maps"
+      target="_blank" rel="noopener">
+      Open Google Maps
+    </a>
+
+    <button class="iz-action iz-whatsapp"
+      onclick="izDoctorRequest()">
+      Send request link to my WhatsApp
+    </button>
+
+    <p id="izDStatus" role="status"></p>
+  </div>
+
+  <!-- BUTTON 3: CONSTRUCTION LEVEL -->
+  <button class="iz-service-button"
+    onclick="izOpenService('izConstruction')">
+    🏗️ CONSTRUCTION LEVEL
+    <br><small>Repairs • Installation • Renovations</small>
+  </button>
+
+  <div class="iz-service-panel" id="izConstruction">
+    <h3>Construction Level — Choose a Service</h3>
+    <p>Select your job, describe the work and request a quote.</p>
+
+    <label>Service required</label>
+    <select id="izCType">
+      <option value="Plumbing">Plumbing and leak repairs</option>
+      <option value="Waterproofing">Waterproofing</option>
+      <option value="Painting">Interior and exterior painting</option>
+      <option value="Air conditioning">Aircon installation and servicing</option>
+      <option value="Geyser installation">Geyser installation and repairs</option>
+      <option value="Roofing">Roof repairs and roofing</option>
+      <option value="Renovations">Home and building renovations</option>
+      <option value="Maintenance">General property maintenance</option>
+    </select>
+
+    <label>Your name</label>
+    <input id="izCName" placeholder="Full name">
+
+    <label>WhatsApp number</label>
+    <input id="izCPhone" type="tel"
+      placeholder="e.g. 27821234567">
+
+    <label>Job location</label>
+    <input id="izCLocation"
+      placeholder="Suburb, street or property address">
+
+    <label>Explain the job</label>
+    <textarea id="izCDetails" rows="4"
+      placeholder="Size, problem, materials and work required"></textarea>
+
+    <label>Preferred date</label>
+    <input id="izCDate" type="date">
+
+    <a class="iz-action" id="izCMap"
+      href="https://www.google.com/maps"
+      target="_blank" rel="noopener">
+      Check job location on Google Maps
+    </a>
+
+    <button class="iz-action iz-whatsapp"
+      onclick="izConstructionQuote()">
+      Request full price quote on WhatsApp
+    </button>
+
+    <p class="iz-note">
+      The contractor must inspect or assess the job and confirm
+      the full quotation, materials, labour and booking details.
+    </p>
+  </div>
+
+</section>
+
+<script>
+(function () {
+  function el(id) {
+    return document.getElementById(id);
+  }
+
+  function val(id) {
+    return el(id).value.trim();
+  }
+
+  function phoneOK(phone) {
+    return /^\+?[0-9]{10,15}$/.test(
+      phone.replace(/[\s()-]/g, "")
+    );
+  }
+
+  function waPhone(phone) {
+    return phone.replace(/[\s()+()-]/g, "");
+  }
+
+  window.izOpenService = function (id) {
+    ["izPartner", "izDoctor", "izConstruction"].forEach(
+      function (panelId) {
+        el(panelId).style.display =
+          panelId === id &&
+          el(panelId).style.display !== "block"
+            ? "block" : "none";
+      }
+    );
+  };
+
+  // Public OSRM demo routing service. This returns road distance
+  // only when both locations can be geocoded and a route exists.
+  window.izCalculateRoute = async function (kind) {
+    var pickupId = kind === "P" ? "izPPickup" : "izDPickup";
+    var dropId = kind === "P" ? "izPDrop" : "izDDrop";
+    var outId = kind === "P" ? "izPDistance" : "izDDistance";
+    var mapId = kind === "P" ? "izPMap" : "izDMap";
+
+    var pickup = val(pickupId);
+    var drop = val(dropId);
+
+    if (!pickup || !drop) {
+      el(outId).textContent =
+        "Enter both pickup and drop-off locations first.";
+      return;
+    }
+
+    el(outId).textContent =
+      "Looking up locations and calculating road distance...";
+
+    try {
+      async function geocode(place) {
+        var url = "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q="
+          + encodeURIComponent(place);
+
+        var response = await fetch(url);
+        if (!response.ok) throw new Error("Location lookup failed");
+
+        var results = await response.json();
+        if (!results.length) {
+          throw new Error("Location not found: " + place);
+        }
+
+        return [
+          Number(results[0].lon),
+          Number(results[0].lat)
+        ];
+      }
+
+      var points = await Promise.all([
+        geocode(pickup),
+        geocode(drop)
+      ]);
+
+      var a = points[0];
+      var b = points[1];
+
+      var routeUrl =
+        "https://router.project-osrm.org/route/v1/driving/"
+        + a.join(",") + ";" + b.join(",")
+        + "?overview=false";
+
+      var response = await fetch(routeUrl);
+      if (!response.ok) throw new Error("Routing unavailable");
+
+      var data = await response.json();
+
+      if (data.code !== "Ok" || !data.routes.length) {
+        throw new Error("No driving route was found.");
+      }
+
+      var km = data.routes[0].distance / 1000;
+      var distanceText = km.toFixed(2) + " km road distance";
+
+      el(outId).textContent =
+        distanceText +
+        ". Indicative route; verify the actual route before pricing.";
+
+      // Link to a map showing the two supplied locations.
+      var googleUrl =
+        "https://www.google.com/maps/dir/?api=1&origin="
+        + encodeURIComponent(pickup)
+        + "&destination=" + encodeURIComponent(drop);
+
+      el(mapId).href = googleUrl;
+
+      if (kind === "P") {
+        el("izPStatus").textContent =
+          "Road distance calculated. No payment has been taken.";
+      } else {
+        el("izDStatus").textContent =
+          "Road distance calculated. No professional has accepted yet.";
+      }
+    } catch (error) {
+      el(outId).textContent =
+        "Could not calculate a verified road distance. Check the addresses or try Google Maps.";
+    }
+  };
+
+  window.izPartnerRequest = function () {
+    var name = val("izPName");
+    var phone = val("izPPhone");
+    var pickup = val("izPPickup");
+    var drop = val("izPDrop");
+    var price = val("izPPrice");
+
+    if (!name || !phone || !pickup || !drop) {
+      alert("Please complete your name, partner number, pickup and drop-off.");
+      return;
+    }
+
+    if (!phoneOK(phone)) {
+      alert("Enter a valid WhatsApp number with country code, e.g. 27821234567.");
+      return;
+    }
+
+    if (!price || Number(price) <= 0) {
+      alert("Enter the agreed price before sending the request.");
+      return;
+    }
+
+    var message =
+      "IZANDLA PARTNER REQUEST\n"
+      + "Requester: " + name + "\n"
+      + "Pickup: " + pickup + "\n"
+      + "Drop-off: " + drop + "\n"
+      + "Proposed price: R" + Number(price).toFixed(2) + "\n\n"
+      + "Please reply to discuss and confirm this request. "
+      + "This WhatsApp message is NOT recorded acceptance "
+      + "in the Izandla app.";
+
+    window.open(
+      "https://wa.me/" + waPhone(phone)
+      + "?text=" + encodeURIComponent(message),
+      "_blank"
+    );
+
+    el("izPStatus").textContent =
+      "WhatsApp opened. Request is not yet verified, accepted or paid.";
+  };
+
+  window.izDoctorRequest = function () {
+    var name = val("izDName");
+    var type = val("izDType");
+    var phone = val("izDPhone");
+    var pickup = val("izDPickup");
+    var drop = val("izDDrop");
+    var details = val("izDDetails");
+
+    if (!name || !phone || !pickup || !details) {
+      alert("Complete your name, WhatsApp number, location and request.");
+      return;
+    }
+
+    if (!phoneOK(phone)) {
+      alert("Enter a valid WhatsApp number with country code.");
+      return;
+    }
+
+    var message =
+      "IZANDLA " + type.toUpperCase() + " REQUEST\n"
+      + "Requester: " + name + "\n"
+      + "Pickup / consultation: " + pickup + "\n"
+      + "Drop-off: " + (drop || "Not specified") + "\n"
+      + "Request: " + details + "\n\n"
+      + "Please review and respond if you are an appropriate "
+      + "professional. Acceptance and location must be confirmed "
+      + "through the Izandla workflow.";
+
+    window.open(
+      "https://wa.me/" + waPhone(phone)
+      + "?text=" + encodeURIComponent(message),
+      "_blank"
+    );
+
+    el("izDStatus").textContent =
+      "WhatsApp opened. Share the request with the relevant professional.";
+  };
+
+  window.izConstructionQuote = function () {
+    var service = val("izCType");
+    var name = val("izCName");
+    var phone = val("izCPhone");
+    var location = val("izCLocation");
+    var details = val("izCDetails");
+    var date = val("izCDate");
+
+    if (!name || !phone || !location || !details) {
+      alert("Please complete your name, phone, job location and job description.");
+      return;
+    }
+
+    if (!phoneOK(phone)) {
+      alert("Enter a valid WhatsApp number with country code.");
+      return;
+    }
+
+    var message =
+      "IZANDLA CONSTRUCTION LEVEL — QUOTATION REQUEST\n"
+      + "Service: " + service + "\n"
+      + "Customer: " + name + "\n"
+      + "Customer WhatsApp: " + phone + "\n"
+      + "Job location: " + location + "\n"
+      + "Job details: " + details + "\n"
+      + "Preferred date: " + (date || "To be agreed") + "\n\n"
+      + "Please provide a full quotation including labour, materials, "
+      + "transport, any additional charges and availability.";
+
+    // Replace the number below with your designated
+    // Izandla Construction business WhatsApp number.
+    var constructionWhatsApp = "";
+
+    if (!constructionWhatsApp) {
+      var copyMessage = message;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(copyMessage).then(function () {
+          alert("Quote request copied. Paste it into the relevant contractor's WhatsApp chat.");
+        }).catch(function () {
+          alert("Copy this quote request manually and send it to the contractor.");
+          window.prompt("Copy the quotation request:", copyMessage);
+        });
+      } else {
+        window.prompt("Copy the quotation request:", copyMessage);
+      }
+      return;
+    }
+
+    window.open(
+      "https://wa.me/" + waPhone(constructionWhatsApp)
+      + "?text=" + encodeURIComponent(message),
+      "_blank"
+    );
+  };
+})();
+</script>
+<!-- END IZANDLA THREE NEW SERVICES -->
+
 <!-- IZANDLA NEWS UPDATES -->
 <section id="news" class="section">
   <div class="card">
