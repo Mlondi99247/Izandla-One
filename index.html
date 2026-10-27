@@ -465,12 +465,80 @@
 
     const fields = {
       "Cleaning Services": [
-        { name: "jobType", label: "Cleaning type", type: "select",
-          options: ["Home cleaning", "Office cleaning", "Deep cleaning", "Other"] },
-        { name: "address", label: "Cleaning address", placeholder: "Where is the job?" },
-        { name: "preferredDate", label: "Preferred date", type: "date" },
-        { name: "description", label: "Job details", type: "textarea",
-          placeholder: "Rooms, size, special requirements..." }
+        {
+          name: "jobType",
+          label: "Choose a cleaning service",
+          type: "select",
+          options: [
+            "JoJo tank basic cleaning - R300",
+            "JoJo tank deep wash - Request quote",
+            "Home full wash combo + yard cleaning - R1500",
+            "House deep cleaning - From R200 per room",
+            "Appliance washing and maintenance - From R45",
+            "Yard walls washing and paving spray - From R150",
+            "Roof washing and maintenance - From R200",
+            "School class deep cleaning - R200 per class",
+            "Auto valet - From R600",
+            "Auto valet with seat removal - R700",
+            "Car polishing - R200"
+          ]
+        },
+        {
+          name: "tankTreatment",
+          label: "JoJo tank treatment add-on",
+          type: "select",
+          options: [
+            "No tank treatment",
+            "Chemical treatment - R40",
+            "Water purification after cleaning - From R30",
+            "Chemical treatment + water purification"
+          ]
+        },
+        {
+          name: "schoolAddOn",
+          label: "School cleaning add-ons",
+          type: "select",
+          options: [
+            "No school add-ons",
+            "Desk cleaning - R8 per desk",
+            "Classroom perfume - R8 per class",
+            "Desk cleaning + classroom perfume"
+          ]
+        },
+        {
+          name: "autoAddOn",
+          label: "Auto valet add-ons",
+          type: "select",
+          options: [
+            "No auto add-ons",
+            "Exterior spray - R25",
+            "Dashboard spray - R15",
+            "Rim wash + shine polish - From R80"
+          ]
+        },
+        {
+          name: "quantity",
+          label: "Number of rooms, desks or items",
+          placeholder: "Enter quantity where applicable"
+        },
+        {
+          name: "address",
+          label: "Service address",
+          placeholder: "Enter the full address"
+        },
+        {
+          name: "preferredDate",
+          label: "Preferred service date",
+          type: "date"
+        },
+        {
+          name: "description",
+          label: "Additional details",
+          type: "textarea",
+          placeholder: "Describe the job and any special requirements..."
+        }
+      ],
+
       ],
 
       "Food Delivery": [
