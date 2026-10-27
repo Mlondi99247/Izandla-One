@@ -1,0 +1,47 @@
+
+<section class="panel" id="adminPanel">
+  <div class="row">
+    <div>
+      <h2>Administrator access</h2>
+      <p class="muted">Secure authentication must be configured before launch.</p>
+    </div>
+    <span class="tag">RESTRICTED</span>
+  </div>
+
+  <div class="adminlock card">
+    <h3>Sign in to administration</h3>
+    <p class="muted">
+      This static demo does not accept or store an admin password.
+      Connect Supabase Auth and enforce admin roles on the server.
+    </p>
+
+    <div class="field">
+      <label>Admin email</label>
+      <input type="email" id="adminEmail"
+        placeholder="Authorised admin email">
+    </div>
+
+    <button class="primary"
+      onclick="alert('Admin sign-in is not connected yet. Configure secure authentication before using live partner or payment data.')">
+      Continue to secure sign-in setup
+    </button>
+  </div>
+
+  <div class="twocol">
+    <div class="card">
+      <h3>Partner dashboards</h3>
+      <p class="muted">
+        Each partner needs a unique account and access only
+        to its own products, menus and orders.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Platform controls</h3>
+      <p class="muted">
+        Partner approvals, service settings, order monitoring
+        and audit logs belong behind server-enforced admin permissions.
+      </p>
+    </div>
+  </div>
+</section>
