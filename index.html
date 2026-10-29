@@ -126,6 +126,297 @@ hr { border:0; border-top:1px solid #e0ebf2; margin:18px 0; }
 </style>
 </head>
 
+<!-- IZANDLA ONE: THREE NEW SERVICE WORKFLOWS -->
+<section id="izandla-extra-services">
+  <style>
+    #izandla-extra-services {
+      font-family: Arial, sans-serif;
+      background: #eaf6ff;
+      color: #123047;
+      padding: 18px;
+      border-radius: 18px;
+      margin: 16px auto;
+      max-width: 700px;
+    }
+    #izandla-extra-services h2 {
+      text-align: center;
+      color: #087fc1;
+    }
+    #izandla-extra-services .service-button {
+      display: block;
+      width: 100%;
+      padding: 17px 12px;
+      margin: 12px 0;
+      border: 0;
+      border-radius: 13px;
+      background: #078bd0;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #izandla-extra-services .service-panel {
+      display: none;
+      background: white;
+      padding: 16px;
+      margin-top: 12px;
+      border-radius: 12px;
+    }
+    #izandla-extra-services input,
+    #izandla-extra-services select,
+    #izandla-extra-services textarea {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      margin: 9px 0;
+      border: 1px solid #b5d5e8;
+      border-radius: 8px;
+      font-size: 16px;
+      background: white;
+    }
+    #izandla-extra-services .send-button {
+      background: #075985;
+    }
+    #izandla-extra-services .note {
+      font-size: 13px;
+      color: #526777;
+    }
+  </style>
+
+  <h2>More Izandla One Services</h2>
+  <p>Choose a service and submit your request.</p>
+
+  <button class="service-button"
+    onclick="izandlaShowService('partner-panel')">
+    ❤️ Request a Partner
+  </button>
+
+  <button class="service-button"
+    onclick="izandlaShowService('medical-panel')">
+    🩺 Request a Doctor / Veterinary Technician
+  </button>
+
+  <button class="service-button"
+    onclick="izandlaShowService('construction-panel')">
+    🏗️ Construction Level
+  </button>
+
+  <!-- PARTNER REQUEST -->
+  <div id="partner-panel" class="service-panel">
+    <h3>Request a Partner</h3>
+    <p>Enter the recipient's WhatsApp number.</p>
+
+    <form onsubmit="izandlaSendPartner(event)">
+      <input id="partner-name"
+        placeholder="Your name" required>
+
+      <input id="partner-phone"
+        type="tel" placeholder="Partner WhatsApp number"
+        required>
+
+      <input id="partner-pickup"
+        placeholder="Pickup location" required>
+
+      <input id="partner-dropoff"
+        placeholder="Destination (optional)">
+
+      <textarea id="partner-notes"
+        placeholder="Additional details"></textarea>
+
+      <button class="service-button send-button"
+        type="submit">Send Partner Request</button>
+    </form>
+
+    <p class="note">
+      Both people must confirm before the request is accepted.
+      This front-end does not yet verify both acceptances or process
+      payments. Backend connection is required for that.
+    </p>
+  </div>
+
+  <!-- DOCTOR / VETERINARY REQUEST -->
+  <div id="medical-panel" class="service-panel">
+    <h3>Doctor / Veterinary Technician</h3>
+
+    <form onsubmit="izandlaSendMedical(event)">
+      <input id="medical-name"
+        placeholder="Your name" required>
+
+      <select id="medical-type" required>
+        <option value="">Choose service</option>
+        <option>Human doctor</option>
+        <option>Veterinary technician</option>
+        <option>Veterinary doctor</option>
+      </select>
+
+      <input id="medical-phone"
+        type="tel" placeholder="Your WhatsApp number" required>
+
+      <input id="medical-location"
+        placeholder="Your current location" required>
+
+      <textarea id="medical-details"
+        placeholder="Explain the assistance needed" required></textarea>
+
+      <button class="service-button send-button"
+        type="submit">Prepare Medical Request</button>
+    </form>
+
+    <p class="note">
+      This prepares a WhatsApp message for you to share with a
+      suitable professional. It does not automatically dispatch
+      a verified doctor or guarantee acceptance.
+    </p>
+  </div>
+
+  <!-- CONSTRUCTION SERVICES -->
+  <div id="construction-panel" class="service-panel">
+    <h3>Construction Level</h3>
+
+    <form onsubmit="izandlaSendConstruction(event)">
+      <input id="construction-name"
+        placeholder="Your name" required>
+
+      <select id="construction-type" required>
+        <option value="">Choose a service</option>
+        <option>Plumbing</option>
+        <option>Waterproofing</option>
+        <option>Painting</option>
+        <option>Aircon installation / servicing</option>
+        <option>Geyser installation</option>
+        <option>Roofing</option>
+        <option>Renovations</option>
+        <option>Building maintenance</option>
+      </select>
+
+      <input id="construction-location"
+        placeholder="Job location" required>
+
+      <textarea id="construction-details"
+        placeholder="Describe the job and materials needed"
+        required></textarea>
+
+      <button class="service-button send-button"
+        type="submit">Request a Quote</button>
+    </form>
+
+    <p class="note">
+      Your job details will be prepared for WhatsApp so a quote
+      can be arranged.
+    </p>
+  </div>
+
+  <script>
+    function izandlaShowService(panelId) {
+      document.querySelectorAll(
+        '#izandla-extra-services .service-panel'
+      ).forEach(function(panel) {
+        panel.style.display = 'none';
+      });
+
+      var panel = document.getElementById(panelId);
+      if (panel) {
+        panel.style.display = 'block';
+        panel.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    }
+
+    function izandlaWhatsApp(phone, message) {
+      var number = String(phone || '').replace(/\D/g, '');
+
+      // Convert South African numbers beginning with 0 to 27 format.
+      if (number.startsWith('0')) {
+        number = '27' + number.substring(1);
+      }
+
+      if (!number || number.length < 10) {
+        alert('Please enter a valid WhatsApp number.');
+        return;
+      }
+
+      var url = 'https://wa.me/' + number +
+        '?text=' + encodeURIComponent(message);
+
+      window.open(url, '_blank');
+    }
+
+    function izandlaSendPartner(event) {
+      event.preventDefault();
+
+      var name = document.getElementById('partner-name').value;
+      var phone = document.getElementById('partner-phone').value;
+      var pickup = document.getElementById('partner-pickup').value;
+      var dropoff = document.getElementById('partner-dropoff').value;
+      var notes = document.getElementById('partner-notes').value;
+
+      var message =
+        'IZANDLA ONE - PARTNER REQUEST\n' +
+        'Requester: ' + name + '\n' +
+        'Pickup: ' + pickup + '\n' +
+        'Destination: ' + (dropoff || 'Not specified') + '\n' +
+        'Details: ' + (notes || 'None') + '\n\n' +
+        'Please reply ACCEPT or DECLINE. ' +
+        'This request is not confirmed until both parties agree.';
+
+      izandlaWhatsApp(phone, message);
+    }
+
+    function izandlaSendMedical(event) {
+      event.preventDefault();
+
+      var name = document.getElementById('medical-name').value;
+      var type = document.getElementById('medical-type').value;
+      var phone = document.getElementById('medical-phone').value;
+      var location = document.getElementById('medical-location').value;
+      var details = document.getElementById('medical-details').value;
+
+      var message =
+        'IZANDLA ONE - MEDICAL / VETERINARY REQUEST\n' +
+        'Requester: ' + name + '\n' +
+        'Service: ' + type + '\n' +
+        'Contact: ' + phone + '\n' +
+        'Location: ' + location + '\n' +
+        'Details: ' + details + '\n\n' +
+        'Please confirm availability and qualifications.';
+
+      // Opens the user's WhatsApp share options.
+      window.open(
+        'https://wa.me/?text=' + encodeURIComponent(message),
+        '_blank'
+      );
+    }
+
+    function izandlaSendConstruction(event) {
+      event.preventDefault();
+
+      var name = document.getElementById('construction-name').value;
+      var type = document.getElementById('construction-type').value;
+      var location = document.getElementById('construction-location').value;
+      var details = document.getElementById('construction-details').value;
+
+      var message =
+        'IZANDLA ONE - CONSTRUCTION QUOTE REQUEST\n' +
+        'Customer: ' + name + '\n' +
+        'Service: ' + type + '\n' +
+        'Job location: ' + location + '\n' +
+        'Job details: ' + details + '\n\n' +
+        'Please provide a quotation and availability.';
+
+      window.open(
+        'https://wa.me/?text=' + encodeURIComponent(message),
+        '_blank'
+      );
+    }
+  </script>
+</section>
+<!-- END IZANDLA ONE EXTRA SERVICES -->
+</body>
+</html>
+
 <body>
 <header>
   <h1>IZANDLA</h1>
