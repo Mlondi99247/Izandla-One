@@ -1770,9 +1770,22 @@ border-radius:14px;padding:16px;text-align:left;color:#16324f;font-weight:800}
 @media(max-width:440px){#izPortal .iz-grid{grid-template-columns:1fr}}
 </style>
 
-<section id="izPortal">
-  <div id="izPortalBody"></div>
+
+<section id="izPortal" style="display:block; background:#fff; border:2px solid #1688e8; border-radius:20px; padding:20px; margin:24px auto; max-width:760px;">
+  <div id="izPortalBody">
+    <h2 style="color:#0872ce;">Izandla One — Login Portal</h2>
+    <p>Select your account to continue.</p>
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;">
+      <button type="button" onclick="window.izOpenLogin('admin')" style="padding:16px;background:#1688e8;color:white;border:0;border-radius:12px;">Admin Login</button>
+      <button type="button" onclick="window.izOpenLogin('driver')" style="padding:16px;background:#1688e8;color:white;border:0;border-radius:12px;">Driver Login</button>
+      <button type="button" onclick="window.izOpenLogin('store')" style="padding:16px;background:#1688e8;color:white;border:0;border-radius:12px;">Store Login</button>
+      <button type="button" onclick="window.izOpenLogin('restaurant')" style="padding:16px;background:#1688e8;color:white;border:0;border-radius:12px;">Restaurant Login</button>
+      <button type="button" onclick="window.izOpenLogin('liquor')" style="padding:16px;background:#1688e8;color:white;border:0;border-radius:12px;">Liquor Login</button>
+    </div>
+    <p style="color:#64748b;font-size:13px;">Login access requires a connected Supabase account.</p>
+  </div>
 </section>
+
 
 <script>
 (function(){
