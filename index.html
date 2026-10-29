@@ -1752,5 +1752,266 @@ renderRequests();
 })();
 </script>
 
+<!-- IZANDLA ONE: ROLE LOGIN PAGES -->
+<style>
+#izPortal{display:none;position:relative;background:#fff;border:1px solid #dce8f3;
+border-radius:22px;padding:22px;margin:24px auto;max-width:760px;
+box-shadow:0 12px 35px #19599112}
+#izPortal .iz-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#izPortal .iz-role{background:#f1f8ff;border:1px solid #dce8f3;
+border-radius:14px;padding:16px;text-align:left;color:#16324f;font-weight:800}
+#izPortal .iz-role span{display:block;font-size:12px;font-weight:500;margin-top:6px;color:#64748b}
+#izPortal .iz-msg{padding:12px;border-radius:10px;margin:12px 0;font-size:13px;overflow-wrap:anywhere}
+#izPortal .iz-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+#izPortal button{cursor:pointer}
+#izPortal .iz-input{width:100%;padding:12px;border:1px solid #d7e3ee;border-radius:11px}
+#izPortal .iz-label{display:block;font-size:12px;font-weight:800;margin:12px 0 6px}
+#izPortal h2{margin-top:0}
+@media(max-width:440px){#izPortal .iz-grid{grid-template-columns:1fr}}
+</style>
+
+<section id="izPortal">
+  <div id="izPortalBody"></div>
+</section>
+
+<script>
+(function(){
+"use strict";
+
+const portal=document.getElementById("izPortal");
+const body=document.getElementById("izPortalBody");
+let selectedRole="";
+
+function getClient(){
+  return window.supabaseClient ||
+         window.izandlaSupabase ||
+         window.izandlasupabase ||
+         null;
+}
+
+function message(text,ok){
+  const el=document.getElementById("izMessage");
+  if(!el)return;
+  el.className="iz-msg";
+  el.style.background=ok?"#eafaf2":"#fff3e8";
+  el.style.color=ok?"#176b46":"#8a3b16";
+  el.textContent=text;
+}
+
+function showPortal(){
+  portal.style.display="block";
+  portal.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function hidePortal(){
+  portal.style.display="none";
+}
+
+function home(){
+  hidePortal();
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("show"));
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function roleName(role){
+  return ({
+    admin:"Administrator",
+    driver:"Driver",
+    store:"Store",
+    restaurant:"Restaurant",
+    liquor:"Liquor business"
+  })[role]||"Partner";
+}
+
+function roleButtons(){
+  body.innerHTML=`
+    <h2>Izandla One partner portal</h2>
+    <p class="muted">Choose your account type to open its login page.</p>
+    <div class="iz-grid">
+      <button class="iz-role" onclick="izOpenLogin('admin')">🔐 Admin
+        <span>Platform administration</span></button>
+      <button class="iz-role" onclick="izOpenLogin('driver')">🚗 Driver app
+        <span>Driver account and requests</span></button>
+      <button class="iz-role" onclick="izOpenLogin('store')">🛒 Store
+        <span>Store account and orders</span></button>
+      <button class="iz-role" onclick="izOpenLogin('restaurant')">🍽️ Restaurant
+        <span>Restaurant account and orders</span></button>
+      <button class="iz-role" onclick="izOpenLogin('liquor')">🔞 Liquor business
+        <span>Approved liquor partner access</span></button>
+    </div>
+    <div class="iz-actions">
+      <button class="outline" onclick="izHome()">← Back to Home</button>
+    </div>`;
+  showPortal();
+}
+
+function loginPage(role){
+  selectedRole=role;
+  body.innerHTML=`
+    <h2>${roleName(role)} login</h2>
+    <p class="muted">Sign in with the email and password for your existing Izandla One account.</p>
+    <form id="izLoginForm">
+      <label class="iz-label" for="izEmail">Email address</label>
+      <input class="iz-input" id="izEmail" type="email"
+        autocomplete="username" required placeholder="you@example.com">
+      <label class="iz-label" for="izPassword">Password</label>
+      <input class="iz-input" id="izPassword" type="password"
+        autocomplete="current-password" required placeholder="Your password">
+      <div id="izMessage" class="iz-msg" style="display:none"></div>
+      <div class="iz-actions">
+        <button class="primary" id="izLoginButton" type="submit">Sign in</button>
+        <button class="outline" type="button" onclick="izRoleMenu()">Change account type</button>
+        <button class="outline" type="button" onclick="izHome()">Home</button>
+      </div>
+    </form>`;
+
+  document.getElementById("izLoginForm").addEventListener("submit",async function(e){
+    e.preventDefault();
+    const client=getClient();
+    if(!client || !client.auth){
+      message("Supabase client not found. The existing Supabase URL, publishable key and client initialization must be connected before login can work.",false);
+      return;
+    }
+
+    const email=document.getElementById("izEmail").value.trim();
+    const password=document.getElementById("izPassword").value;
+    const btn=document.getElementById("izLoginButton");
+    btn.disabled=true;
+    btn.textContent="Signing in…";
+
+    try{
+      const result=await client.auth.signInWithPassword({email,password});
+      if(result.error)throw result.error;
+
+      const user=result.data.user;
+      if(!user)throw new Error("Supabase did not return a signed-in user.");
+
+      const allowed=await checkRole(client,user.id,role);
+      if(!allowed){
+        await client.auth.signOut();
+        throw new Error("This account is not authorised for the "+roleName(role)+" portal. Check its role, membership or approval in Supabase.");
+      }
+
+      showDashboard(role,user);
+    }catch(err){
+      message(err.message||"Login failed. Check your details and Supabase configuration.",false);
+    }finally{
+      if(document.getElementById("izLoginButton")){
+        btn.disabled=false;
+        btn.textContent="Sign in";
+      }
+    }
+  });
+
+  showPortal();
+}
+
+async function checkRole(client,userId,role){
+  if(role==="admin"){
+    const {data,error}=await client.from("izandla_profiles")
+      .select("profile_role").eq("user_id",userId).maybeSingle();
+    if(error)throw new Error("Could not check admin role: "+error.message);
+    return data?.profile_role==="admin";
+  }
+
+  if(role==="driver"){
+    const {data,error}=await client.from("izandla_drivers")
+      .select("user_id").eq("user_id",userId).maybeSingle();
+    if(error)throw new Error("Could not check driver profile: "+error.message);
+    if(!data)return false;
+
+    // A driver profile alone does not mean the driver is approved.
+    // Approval must also be enforced by the database and dispatch workflow.
+    return true;
+  }
+
+  const {data,error}=await client.from("izandla_store_members")
+    .select("store_id, role").eq("user_id",userId).limit(100);
+  if(error)throw new Error("Could not check business membership: "+error.message);
+
+  // A business account must have a membership record.
+  // Specific store/restaurant/liquor type restrictions must also be
+  // enforced against the actual store record and by Supabase RLS.
+  return Array.isArray(data)&&data.length>0;
+}
+
+function showDashboard(role,user){
+  body.innerHTML=`
+    <h2>${roleName(role)} portal</h2>
+    <div class="success">
+      Signed in successfully.<br>
+      Account: ${escapeText(user.email||"Authenticated user")}<br>
+      Portal: ${roleName(role)}
+    </div>
+    <p class="muted">Your account has passed the initial portal role check.
+    This is not confirmation that driver approval, store-specific access,
+    or order dispatch is fully configured.</p>
+    <div class="iz-actions">
+      <button class="primary" onclick="izRefreshPortal()">Refresh portal</button>
+      <button class="outline" onclick="izSignOut()">Sign out</button>
+      <button class="outline" onclick="izHome()">Home</button>
+    </div>
+    <div id="izMessage" class="iz-msg" style="display:none"></div>`;
+  showPortal();
+}
+
+function escapeText(value){
+  return String(value).replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+window.izOpenLogin=loginPage;
+window.izRoleMenu=roleButtons;
+window.izHome=home;
+window.izRefreshPortal=roleButtons;
+
+window.izSignOut=async function(){
+  const client=getClient();
+  if(!client){message("Supabase client not found.",false);return;}
+  const {error}=await client.auth.signOut();
+  if(error){message(error.message,false);return;}
+  roleButtons();
+};
+
+window.izOpenPortals=roleButtons;
+
+// Route existing navigation buttons into the new login pages.
+// Other customer-service panels keep their original behaviour.
+const originalShowPanel=window.showPanel;
+window.showPanel=function(id){
+  if(id==="adminPanel"){loginPage("admin");return;}
+  if(id==="driverPanel"){loginPage("driver");return;}
+  if(id==="partnerPortal"){roleButtons();return;}
+  if(typeof originalShowPanel==="function")originalShowPanel(id);
+};
+
+// Partner dashboard buttons now open a login, not the customer menu.
+window.openStore=function(id){
+  const list=window.stores;
+  const store=Array.isArray(list)?list.find(s=>s.id===id):null;
+  if(store && store.type==="Liquor"){loginPage("liquor");return;}
+  if(store && store.type==="Restaurant"){loginPage("restaurant");return;}
+  loginPage("store");
+};
+
+// Add a clear entry point to the home page.
+const services=document.getElementById("services");
+if(services){
+  const section=document.createElement("section");
+  section.className="section";
+  section.innerHTML=`
+    <div class="sectionhead">
+      <div><h2>Business and staff login</h2>
+      <p>Choose the correct portal for your account.</p></div>
+    </div>
+    <button class="primary" onclick="izOpenPortals()">Open partner and staff portals →</button>`;
+  services.insertAdjacentElement("afterend",section);
+}
+
+})();
+</script>
+<!-- END IZANDLA ONE ROLE LOGIN PAGES -->
+
 </body>
 </html>
