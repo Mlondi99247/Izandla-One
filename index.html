@@ -1631,231 +1631,121 @@ async function enableNotifications() {
 
 renderRequests();
 </script>
-<!-- IZANDLA ADMIN AND STORE DASHBOARDS -->
-<section id="izandla-dashboard" style="font-family:Arial,sans-serif;padding:16px;background:#f3f6f8;color:#17212b;border-radius:12px">
-  <h2>IZANDLA DASHBOARDS</h2>
-  <p id="izandla-db-status">Connecting to Supabase...</p>
 
-  <div style="display:flex;gap:8px;flex-wrap:wrap">
-    <button onclick="izandlaLoadOrders('all')">Admin: All Orders</button>
-    <button onclick="izandlaLoadOrders('store')">Store: My Orders</button>
-    <button onclick="izandlaLoadOrders('all')">Refresh</button>
-  </div>
-
-  <div id="izandla-dashboard-stats" style="display:flex;gap:10px;flex-wrap:wrap;margin:16px 0"></div>
-  <div style="overflow-x:auto">
-    <table style="width:100%;background:white;border-collapse:collapse">
-      <thead>
-        <tr>
-          <th style="padding:10px;text-align:left">Order</th>
-          <th style="padding:10px;text-align:left">Store</th>
-          <th style="padding:10px;text-align:left">Status</th>
-          <th style="padding:10px;text-align:left">Details</th>
-        </tr>
-      </thead>
-      <tbody id="izandla-orders-list">
-        <tr><td colspan="4" style="padding:10px">Waiting for orders...</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<script>
-(function () {
-  const status = document.getElementById("izandla-db-status");
-  const list = document.getElementById("izandla-orders-list");
-  const stats = document.getElementById("izandla-dashboard-stats");
-
-  window.izandlaLoadOrders = async function (view) {
-    const db = window.izandlaSupabase || window.izandlasupabase;
-
-    if (!db) {
-      status.textContent =
-        "Supabase client not found. Check your existing connection code.";
-      return;
-    }
-
-    status.textContent = "Loading orders...";
-    list.innerHTML = "";
-    stats.innerHTML = "";
-
-    try {
-      const { data, error } = await db
-        .from("izandla_orders")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(100);
-
-      if (error) throw error;
-
-      const orders = data || [];
-
-      if (view === "store") {
-        status.textContent =
-          "Store view requires your store login and store ID filter to be connected.";
-      } else {
-        status.textContent = "Loaded " + orders.length + " orders.";
-      }
-
-      const card = (label, value) =>
-        '<div style="background:white;padding:14px;border-radius:8px;min-width:110px">' +
-        '<strong>' + label + '</strong><div style="font-size:22px;margin-top:6px">' +
-        value + '</div></div>';
-
-      stats.innerHTML =
-        card("Total orders", orders.length) +
-        card("Pending", orders.filter(o =>
-          String(o.status || "").toLowerCase().includes("pending")
-        ).length) +
-        card("Completed", orders.filter(o =>
-          String(o.status || "").toLowerCase().includes("complete")
-        ).length);
-
-      if (!orders.length) {
-        list.innerHTML =
-          '<tr><td colspan="4" style="padding:10px">No orders found.</td></tr>';
-        return;
-      }
-
-      orders.forEach(function (order) {
-        const tr = document.createElement("tr");
-        const values = [
-          order.id ?? order.order_id ?? "—",
-          order.store_name ?? order.store_id ?? "—",
-          order.status ?? "Unknown",
-          order.description ?? order.delivery_address ?? "—"
-        ];
-
-        values.forEach(function (value) {
-          const td = document.createElement("td");
-          td.style.cssText = "padding:10px;border-top:1px solid #ddd";
-          td.textContent = String(value);
-          tr.appendChild(td);
-        });
-
-        list.appendChild(tr);
-      });
-    } catch (error) {
-      status.textContent = "Order loading error: " + error.message;
-      list.innerHTML =
-        '<tr><td colspan="4" style="padding:10px">Check the table name, columns and Supabase permissions.</td></tr>';
-    }
-  };
-
-  window.izandlaLoadOrders("all");
-})();
-</script>
-
-<!-- IZANDLA ONE: STORE + DRIVER + ADMIN DASHBOARDS -->
-<section id="izandla-dashboards" style="display:none;padding:16px;background:#e8f5ff;color:#123">
+<!-- IZANDLA ONE DASHBOARD NAVIGATION -->
+<section id="izandla-dashboards" style="padding:18px;background:#e8f5ff;color:#123;border-radius:12px">
   <h2>Izandla One Dashboard</h2>
-  <p id="iz-dashboard-status">Connecting to Supabase...</p>
+  <p id="iz-status">Checking Supabase connection...</p>
 
-  <button onclick="izLoadDashboard('store')">Store Dashboard</button>
-  <button onclick="izLoadDashboard('driver')">Driver Dashboard</button>
-  <button onclick="izLoadDashboard('admin')">Admin Dashboard</button>
+  <div style="display:flex;flex-wrap:wrap;gap:10px">
+    <button onclick="izOpenDashboard('store')">Store Dashboard</button>
+    <button onclick="izOpenDashboard('driver')">Driver Dashboard</button>
+    <button onclick="izOpenDashboard('admin')">Admin Dashboard</button>
+  </div>
 
-  <h3 id="iz-dashboard-title">Orders and Requests</h3>
-  <button onclick="izRefreshDashboard()">Refresh</button>
-  <div id="iz-dashboard-results">Please wait...</div>
+  <div id="iz-view" style="margin-top:20px">
+    <h3>Choose a dashboard above</h3>
+  </div>
 </section>
 
 <script>
 (function () {
-  const panel = document.getElementById("izandla-dashboards");
-  const status = document.getElementById("iz-dashboard-status");
-  const results = document.getElementById("iz-dashboard-results");
-  const title = document.getElementById("iz-dashboard-title");
+  const status = document.getElementById("iz-status");
+  const view = document.getElementById("iz-view");
 
-  let currentView = "store";
-  let refreshTimer = null;
-
-  // Reuse your existing Supabase connection.
-  function getClient() {
+  function client() {
     return window.izandlaSupabase ||
       window.izandlasupabase ||
       window.supabaseClient ||
       null;
   }
 
-  function safe(value) {
+  function escapeText(value) {
     const el = document.createElement("span");
-    el.textContent = value == null ? "" :
-      typeof value === "object" ? JSON.stringify(value) :
-      String(value);
+    el.textContent = value == null ? "" : String(value);
     return el.innerHTML;
   }
 
-  function showRows(rows) {
-    if (!rows || !rows.length) {
-      results.innerHTML =
-        "<p>No orders found. New requests will appear here when " +
-        "the database, permissions and order workflow are connected.</p>";
+  window.izOpenDashboard = async function (type) {
+    const labels = {
+      store: "Store Dashboard",
+      driver: "Driver Dashboard",
+      admin: "Admin Dashboard"
+    };
+
+    view.innerHTML = "<h3>" + labels[type] + "</h3><p>Loading...</p>";
+    status.textContent = "Opening " + labels[type] + "...";
+
+    const db = client();
+
+    if (!db) {
+      view.innerHTML =
+        "<p>Supabase is not connected. Check your existing client setup.</p>";
+      status.textContent = "Connection unavailable";
       return;
     }
-
-    results.innerHTML = rows.map(function (row) {
-      return '<article style="background:white;padding:12px;margin:10px 0;' +
-        'border-radius:10px;overflow-wrap:anywhere">' +
-        Object.keys(row).map(function (key) {
-          const value = row[key];
-          if (value === null || typeof value === "object") {
-            return "<p><b>" + safe(key) + ":</b> " +
-              safe(value) + "</p>";
-          }
-          return "<p><b>" + safe(key) + ":</b> " +
-            safe(value) + "</p>";
-        }).join("") + "</article>";
-    }).join("");
-  }
-
-  window.izRefreshDashboard = async function () {
-    const db = getClient();
-
-    if (!db || typeof db.from !== "function") {
-      status.textContent =
-        "Supabase client not found. Check your existing connection code.";
-      results.textContent = "Dashboard cannot load until Supabase connects.";
-      return;
-    }
-
-    status.textContent = "Loading " + currentView + " dashboard...";
-    results.textContent = "Loading orders...";
 
     try {
-      // Database row-level security must limit which records
-      // the signed-in user is allowed to read.
-      const response = await db
-        .from("izandla_orders")
-        .select("*")
-        .limit(100);
+      let result;
 
-      if (response.error) throw response.error;
+      if (type === "store") {
+        result = await db.from("izandla_orders")
+          .select("*").limit(100);
+      } else if (type === "driver") {
+        result = await db.from("izandla_requests")
+          .select("*").limit(100);
+      } else {
+        const orders = await db.from("izandla_orders")
+          .select("*").limit(100);
+        if (orders.error) throw orders.error;
 
-      showRows(response.data || []);
-      status.textContent = "Dashboard connected. " +
-        (response.data || []).length + " records returned.";
+        const requests = await db.from("izandla_requests")
+          .select("*").limit(100);
+        if (requests.error) throw requests.error;
+
+        view.innerHTML =
+          "<h4>Orders: " + orders.data.length + "</h4>" +
+          "<h4>Requests: " + requests.data.length + "</h4>" +
+          "<p>Orders and requests visible to your current database session.</p>";
+
+        status.textContent = "Admin view loaded";
+        return;
+      }
+
+      if (result.error) throw result.error;
+
+      const rows = result.data || [];
+
+      if (!rows.length) {
+        view.innerHTML =
+          "<h3>" + labels[type] + "</h3>" +
+          "<p>No records found in the connected table.</p>" +
+          "<p>This dashboard opened successfully, but its data workflow " +
+          "still needs to be connected.</p>";
+      } else {
+        view.innerHTML = "<h3>" + labels[type] + "</h3>" +
+          rows.map(function (row) {
+            return "<article style='background:white;padding:12px;" +
+              "margin:10px 0;border-radius:8px;overflow-wrap:anywhere'>" +
+              Object.keys(row).map(function (key) {
+                return "<p><b>" + escapeText(key) + ":</b> " +
+                  escapeText(typeof row[key] === "object" &&
+                    row[key] !== null
+                    ? JSON.stringify(row[key]) : row[key]) +
+                  "</p>";
+              }).join("") + "</article>";
+          }).join("");
+      }
+
+      status.textContent = labels[type] + " opened";
     } catch (error) {
-      status.textContent = "Could not load dashboard data.";
-      results.textContent =
-        (error && error.message) ? error.message :
-        "Check the Supabase table and access policies.";
+      view.innerHTML =
+        "<h3>" + labels[type] + "</h3>" +
+        "<p>Could not load data: " +
+        escapeText(error.message || "Database error") + "</p>";
+      status.textContent = "Check table permissions and database setup";
     }
   };
-
-  window.izLoadDashboard = function (view) {
-    currentView = view;
-    title.textContent = view.charAt(0).toUpperCase() +
-      view.slice(1) + " Dashboard";
-    window.izRefreshDashboard();
-  };
-
-  // Refresh while this page remains open.
-  panel.style.display = "block";
-  window.izRefreshDashboard();
-  refreshTimer = window.setInterval(function () {
-    if (!document.hidden) window.izRefreshDashboard();
-  }, 15000);
 })();
 </script>
 
