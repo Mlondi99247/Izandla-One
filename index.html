@@ -1692,8 +1692,11 @@ renderRequests();
         result = await db.from("izandla_orders")
           .select("*").limit(100);
       } else if (type === "driver") {
-        result = await db.from("izandla_requests")
-          .select("*").limit(100);
+       result = await db.from("izandla_orders")
+  .select("*")
+  .is("driver_id", null)
+  .eq("order_status", "new")
+  .limit(100); 
       } else {
         const orders = await db.from("izandla_orders")
           .select("*").limit(100);
