@@ -1746,5 +1746,118 @@ renderRequests();
 })();
 </script>
 
+<!-- IZANDLA ONE: STORE + DRIVER + ADMIN DASHBOARDS -->
+<section id="izandla-dashboards" style="display:none;padding:16px;background:#e8f5ff;color:#123">
+  <h2>Izandla One Dashboard</h2>
+  <p id="iz-dashboard-status">Connecting to Supabase...</p>
+
+  <button onclick="izLoadDashboard('store')">Store Dashboard</button>
+  <button onclick="izLoadDashboard('driver')">Driver Dashboard</button>
+  <button onclick="izLoadDashboard('admin')">Admin Dashboard</button>
+
+  <h3 id="iz-dashboard-title">Orders and Requests</h3>
+  <button onclick="izRefreshDashboard()">Refresh</button>
+  <div id="iz-dashboard-results">Please wait...</div>
+</section>
+
+<script>
+(function () {
+  const panel = document.getElementById("izandla-dashboards");
+  const status = document.getElementById("iz-dashboard-status");
+  const results = document.getElementById("iz-dashboard-results");
+  const title = document.getElementById("iz-dashboard-title");
+
+  let currentView = "store";
+  let refreshTimer = null;
+
+  // Reuse your existing Supabase connection.
+  function getClient() {
+    return window.izandlaSupabase ||
+      window.izandlasupabase ||
+      window.supabaseClient ||
+      null;
+  }
+
+  function safe(value) {
+    const el = document.createElement("span");
+    el.textContent = value == null ? "" :
+      typeof value === "object" ? JSON.stringify(value) :
+      String(value);
+    return el.innerHTML;
+  }
+
+  function showRows(rows) {
+    if (!rows || !rows.length) {
+      results.innerHTML =
+        "<p>No orders found. New requests will appear here when " +
+        "the database, permissions and order workflow are connected.</p>";
+      return;
+    }
+
+    results.innerHTML = rows.map(function (row) {
+      return '<article style="background:white;padding:12px;margin:10px 0;' +
+        'border-radius:10px;overflow-wrap:anywhere">' +
+        Object.keys(row).map(function (key) {
+          const value = row[key];
+          if (value === null || typeof value === "object") {
+            return "<p><b>" + safe(key) + ":</b> " +
+              safe(value) + "</p>";
+          }
+          return "<p><b>" + safe(key) + ":</b> " +
+            safe(value) + "</p>";
+        }).join("") + "</article>";
+    }).join("");
+  }
+
+  window.izRefreshDashboard = async function () {
+    const db = getClient();
+
+    if (!db || typeof db.from !== "function") {
+      status.textContent =
+        "Supabase client not found. Check your existing connection code.";
+      results.textContent = "Dashboard cannot load until Supabase connects.";
+      return;
+    }
+
+    status.textContent = "Loading " + currentView + " dashboard...";
+    results.textContent = "Loading orders...";
+
+    try {
+      // Database row-level security must limit which records
+      // the signed-in user is allowed to read.
+      const response = await db
+        .from("izandla_orders")
+        .select("*")
+        .limit(100);
+
+      if (response.error) throw response.error;
+
+      showRows(response.data || []);
+      status.textContent = "Dashboard connected. " +
+        (response.data || []).length + " records returned.";
+    } catch (error) {
+      status.textContent = "Could not load dashboard data.";
+      results.textContent =
+        (error && error.message) ? error.message :
+        "Check the Supabase table and access policies.";
+    }
+  };
+
+  window.izLoadDashboard = function (view) {
+    currentView = view;
+    title.textContent = view.charAt(0).toUpperCase() +
+      view.slice(1) + " Dashboard";
+    window.izRefreshDashboard();
+  };
+
+  // Refresh while this page remains open.
+  panel.style.display = "block";
+  window.izRefreshDashboard();
+  refreshTimer = window.setInterval(function () {
+    if (!document.hidden) window.izRefreshDashboard();
+  }, 15000);
+})();
+</script>
+
 </body>
 </html>
