@@ -95,4 +95,78 @@ async function signOut(){if(db)await db.auth.signOut();user=null;role='customer'
 window.addEventListener('online',()=>toast('You are back online.'));window.addEventListener('offline',()=>toast('You are offline. Requests may not save until connection returns.'));
 </script>
 <!-- DEPLOY NOTES: Connect the existing Supabase URL and publishable key above (never expose service_role/payment secrets). Route distance uses OpenStreetMap geocoding and OSRM driving-road routing; public services have fair-use/availability limits and should be replaced or self-hosted for production scale. Google Maps search and directions links are live now. On Monday, configure Google Maps Platform Places Autocomplete + Routes/Distance Matrix through a secure backend; never put a restricted server key in public HTML. Play Store release additionally requires a packaged Android app (Capacitor/TWA), privacy policy, account/data deletion plan where applicable, permissions review, signing, testing and Play Console submission. Payments, background push alarms, identity verification, and trusted completion/payout accounting require backend/provider setup. -->
+
+<!-- IZANDLA ONE: DRIVER & STORE REGISTRATION -->
+<section id="izandla-registration" style="font-family:Arial,sans-serif;max-width:760px;margin:24px auto;padding:20px;background:#e0f2fe;border:2px solid #38bdf8;border-radius:18px;color:#0c2d48;">
+  <h2 style="text-align:center;margin-top:0;">🤝 Izandla One Registration</h2>
+  <p style="text-align:center;">Quality uplifts the world 🌎</p>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;">
+    <button type="button" onclick="document.getElementById('iz-driver-form').hidden=false;document.getElementById('iz-store-form').hidden=true"
+      style="padding:16px;background:#0284c7;color:white;border:0;border-radius:12px;font-size:16px;font-weight:bold;">
+      🚗 Driver Sign-up
+    </button>
+    <button type="button" onclick="document.getElementById('iz-store-form').hidden=false;document.getElementById('iz-driver-form').hidden=true"
+      style="padding:16px;background:#0369a1;color:white;border:0;border-radius:12px;font-size:16px;font-weight:bold;">
+      🏪 Register a Store
+    </button>
+  </div>
+
+  <form id="iz-driver-form" hidden style="margin-top:20px;background:white;padding:16px;border-radius:12px;">
+    <h3>Driver application</h3>
+    <label>Full name<br><input name="full_name" autocomplete="name" required style="width:100%;padding:12px;box-sizing:border-box;"></label><br><br>
+    <label>Email<br><input name="email" type="email" autocomplete="email" required style="width:100%;padding:12px;box-sizing:border-box;"></label><br><br>
+    <label>Mobile / WhatsApp number<br><input name="phone" type="tel" autocomplete="tel" required style="width:100%;padding:12px;box-sizing:border-box;"></label><br><br>
+    <label>City / town<br><input name="city" required placeholder="e.g. Cape Town or Durban" style="width:100%;padding:12px;box-sizing:border-box;"></label><br><br>
+    <label>Vehicle type<br>
+      <select name="vehicle_type" required style="width:100%;padding:12px;box-sizing:border-box;">
+        <option value="">Select vehicle</option>
+        <option>Motorcycle</option><option>Car</option><option>Bakkie</option><option>Van</option><option>Truck</option>
+      </select>
+    </label><br><br>
+    <label>Licence type<br>
+      <select name="licence_type" required style="width:100%;padding:12px;box-sizing:border-box;">
+        <option value="">Select licence</option>
+        <option>Valid driving licence</option><option>Learner licence (approval subject to service requirements)</option>
+      </select>
+    </label><br><br>
+    <p style="font-size:13px;">Secure document upload must be connected before collecting licence documents.</p>
+    <button type="submit" style="width:100%;padding:14px;background:#0284c7;color:white;border:0;border-radius:10px;font-weight:bold;">Submit Driver Application</button>
+    <p id="iz-driver-message" role="status" aria-live="polite"></p>
+  </form>
+
+  <form id="iz-store-form" hidden style="margin-top:20px;background:white;padding:16px;border-radius:12px;">
+    <h3>Store application</h3>
+    <label>Store / business name<br><input name="store_name" required style="width:100%;padding:12px;box-sizing:border-box;"></label><br><br>
+    <label>Manager's full name<br><input name="manager_name" required style="width:100%;padding:12px;box-sizing:border-box;"></label><br><br>
+    <label>Manager's email<br><input name="email" type="email" required style="width:100%;padding:12px;box-sizing:border-box;"></label><br><br>
+    <label>Phone number<br><input name="phone" type="tel" required style="width:100%;padding:12px;box-sizing:border-box;"></label><br><br>
+    <label>City / town<br><input name="city" required placeholder="e.g. Cape Town or Bizana" style="width:100%;padding:12px;box-sizing:border-box;"></label><br><br>
+    <label>Business address<br><input name="address" required style="width:100%;padding:12px;box-sizing:border-box;"></label><br><br>
+    <button type="submit" style="width:100%;padding:14px;background:#0369a1;color:white;border:0;border-radius:10px;font-weight:bold;">Submit Store Application</button>
+    <p id="iz-store-message" role="status" aria-live="polite"></p>
+  </form>
+
+  <p style="font-size:13px;margin-bottom:0;">Applications require verification and approval. Submitting a form does not grant dashboard access.</p>
+</section>
+
+<script>
+(function () {
+  const driverForm = document.getElementById('iz-driver-form');
+  const storeForm = document.getElementById('iz-store-form');
+
+  driverForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+    document.getElementById('iz-driver-message').textContent =
+      'Not connected yet. Supabase registration must be configured before applications can be received.';
+  });
+
+  storeForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+    document.getElementById('iz-store-message').textContent =
+      'Not connected yet. Supabase registration must be configured before applications can be received.';
+  });
+})();
+</script>
+<!-- END IZANDLA ONE REGISTRATION -->
 </body></html>
