@@ -1,0 +1,327 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#38bdf8">
+<meta name="description" content="Izandla One — Quality uplifts the world">
+<title>Izandla One 🤝🏿</title>
+<style>
+:root{--sky:#38bdf8;--blue:#0284c7;--deep:#075985;--pale:#e0f2fe;--ink:#0f172a;--muted:#64748b;--line:#dbeafe;--white:#fff;--red:#991b1b;--shadow:0 10px 28px #0284c71a;--radius:18px}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Arial,sans-serif;background:linear-gradient(#effaff,#fff 55%);color:var(--ink);line-height:1.5}
+button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:var(--blue)}
+.top{position:sticky;top:0;z-index:30;background:#ffffffed;backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topin,.wrap,.footin{max-width:1100px;margin:auto}.topin{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 15px}
+.brand{display:flex;align-items:center;gap:10px}.mark{width:45px;height:45px;border-radius:14px;background:var(--pale);display:grid;place-items:center;font-size:27px}
+.brand h1{font-size:1.15rem;color:var(--deep);margin:0}.brand p{font-size:.75rem;color:var(--muted);margin:2px 0}
+.wrap{padding:16px}.hero{background:linear-gradient(135deg,#0369a1,#38bdf8 65%,#7dd3fc);color:white;padding:28px 20px;border-radius:25px;box-shadow:var(--shadow)}
+.hero h2{font-size:clamp(1.8rem,6vw,3rem);line-height:1.1;margin:0 0 10px}.hero p{margin:0}
+.btn{border:0;border-radius:12px;padding:11px 15px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.primary{background:var(--blue);color:white}.light{background:white;color:var(--deep)}.outline{background:white;color:var(--deep);border:1px solid #bae6fd}.danger{background:#fee2e2;color:var(--red)}.smallbtn{font-size:.85rem;padding:8px 11px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}.section{margin-top:23px}.heading{display:flex;justify-content:space-between;align-items:end;gap:10px;margin-bottom:12px}
+.heading h2,.back h2{margin:0;color:var(--deep);font-size:1.35rem}.heading p{margin:3px 0 0;color:var(--muted);font-size:.88rem}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.service{border:1px solid var(--line);border-radius:17px;background:white;box-shadow:0 5px 16px #0284c70d;padding:15px 13px;display:flex;flex-direction:column;text-align:left;min-height:135px;color:var(--ink);text-decoration:none}
+.service strong{color:var(--deep)}.service span:last-child{color:var(--muted);font-size:.83rem;margin-top:5px}.emoji{font-size:1.9rem;margin-bottom:6px}
+.view{display:none}.view.active{display:block}.back{display:flex;align-items:center;gap:10px;margin:7px 0 17px}
+.notice{border:1px solid #bae6fd;background:#f0f9ff;color:#075985;padding:12px 14px;border-radius:13px;font-size:.9rem}
+.card,.clean{background:white;border:1px solid var(--line);border-radius:var(--radius);padding:15px;box-shadow:0 5px 17px #0284c70b}
+.catalog{display:grid;grid-template-columns:1fr;gap:12px}.clean h3{color:var(--deep);margin:8px 0 4px}.clean p{margin:7px 0}.clean ul{padding-left:20px}.price{font-weight:900;color:var(--blue);font-size:1.08rem}
+.pill{display:inline-block;border-radius:99px;background:var(--pale);color:var(--deep);padding:4px 9px;font-size:.75rem;font-weight:800}
+.muted{color:var(--muted)}.small{font-size:.85rem}.field{display:grid;gap:5px;margin:11px 0}.field label{font-weight:750;font-size:.9rem}
+.field input,.field select,.field textarea{width:100%;border:1px solid #cbd5e1;border-radius:11px;padding:11px;background:white;color:var(--ink)}
+.field textarea{min-height:85px}.field input:focus,.field select:focus,.field textarea:focus{outline:3px solid #bae6fd;border-color:var(--blue)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.addonlist{display:grid;gap:8px}.addon{display:flex;gap:9px;padding:10px;border:1px solid var(--line);border-radius:12px;background:#fbfdff}
+.addon input{width:18px;height:18px;margin-top:4px}.addon small{display:block;color:var(--muted)}
+.total{position:sticky;bottom:8px;background:#082f49;color:white;border-radius:13px;padding:13px;display:flex;justify-content:space-between;gap:10px;margin:12px 0}
+.total strong{font-size:1.2rem}.row{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}.status{display:inline-block;background:#fef3c7;color:#92400e;border-radius:99px;padding:4px 8px;font-size:.78rem;font-weight:800}
+.statgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.stat{background:#f0f9ff;border:1px solid #bae6fd;border-radius:13px;padding:12px}.stat strong{display:block;font-size:1.4rem;color:var(--deep)}
+footer{margin-top:30px;background:#082f49;color:#e0f2fe;padding:25px 17px}.footin{display:grid;gap:12px}footer h2{margin:0}footer p{margin:4px 0}footer a{color:#bae6fd}
+.modalbg{display:none;position:fixed;inset:0;background:#0f172a99;z-index:70;align-items:flex-end;justify-content:center;padding:10px}.modalbg.open{display:flex}
+.modal{background:white;border-radius:20px;padding:18px;width:min(100%,620px);max-height:93vh;overflow:auto}.modalhead{display:flex;align-items:center;justify-content:space-between;gap:10px}.modalhead h2{margin:0;color:var(--deep)}.close{border:0;background:var(--pale);border-radius:10px;padding:8px 11px;font-weight:800}
+.toast{display:none;position:fixed;z-index:100;bottom:18px;left:14px;right:14px;background:#0f172a;color:white;padding:13px;border-radius:13px}.toast.show{display:block}.hide{display:none!important}
+.food-banner{background:linear-gradient(120deg,#075985,#38bdf8);color:white;border-radius:18px;padding:18px;display:flex;justify-content:space-between;align-items:center}.food-banner h2{margin:8px 0}.food-store-grid,.food-product-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.food-store,.food-product{border:1px solid var(--line);border-radius:15px;padding:13px;background:white}.food-store h3,.food-product h3{margin:5px 0;color:var(--deep)}.food-product .emoji{font-size:2rem}
+.admin-only{border:2px solid #7dd3fc;background:#f0f9ff}
+@media(min-width:650px){.wrap{padding:23px}.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.catalog{grid-template-columns:repeat(2,minmax(0,1fr))}.footin{grid-template-columns:2fr 1fr 1fr}.statgrid{grid-template-columns:repeat(4,minmax(0,1fr))}.hero{padding:38px}.food-store-grid,.food-product-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:420px){.two{grid-template-columns:1fr}.wrap{padding:13px}.hero{padding:22px 17px}}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="topin">
+<div class="brand"><div class="mark">🤝🏿</div><div><h1>Izandla One</h1><p>Quality uplifts the world 🌎</p></div></div>
+<div class="actions" style="margin:0"><button class="btn outline smallbtn" onclick="showView('home')">Home</button><button class="btn outline smallbtn" onclick="openLogin()">Login</button></div>
+</div></header>
+
+<main class="wrap">
+
+<section id="v-home" class="view active">
+<div class="hero"><h2>Spotless Homes. Everyday Solutions.</h2><p>Cleaning, food, rides and helpful local services in one place.</p>
+<div class="actions"><button class="btn light" onclick="showView('cleaning')">Cleaning services</button><button class="btn light" onclick="openRequest('Ride request')">Request a Ride</button><button class="btn light" onclick="showView('food')">Order delicious meals</button></div></div>
+<div class="section"><div class="heading"><div><h2>Home services</h2><p>Choose a service to continue.</p></div></div>
+<div class="grid">
+<button class="service" onclick="showView('cleaning')"><span class="emoji">🧹</span><strong>Cleaning</strong><span>Cleaning catalogue, add-ons and car valet.</span></button>
+<button class="service" onclick="showView('food')"><span class="emoji">🍔</span><strong>Food</strong><span>Stores, restaurants and menus.</span></button>
+<button class="service" onclick="openRequest('Ride request')"><span class="emoji">🚗</span><strong>Rides</strong><span>Pickup and destination details.</span></button>
+<button class="service" onclick="showView('news')"><span class="emoji">📰</span><strong>News Updates</strong><span>South African, global and sports links.</span></button>
+<button class="service" onclick="openRequest('Request a Partner')"><span class="emoji">🤝🏿</span><strong>Request a Partner</strong><span>Send a partner request.</span></button>
+<button class="service" onclick="openRequest('Doctor / Veterinary')"><span class="emoji">🩺</span><strong>Doctor / Veterinary</strong><span>Request a provider.</span></button>
+<button class="service" onclick="showView('construction')"><span class="emoji">🛠️</span><strong>Construction Level</strong><span>Plumbing, painting, roofing and maintenance.</span></button>
+<button class="service" onclick="openRequest('Petrol / Diesel delivery')"><span class="emoji">⛽</span><strong>Petrol / Diesel</strong><span>Request fuel delivery subject to safe availability.</span></button>
+<button class="service" onclick="openRequest('Gas swap 9kg–48kg')"><span class="emoji">🔥</span><strong>Gas Swap</strong><span>Request a cylinder swap.</span></button>
+<button class="service" onclick="openLogin()"><span class="emoji">📊</span><strong>Dashboards</strong><span>Customer, driver, store or admin login.</span></button>
+</div></div>
+<div class="section notice">Prices marked “from” or “quote” require confirmation before work begins. Final pricing and availability must be agreed with the provider.</div>
+</section>
+
+<section id="v-cleaning" class="view">
+<div class="back"><button class="btn outline smallbtn" onclick="showView('home')">← Home</button><div><h2>IZANDLA CLEANING SERVICES</h2><div class="muted small">Quality uplifts the world 🌎</div></div></div>
+<div class="notice">Choose a service, select optional add-ons and send your booking to Izandla WhatsApp. Quote-based work needs confirmation.</div>
+<div id="cleanCatalog" class="section catalog"></div>
+</section>
+
+<section id="v-food" class="view">
+<div class="back"><button class="btn outline smallbtn" onclick="showView('home')">← Home</button><div><h2>Izandla Food Marketplace</h2><div class="muted small">Discover stores, restaurants and menus</div></div></div>
+<div class="food-banner"><div><span class="pill">IZANDLA ONE MARKETPLACE</span><h2>Good food. Great choices.</h2><p>Explore participating stores and restaurants.</p></div><span style="font-size:48px">🍔</span></div>
+<div class="notice section">Demo products are temporary examples only. They are not verified menus, stock or official prices. Replace them with approved store menus when supplied.</div>
+<div class="field section"><label for="foodSearch">Search stores or menu items</label><input id="foodSearch" placeholder="Search burgers, chicken, groceries..." oninput="renderFood()"></div>
+<div class="actions">
+<button class="btn primary smallbtn" onclick="foodFilter('all')">All stores</button>
+<button class="btn outline smallbtn" onclick="foodFilter('restaurant')">Restaurants</button>
+<button class="btn outline smallbtn" onclick="foodFilter('grocery')">Groceries</button>
+<button class="btn outline smallbtn" onclick="foodFilter('liquor')">Liquor</button>
+</div>
+<div class="section"><div class="heading"><div><h2>Participating stores</h2><p>Choose a store to explore its menu.</p></div><span class="pill" id="foodStoreCount">8 stores</span></div><div id="foodStores" class="food-store-grid"></div></div>
+<div id="foodMenuPanel" class="section hide"><div class="card">
+<div class="back"><button class="btn outline smallbtn" onclick="closeFoodMenu()">← Stores</button><div><h2 id="foodMenuTitle">Store menu</h2><div id="foodMenuSubtitle" class="muted small"></div></div></div>
+<div class="notice">Temporary demonstration menu. Only approved store information should be published as an official menu.</div>
+<div id="foodProducts" class="food-product-grid section"></div>
+</div></div>
+</section>
+
+<section id="v-news" class="view">
+<div class="back"><button class="btn outline smallbtn" onclick="showView('home')">← Home</button><h2>News Updates</h2></div>
+<div class="notice">External news and sports links. Content is not hosted by Izandla One.</div>
+<div class="section grid">
+<a class="service" href="https://www.sabcnews.com/" target="_blank" rel="noopener"><span class="emoji">🇿🇦</span><strong>SABC News</strong><span>South African headlines</span></a>
+<a class="service" href="https://www.news24.com/" target="_blank" rel="noopener"><span class="emoji">🗞️</span><strong>News24</strong><span>Local news</span></a>
+<a class="service" href="https://www.reuters.com/world/" target="_blank" rel="noopener"><span class="emoji">🌍</span><strong>Reuters World</strong><span>International reporting</span></a>
+<a class="service" href="https://www.bbc.com/news" target="_blank" rel="noopener"><span class="emoji">🌐</span><strong>BBC News</strong><span>Global headlines</span></a>
+<a class="service" href="https://www.espn.com/" target="_blank" rel="noopener"><span class="emoji">🏆</span><strong>ESPN</strong><span>Sports news and scores</span></a>
+<a class="service" href="https://www.supersport.com/" target="_blank" rel="noopener"><span class="emoji">⚽</span><strong>SuperSport</strong><span>Sports coverage</span></a>
+</div></section>
+
+<section id="v-construction" class="view">
+<div class="back"><button class="btn outline smallbtn" onclick="showView('home')">← Home</button><h2>Construction Level</h2></div>
+<div class="notice">Request a quote. Provider confirms scope, materials, safety and final price before work starts.</div>
+<div id="constructionGrid" class="section grid"></div>
+</section>
+
+<section id="v-request" class="view">
+<div class="back"><button class="btn outline smallbtn" onclick="showView('home')">← Home</button><h2 id="requestTitle">Service request</h2></div>
+<div class="card"><p class="muted small">Submit your request to the Izandla database and continue through WhatsApp.</p>
+<form id="requestForm">
+<div class="field"><label for="reqService">Service</label><input id="reqService" required></div>
+<div class="two"><div class="field"><label for="reqName">Your name</label><input id="reqName" autocomplete="name" required></div><div class="field"><label for="reqPhone">WhatsApp number</label><input id="reqPhone" inputmode="tel" required placeholder="079 000 0000"></div></div>
+<div class="two">
+<div class="field"><label for="reqPickup">Pickup / service address</label><input id="reqPickup" required placeholder="Street, suburb or landmark"><a id="pickupMapLink" target="_blank" rel="noopener">Open pickup in Google Maps</a></div>
+<div class="field"><label for="reqDropoff">Destination</label><input id="reqDropoff" placeholder="Destination address"><a id="dropoffMapLink" target="_blank" rel="noopener">Open destination in Google Maps</a></div>
+</div>
+<div class="card" style="background:#f0f9ff"><h3 style="margin-top:0;color:var(--deep)">Road distance and fare estimate</h3>
+<button id="routeButton" class="btn primary" type="button" onclick="calculateRoute()">Calculate real road distance</button>
+<div id="routeResult" class="section small">For rides and deliveries, enter pickup and destination first.</div><div id="fareBreakdown" class="section"></div>
+<a id="googleRouteLink" class="btn outline smallbtn" target="_blank" rel="noopener">Open route in Google Maps</a>
+</div>
+<div class="field"><label for="reqDetails">Request details</label><textarea id="reqDetails" placeholder="Quantity, date or other important details"></textarea></div>
+<button class="btn primary" type="submit">Submit request</button>
+<button class="btn outline" type="button" onclick="sendGeneralWhatsApp()">Continue via WhatsApp</button>
+</form></div>
+</section>
+
+<section id="v-dashboard" class="view">
+<div class="back"><button class="btn outline smallbtn" onclick="showView('home')">← Home</button><h2 id="dashTitle">Dashboard</h2></div>
+<div id="dashStatus" class="notice">Sign in to load dashboard data.</div>
+<div id="dashStats" class="section statgrid"></div>
+<div id="adminPanel" class="section card admin-only hide">
+<div class="heading"><div><h2>Admin controls</h2><p>Only an authenticated, approved admin can access these controls.</p></div><span class="pill">ADMIN ONLY</span></div>
+<h3>Add a store to the demonstration marketplace</h3>
+<form id="adminStoreForm">
+<div class="two"><div class="field"><label for="adminStoreName">Store name</label><input id="adminStoreName" required></div>
+<div class="field"><label for="adminStoreType">Category</label><select id="adminStoreType"><option value="restaurant">Restaurant</option><option value="grocery">Grocery</option><option value="liquor">Liquor</option></select></div></div>
+<div class="field"><label for="adminStoreLocation">Location</label><input id="adminStoreLocation" placeholder="Town / suburb"></div>
+<button class="btn primary" type="submit">Add store</button>
+</form>
+<hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+<h3>Demo menu maintenance</h3><p class="small muted">These buttons affect the temporary marketplace catalogue saved in this browser. They do not delete real Supabase orders, stores or customer data.</p>
+<div class="actions"><button class="btn danger smallbtn" onclick="removeAllDemoItems()">Remove all demo products</button><button class="btn outline smallbtn" onclick="restoreDemoItems()">Restore demo products</button></div>
+</div>
+<div class="section card"><div class="heading"><div><h2>Requests and orders</h2><p>Records returned under your Supabase database permissions.</p></div><button class="btn outline smallbtn" onclick="loadDashboard()">Refresh</button></div><div id="dashRows"><p class="muted">No data loaded yet.</p></div></div>
+<div class="section card"><p id="accountInfo" class="muted small">Not signed in.</p><button class="btn danger smallbtn" onclick="signOut()">Sign out</button></div>
+</section>
+
+<section id="v-registration" class="view">
+<div class="back"><button class="btn outline smallbtn" onclick="showView('home')">← Home</button><h2>Partner registration</h2></div>
+<div class="notice">Driver and store applications require review and approval. Creating a customer login does not automatically grant driver, store or admin access.</div>
+<div class="card section"><h3>Driver application</h3><p class="small muted">Please contact Izandla to arrange secure document submission and verification.</p><button class="btn primary" onclick="contactWhatsApp('I would like to apply as an Izandla One driver.')">Apply via WhatsApp</button></div>
+<div class="card section"><h3>Store / restaurant application</h3><p class="small muted">Send your business name, manager details, location and contact number for onboarding.</p><button class="btn primary" onclick="contactWhatsApp('I would like to register my store or restaurant with Izandla One.')">Register via WhatsApp</button></div>
+</section>
+</main>
+
+<footer><div class="footin">
+<div><h2>Izandla One 🤝🏿</h2><p><strong>Quality uplifts the world 🌎</strong></p><p>Spotless Homes. Everyday Solutions.</p></div>
+<div><strong>Contact</strong><p><a href="tel:+27795100296">079 510 0296</a></p><p><a href="mailto:Izandla.one@gmail.com">Izandla.one@gmail.com</a></p></div>
+<div><strong>Quick links</strong><p><a href="#" onclick="showView('cleaning');return false">Cleaning services</a></p><p><a href="#" onclick="showView('news');return false">News updates</a></p><p><a href="#" onclick="openLogin();return false">Dashboard login</a></p><p><a href="#" onclick="showView('registration');return false">Partner registration</a></p></div>
+</div></footer>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div id="loginModal" class="modalbg" role="dialog" aria-modal="true"><div class="modal">
+<div class="modalhead"><h2>Izandla One Login</h2><button class="close" onclick="closeModal('loginModal')">Close ✕</button></div>
+<div class="notice">Sign in with your registered Supabase account. Dashboard access is checked against your database profile.</div>
+<form id="loginForm" class="section">
+<div class="field"><label for="loginRole">Dashboard</label><select id="loginRole"><option value="customer">Customer</option><option value="driver">Driver</option><option value="store">Store / Restaurant</option><option value="admin">Admin</option></select></div>
+<div class="field"><label for="loginEmail">Email</label><input id="loginEmail" type="email" autocomplete="username" required></div>
+<div class="field"><label for="loginPassword">Password</label><input id="loginPassword" type="password" autocomplete="current-password" required></div>
+<button class="btn primary" type="submit">Sign in</button>
+<button class="btn outline" type="button" onclick="registerAccount()">Create customer account</button>
+<button class="btn outline" type="button" onclick="resetPassword()">Reset password</button>
+</form><p id="loginMessage" class="muted small" aria-live="polite"></p>
+</div></div>
+
+<div id="cleanModal" class="modalbg" role="dialog" aria-modal="true"><div class="modal">
+<div class="modalhead"><h2 id="cleanModalTitle">Cleaning booking</h2><button class="close" onclick="closeModal('cleanModal')">Close ✕</button></div>
+<div id="cleanModalBody"></div>
+</div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* IZANDLA CONFIGURATION */
+const SUPABASE_URL="https://ejsdxxapryebecgmkekf.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_hvKxq3KkZNrmKMSNXlyYWg_hmFm5AYd";
+const WHATSAPP_NUMBER="27795100296";
+const ROUTING={geocoder:"https://nominatim.openstreetmap.org/search",router:"https://router.project-osrm.org/route/v1/driving",base:20,perKm:5};
+let db=null,user=null,role="customer",selectedService=null,selectedAddons={},calculatedRoute=null,foodCategory="all",activeFoodStore=null;
+const $=id=>document.getElementById(id);
+function initDB(){if(db)return db;if(!window.supabase){console.error("Supabase library did not load");return null}try{db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}})}catch(e){console.error(e)}return db}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+let toastTimer;function toast(s){$("toast").textContent=s;$("toast").classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("toast").classList.remove("show"),4000)}
+function showView(n){document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));$("v-"+n)?.classList.add("active");window.scrollTo({top:0,behavior:"smooth"})}
+function closeModal(id){$(id).classList.remove("open")}
+function contactWhatsApp(message){window.open("https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(message),"_blank","noopener")}
+function openLogin(){initDB();$("loginModal").classList.add("open");$("loginMessage").textContent=db?"Sign in with your registered account.":"Supabase could not initialise. Check your internet connection and project key."}
+
+/* CLEANING CATALOGUE */
+const cleaning=[
+{id:"tank",name:"JoJo Tank Cleaning — Basic",price:300,unit:"R300 basic service",desc:"Basic accessible tank cleaning and ordinary sediment removal. Tank condition, size and access must be agreed.",includes:["Basic clean of accessible tank surfaces","Removal of ordinary dirt and accessible sediment","Suitable rinse and tidy-up"],addons:[["tankdeep","Deep wash and algae-residue removal",0,"quote","Extra scrubbing and rinsing; quote depends on tank size and condition."],["tankchem","Tank-safe treatment chemical",40,"fixed","R40 suitable treatment product."],["tankwater","Water treatment / purification step",30,"from","From R30. Not a guarantee of potable water."]]},
+{id:"room",name:"House Cleaning — Per Room",price:200,unit:"R200 per room",desc:"General cleaning for a room in a house, flat or rental property.",includes:["Dust and wipe accessible surfaces","Sweep, vacuum or mop floors","Tidy agreed areas"],addons:[["roomdeep","Deep-clean upgrade",0,"quote","Extra corners, built-up grime and skirting."],["appliance","Appliance deep clean / maintenance",45,"from","From R45 per selected appliance."],["windows","Extra window cleaning",0,"quote","Quoted by size, number, height and access."]]},
+{id:"homecombo",name:"Full Home Wash Combo + Yard",price:1500,unit:"R1,500 package",desc:"Combined home and yard cleaning. Agree property size and checklist before work.",includes:["Agreed home-cleaning tasks","Agreed yard-cleaning tasks","Scope confirmation"],addons:[["fridge","Fridge interior clean",0,"quote","Quoted by size and condition."],["oven","Oven deep clean",0,"quote","Quoted by type and condition."],["extraroom","Additional room",200,"perunit","R200 per additional room."]]},
+{id:"yard",name:"Yard, Walls and Paving Cleaning",price:150,unit:"From R150",desc:"Outdoor cleaning for an agreed yard, wall or paved area.",includes:["Sweep and tidy agreed yard","Clean agreed walls or paving","Suitable surface method"],addons:[["wallwash","Wall washing",0,"quote","Quoted by size, height and access."],["paving","Paving pressure wash",0,"quote","Quoted by area and condition."],["waste","Green-waste removal",0,"quote","Quoted by volume and disposal."]]},
+{id:"roof",name:"Roof Washing and Maintenance",price:200,unit:"From R200",desc:"Roof washing or maintenance request. A safety and access assessment is required.",includes:["Record requested roof work","Review access and safety","Confirm scope"],addons:[["gutters","Gutter clearing",0,"quote","Quoted by length, height and debris."],["roofcheck","Minor maintenance inspection",0,"quote","Repairs quoted separately."]]},
+{id:"school",name:"School / Classroom Deep Cleaning",price:200,unit:"R200 per classroom",desc:"Deep cleaning for classrooms with agreed surfaces and floors.",includes:["Clean agreed classroom surfaces","Sweep or mop floor","Tidy work area"],addons:[["desks","Desk cleaning",8,"perextra","R8 per desk; enter desk count in extra quantity."]]},
+{id:"polish",name:"Car Polishing",price:200,unit:"R200 basic polish",desc:"Basic polishing service. Paint condition checked first; major paint correction is separate.",includes:["Basic polishing service","Paint condition check","Confirm vehicle type"],addons:[["dashboard","Dashboard dressing spray",15,"fixed","R15 add-on."],["surfacespray","Compatible surface spray",25,"fixed","R25 add-on."],["rims","Rim wash and shine",80,"from","From R80."],["paintcorrection","Machine polish / paint correction",0,"quote","Separate assessment and quote."]]},
+{id:"valet",name:"Auto Valet — Full Vehicle Clean",price:600,unit:"From R600",desc:"Interior and exterior clean. Scope depends on vehicle size and condition.",includes:["Exterior wash and dry","Interior vacuum and wipe-down","Windows and agreed surfaces","Wheels and tyres cleaned where accessible"],addons:[["seatremove","Full valet with seat removal",700,"package","Package from R700; vehicle suitability must be checked."],["interiordeep","Interior deep clean",0,"quote","Quoted by stains and condition."],["leather","Leather seat clean and condition",0,"quote","Material-suitable products."],["engine","Engine bay cleaning",0,"quote","Only after safety assessment."],["valetrims","Additional rim wash and shine",80,"from","From R80."],["valetpolish","Exterior car polishing",200,"fixed","R200 basic polish."]]},
+{id:"sneakers",name:"Sneaker Cleaning",price:100,unit:"From R100 per pair",desc:"Cleaning for suitable sneakers. Results vary by material, age and stains.",includes:["Surface brushing and cleaning","Laces cleaned where suitable","Material-suitable cleaning method"],addons:[["sneakerstain","Deep stain treatment",0,"quote","Quoted by material and stain."],["sneakerodor","Odour treatment",0,"quote","Suitable treatment where possible."]]},
+{id:"aircon",name:"Aircon Installation and Servicing",price:0,unit:"Quote required",desc:"New installation, servicing, filter cleaning, fault inspection or repair.",includes:["Record unit and job details","Record location and access","Confirm quote"],addons:[["airconinstall","New installation",0,"quote","Quote depends on unit and site."],["airconservice","Routine service",0,"quote","Quote after scope confirmed."],["airconrepair","Fault finding / repair",0,"quote","Depends on fault and parts."]]},
+{id:"maintenance",name:"General Cleaning Maintenance",price:0,unit:"Quote required",desc:"One-off or recurring cleaning for homes, offices or other properties.",includes:["Once-off or recurring requests","Scope and frequency recorded","Quote confirmed"],addons:[["weekly","Weekly recurring clean",0,"quote","Quoted by hours, rooms and frequency."],["office","Office / commercial cleaning",0,"quote","Quoted by area and requirements."]]}
+];
+const construction=[["Plumbing","🚰","Leaks, blocked drains, taps and installations"],["Waterproofing","💧","Roof, bathroom and wall waterproofing"],["Painting","🖌️","Interior, exterior and touch-up painting"],["Aircon installation / service","❄️","Installations, servicing and repairs"],["Geyser installation","♨️","Geyser replacement or installation assessment"],["Roofing","🏠","Roof repair and replacement quotes"],["Renovations","🧱","Home improvements and renovations"],["Maintenance","🛠️","Repairs and routine property maintenance"]];
+function renderCleaning(){$("cleanCatalog").innerHTML=cleaning.map(s=>`<article class="clean"><span class="pill">IZANDLA CLEANING SERVICES</span><h3>${esc(s.name)}</h3><div class="price">${esc(s.unit)}</div><p>${esc(s.desc)}</p><strong>Included</strong><ul>${s.includes.map(x=>`<li>${esc(x)}</li>`).join("")}</ul><p class="small muted">${s.addons.length} optional add-ons</p><button class="btn primary" onclick="openClean('${s.id}')">Book this service</button></article>`).join("")}
+function renderConstruction(){$("constructionGrid").innerHTML=construction.map(s=>`<button class="service" onclick="openRequest('${esc(s[0])}')"><span class="emoji">${s[1]}</span><strong>${esc(s[0])}</strong><span>${esc(s[2])}</span><span class="pill">Request a quote</span></button>`).join("")}
+function openClean(id){selectedService=cleaning.find(s=>s.id===id);selectedAddons={};const s=selectedService;
+$("cleanModalTitle").textContent=s.name;
+$("cleanModalBody").innerHTML=`<p>${esc(s.desc)}</p><div class="notice">Base price: <strong>${esc(s.unit)}</strong>. Quote-based work needs confirmation.</div><form id="cleanForm">
+<div class="two"><div class="field"><label>Your name</label><input id="cName" required></div><div class="field"><label>WhatsApp number</label><input id="cPhone" required inputmode="tel"></div></div>
+<div class="two"><div class="field"><label>Service address</label><input id="cAddress" required></div><div class="field"><label>Preferred date</label><input id="cDate" type="date"></div></div>
+<div class="two"><div class="field"><label>Quantity / rooms / classrooms</label><input id="cQty" type="number" min="1" value="1" required></div><div class="field"><label>Extra quantity / desks</label><input id="cExtra" type="number" min="0" value="0"></div></div>
+<div class="field"><label>Optional add-ons</label><div class="addonlist">${s.addons.map(a=>`<label class="addon"><input type="checkbox" onchange="toggleAddon('${a[0]}',this.checked)"><span><strong>${esc(a[1])} — ${a[2]?(a[3]==="from"?"From R":"R")+a[2]:"Quote required"}</strong><small>${esc(a[4])}</small></span></label>`).join("")}</div></div>
+<div class="field"><label>Extra details</label><textarea id="cNotes"></textarea></div>
+<div class="total"><div><span class="small">Estimated total</span><br><strong id="cTotal"></strong></div><span id="cFlag" class="small">Estimate only</span></div>
+<button class="btn primary" type="submit">Save booking and WhatsApp</button><button class="btn outline" type="button" onclick="cleanWhatsApp()">WhatsApp only</button></form>`;
+$("cleanForm").addEventListener("submit",submitCleaning);$("cQty").addEventListener("input",updateTotal);$("cExtra").addEventListener("input",updateTotal);$("cleanModal").classList.add("open");updateTotal()}
+function toggleAddon(id,on){if(on)selectedAddons[id]=true;else delete selectedAddons[id];updateTotal()}
+function calcCleaning(){let s=selectedService,q=Math.max(1,Number($("cQty")?.value||1)),extra=Math.max(0,Number($("cExtra")?.value||0)),total=s.price*q,quote=!s.price;
+for(const a of s.addons){if(!selectedAddons[a[0]])continue;if(a[3]==="quote"||!a[2])quote=true;else if(a[3]==="perunit")total+=a[2]*(s.id==="school"?extra:1);else if(a[3]==="package")total=Math.max(total,a[2]);else if(a[3]==="from"){total+=a[2];quote=true}else total+=a[2]}
+if(s.id==="school")total+=extra*8;return{total,quote}}
+function updateTotal(){if(!selectedService)return;let c=calcCleaning();$("cTotal").textContent=c.total?"R"+c.total.toFixed(2):"Quote required";$("cFlag").textContent=c.quote?"Quote item selected":"Estimate only"}
+function bookingData(){let c=calcCleaning(),s=selectedService;return{service:s.name,id:s.id,name:$("cName").value.trim(),phone:$("cPhone").value.trim(),address:$("cAddress").value.trim(),date:$("cDate").value,qty:Number($("cQty").value||1),extra:Number($("cExtra").value||0),addons:s.addons.filter(a=>selectedAddons[a[0]]),notes:$("cNotes").value.trim(),total:c.total,quote:c.quote}}
+function bookingMessage(b){return `IZANDLA CLEANING SERVICES\nQuality uplifts the world\nService: ${b.service}\nName: ${b.name}\nWhatsApp: ${b.phone}\nAddress: ${b.address}\nDate: ${b.date||"To be confirmed"}\nQuantity: ${b.qty}\nExtra quantity: ${b.extra}\nAdd-ons: ${b.addons.map(a=>a[1]).join(", ")||"None"}\nEstimate: R${b.total.toFixed(2)}${b.quote?" — quote required":""}\nNotes: ${b.notes||"None"}\nPlease confirm availability and final price.`}
+async function submitCleaning(e){e.preventDefault();let b=bookingData();if(!b.name||!b.phone||!b.address){toast("Complete your name, WhatsApp and address.");return}
+try{await insertRequest({service:b.service,customer_name:b.name,phone:b.phone,details:{source:"cleaning",service_id:b.id,address:b.address,date:b.date||null,quantity:b.qty,extra:b.extra,addons:b.addons.map(a=>a[1]),notes:b.notes,estimated_total:b.total,quote_required:b.quote},status:"new",verified:false,available_to_drivers:false});contactWhatsApp(bookingMessage(b));closeModal("cleanModal");toast("Cleaning booking saved. WhatsApp opened.")}catch(e){toast("Could not save booking: "+e.message)}}
+function cleanWhatsApp(){let b=bookingData();if(!b.name||!b.phone||!b.address){toast("Complete your name, WhatsApp and address first.");return}contactWhatsApp(bookingMessage(b))}
+function openRequest(s){$("requestTitle").textContent=s;$("reqService").value=s;$("routeResult").textContent="Enter pickup and destination, then calculate the driving route.";$("fareBreakdown").innerHTML="";calculatedRoute=null;updateMapLinks();showView("request")}
+function requestData(){return{service:$("reqService").value.trim(),name:$("reqName").value.trim(),phone:$("reqPhone").value.trim(),pickup:$("reqPickup").value.trim(),dropoff:$("reqDropoff").value.trim(),details:$("reqDetails").value.trim()}}
+function needsRoute(s){return /ride|food delivery|petrol|diesel|gas swap|liquor/i.test(s)}
+function mapsSearch(a){return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(a||"")}
+function updateMapLinks(){let p=$("reqPickup")?.value.trim()||"",d=$("reqDropoff")?.value.trim()||"";$("pickupMapLink").href=mapsSearch(p);$("dropoffMapLink").href=mapsSearch(d);$("googleRouteLink").href="https://www.google.com/maps/dir/?api=1&origin="+encodeURIComponent(p)+"&destination="+encodeURIComponent(d)+"&travelmode=driving"}
+async function geocode(q){let res=await fetch(ROUTING.geocoder+"?format=jsonv2&limit=1&countrycodes=za&q="+encodeURIComponent(q),{headers:{Accept:"application/json"}});if(!res.ok)throw Error("Address search unavailable. Try a more complete address.");return await res.json()}
+async function calculateRoute(){let r=requestData();if(!r.pickup||!r.dropoff){toast("Enter pickup and destination first.");return}let btn=$("routeButton");btn.disabled=true;btn.textContent="Calculating…";$("routeResult").textContent="Finding addresses and calculating the road route…";try{let [a,b]=await Promise.all([geocode(r.pickup),geocode(r.dropoff)]);if(!a.length||!b.length)throw Error("Could not match both addresses. Add suburb or street details.");let url=`${ROUTING.router}/${a[0].lon},${a[0].lat};${b[0].lon},${b[0].lat}?overview=false`;let response=await fetch(url);if(!response.ok)throw Error("Road routing service unavailable. Retry later.");let data=await response.json();if(data.code!=="Ok"||!data.routes?.length)throw Error("No driving route returned.");let km=data.routes[0].distance/1000,fare=ROUTING.base+km*ROUTING.perKm;calculatedRoute={roadKm:km,fare:Number(fare.toFixed(2)),pickup:a[0].display_name,dropoff:b[0].display_name};$("routeResult").innerHTML=`<strong>Driving distance: ${km.toFixed(2)} km</strong><p class="muted">Calculated using OpenStreetMap address data and OSRM road routing.</p>`;$("fareBreakdown").innerHTML=`<div class="row"><span>Base fee</span><strong>R${ROUTING.base.toFixed(2)}</strong></div><div class="row"><span>${km.toFixed(2)} km × R${ROUTING.perKm}/km</span><strong>R${(km*ROUTING.perKm).toFixed(2)}</strong></div><div class="row"><strong>Estimated service fee</strong><strong>R${fare.toFixed(2)}</strong></div><p class="small muted">The R5 Izandla deduction is accounted for after a successful ride/delivery; it is not an extra customer charge. Goods, fuel, gas, tolls and other agreed charges are separate.</p>`;toast("Road distance calculated.")}catch(e){calculatedRoute=null;$("routeResult").textContent=e.message;toast(e.message)}finally{btn.disabled=false;btn.textContent="Calculate real road distance"}}
+function generalMessage(r){return `IZANDLA ONE REQUEST\nQuality uplifts the world\nService: ${r.service}\nName: ${r.name}\nWhatsApp: ${r.phone}\nPickup: ${r.pickup}\nDestination: ${r.dropoff||"Not supplied"}\n${calculatedRoute?"Driving distance: "+calculatedRoute.roadKm.toFixed(2)+" km\nEstimated fee: R"+calculatedRoute.fare.toFixed(2)+"\n":""}Details: ${r.details||"None"}\nGoogle Maps: https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(r.pickup)}&destination=${encodeURIComponent(r.dropoff)}&travelmode=driving`}
+function sendGeneralWhatsApp(){let r=requestData();if(!r.name||!r.phone||!r.pickup){toast("Complete name, WhatsApp and pickup/service address.");return}if(needsRoute(r.service)&&(!r.dropoff||!calculatedRoute)){toast("Calculate the road distance before sending this request.");return}contactWhatsApp(generalMessage(r))}
+async function insertRequest(payload){let client=initDB();if(!client)throw Error("Supabase client is not available.");let {error}=await client.from("izandla_requests").insert(payload);if(error)throw error;return true}
+async function submitRequest(e){e.preventDefault();let r=requestData();if(!r.name||!r.phone||!r.pickup){toast("Complete the required fields.");return}if(needsRoute(r.service)&&(!r.dropoff||!calculatedRoute)){toast("Enter destination and calculate the road distance first.");return}
+let details={pickup_address:r.pickup,dropoff_address:r.dropoff||null,customer_notes:r.details,source:"customer_web",route:calculatedRoute,pricing:calculatedRoute&&needsRoute(r.service)?{base_zar:20,rate_per_km_zar:5,estimated_service_fee_zar:calculatedRoute.fare,izandla_deduction_on_success_zar:5}:null,google_maps_url:$("googleRouteLink").href};
+try{await insertRequest({service:r.service,customer_name:r.name,phone:r.phone,details,status:"new",verified:false,available_to_drivers:/ride|food delivery|petrol|diesel|gas swap/i.test(r.service)});toast("Request saved. Opening WhatsApp.");contactWhatsApp(generalMessage(r))}catch(e){toast("Request not saved: "+e.message)}}
+
+/* FOOD MARKETPLACE — LOCAL DEMO CATALOGUE */
+const defaultStores=[
+{id:"bk",name:"Burger King",type:"restaurant",location:"Location to be confirmed"},
+{id:"foodlovers",name:"Food Lovers",type:"grocery",location:"Queensburgh"},
+{id:"honchos",name:"Honchos",type:"restaurant",location:"Bizana"},
+{id:"hungrylion",name:"Hungry Lion",type:"restaurant",location:"Bizana"},
+{id:"pedros",name:"Pedro’s",type:"restaurant",location:"Bizana"},
+{id:"shoprite",name:"Shoprite",type:"grocery",location:"Bizana"},
+{id:"pizzahut",name:"Pizza Hut",type:"restaurant",location:"Queensburgh"},
+{id:"fishplaice",name:"Fish Plaice",type:"restaurant",location:"Durban North"}
+];
+function loadLocal(key,fallback){try{return JSON.parse(localStorage.getItem(key))??fallback}catch(e){return fallback}}
+let foodStores=loadLocal("iz_food_stores",defaultStores);
+let foodItems=loadLocal("iz_food_items",null);
+function demoItems(){let items=[];foodStores.forEach(s=>{let products=s.type==="grocery"?[["Fresh produce selection","Seasonal grocery example",45,"🍎"],["Pantry essentials","Example grocery item",65,"🛒"],["Bakery selection","Example bakery item",35,"🍞"]]:s.type==="liquor"?[["Store catalogue item","Example listing only; age checks and legal compliance apply",80,"🧃"]]:[["Classic meal","Temporary example menu item",75,"🍔"],["Chicken meal","Temporary example menu item",89,"🍗"],["Chips and drink","Temporary example menu item",39,"🍟"]];products.forEach((p,i)=>items.push({id:s.id+"-"+i,storeId:s.id,name:p[0],description:p[1],price:p[2],emoji:p[3],demo:true}))});return items}
+if(!foodItems)foodItems=demoItems();
+function saveFood(){localStorage.setItem("iz_food_stores",JSON.stringify(foodStores));localStorage.setItem("iz_food_items",JSON.stringify(foodItems))}
+function foodFilter(c){foodCategory=c;renderFood()}
+function renderFood(){let q=($("foodSearch")?.value||"").toLowerCase();let stores=foodStores.filter(s=>(foodCategory==="all"||s.type===foodCategory)&&(`${s.name} ${s.location} ${foodItems.filter(p=>p.storeId===s.id).map(p=>p.name).join(" ")}`).toLowerCase().includes(q));$("foodStoreCount").textContent=stores.length+" stores";$("foodStores").innerHTML=stores.length?stores.map(s=>`<article class="food-store"><div class="emoji">${s.type==="grocery"?"🛒":s.type==="liquor"?"🧃":"🍽️"}</div><span class="pill">${esc(s.type)}</span><h3>${esc(s.name)}</h3><p class="small muted">${esc(s.location||"Location to be confirmed")}</p><button class="btn primary smallbtn" onclick="openFoodStore('${s.id}')">View menu</button></article>`).join(""):'<p class="muted">No matching stores.</p>'}
+function openFoodStore(id){activeFoodStore=foodStores.find(s=>s.id===id);if(!activeFoodStore)return;$("foodMenuTitle").textContent=activeFoodStore.name;$("foodMenuSubtitle").textContent=activeFoodStore.location||"Location to be confirmed";let items=foodItems.filter(p=>p.storeId===id);$("foodProducts").innerHTML=items.length?items.map(p=>`<article class="food-product"><div class="emoji">${esc(p.emoji||"🍽️")}</div><h3>${esc(p.name)}</h3><p class="small muted">${esc(p.description||"")}</p><strong>R${Number(p.price).toFixed(2)}</strong>${p.demo?'<p><span class="pill">DEMO ITEM</span></p>':""}</article>`).join(""):'<p class="muted">No menu items are currently listed for this store.</p>';$("foodMenuPanel").classList.remove("hide");$("foodMenuPanel").scrollIntoView({behavior:"smooth"})}
+function closeFoodMenu(){$("foodMenuPanel").classList.add("hide");activeFoodStore=null}
+function removeAllDemoItems(){if(role!=="admin"||!user){toast("Admin access required.");return}if(!confirm("Remove all temporary demo products from this browser?"))return;foodItems=foodItems.filter(p=>!p.demo);saveFood();renderFood();closeFoodMenu();toast("Demo products removed.")}
+function restoreDemoItems(){if(role!=="admin"||!user){toast("Admin access required.");return}if(!confirm("Restore the temporary example products?"))return;foodItems=foodItems.filter(p=>!p.demo).concat(demoItems());saveFood();renderFood();toast("Demo products restored.")}
+$("adminStoreForm").addEventListener("submit",e=>{e.preventDefault();if(role!=="admin"||!user){toast("Admin access required.");return}let name=$("adminStoreName").value.trim();if(!name)return;let id="store-"+Date.now();foodStores.push({id,name,type:$("adminStoreType").value,location:$("adminStoreLocation").value.trim()||"Location to be confirmed"});saveFood();e.target.reset();renderFood();toast("Store added to this browser's demonstration marketplace.")});
+
+/* AUTHENTICATION AND ROLE CHECKS */
+async function signIn(e){e.preventDefault();let client=initDB();if(!client){$("loginMessage").textContent="Supabase did not initialise. Check connection and project settings.";return}
+let email=$("loginEmail").value.trim(),password=$("loginPassword").value,wanted=$("loginRole").value;$("loginMessage").textContent="Signing in…";
+let {data,error}=await client.auth.signInWithPassword({email,password});if(error){$("loginMessage").textContent=error.message;return}
+user=data.user;let check=await checkRole(user,wanted);
+if(!check.ok){await client.auth.signOut();user=null;$("loginMessage").textContent=check.message;return}
+role=wanted;closeModal("loginModal");$("dashTitle").textContent=({admin:"Admin Dashboard",driver:"Driver Dashboard",store:"Store / Restaurant Dashboard",customer:"Customer Dashboard"})[role];$("accountInfo").textContent="Signed in: "+(user.email||email)+" · "+role;$("adminPanel").classList.toggle("hide",role!=="admin");showView("dashboard");await loadDashboard()}
+async function checkRole(u,wanted){if(wanted==="customer")return{ok:true};
+let email=(u.email||"").toLowerCase();
+try{
+let p=await db.from("izandla_profiles").select("*").eq("email",email).maybeSingle();
+if(!p.error&&p.data){let profileRole=String(p.data.profile_role||p.data.role||"").toLowerCase();if(wanted==="admin"&&profileRole==="admin")return{ok:true};if(wanted==="store"&&profileRole==="store")return{ok:true};if(wanted==="driver"&&profileRole==="driver")return{ok:true}}
+}catch(e){console.warn("Profile role check",e)}
+if(wanted==="driver"){try{let d=await db.from("izandla_drivers").select("*").eq("user_id",u.id).maybeSingle();if(!d.error&&d.data&&(d.data.verified===true||d.data.is_verified===true)&&d.data.activated===true)return{ok:true}}catch(e){console.warn(e)}}
+if(wanted==="store"){try{let m=await db.from("store_members").select("*").eq("user_id",u.id).limit(1);if(!m.error&&m.data?.length)return{ok:true}}catch(e){console.warn(e)}}
+return{ok:false,message:"Access denied. This account is not approved for the "+wanted+" dashboard. Ask the Izandla administrator to verify its role and activation in Supabase."}}
+async function registerAccount(){let client=initDB(),email=$("loginEmail").value.trim(),password=$("loginPassword").value;if(!client){$("loginMessage").textContent="Supabase is unavailable.";return}if(!email||password.length<6){$("loginMessage").textContent="Enter an email and password of at least 6 characters.";return}let {error}=await client.auth.signUp({email,password});$("loginMessage").textContent=error?error.message:"Customer registration submitted. Check your email if confirmation is enabled, then sign in."}
+async function resetPassword(){let client=initDB(),email=$("loginEmail").value.trim();if(!client||!email){$("loginMessage").textContent="Enter your email and check your connection.";return}let {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:location.origin});$("loginMessage").textContent=error?error.message:"If the account exists, a password reset email will be sent."}
+async function signOut(){if(db)await db.auth.signOut();user=null;role="customer";$("accountInfo").textContent="Not signed in.";showView("home");toast("Signed out.")}
+
+/* DASHBOARD — database RLS remains the real security boundary */
+async function loadDashboard(){if(!db||!user){$("dashStatus").textContent="Sign in first.";return}
+$("dashStatus").textContent="Loading records…";$("dashRows").innerHTML="";
+let q=await db.from("izandla_requests").select("*").order("created_at",{ascending:false}).limit(50);
+if(q.error){$("dashStatus").textContent="Could not load requests: "+q.error.message;$("dashRows").textContent="Check that izandla_requests exists and your Supabase RLS policies allow this account to read its permitted records.";return}
+let rows=q.data||[];$("dashStatus").textContent="Loaded "+rows.length+" request(s). Records are subject to Supabase Row Level Security.";
+$("dashStats").innerHTML=[["Records",rows.length],["New",rows.filter(x=>x.status==="new").length],["Accepted",rows.filter(x=>x.status==="accepted").length],["Completed",rows.filter(x=>String(x.status).toLowerCase().includes("complete")).length]].map(x=>`<div class="stat"><strong>${x[1]}</strong><span>${x[0]}</span></div>`).join("");
+$("dashRows").innerHTML=rows.length?rows.map(r=>`<div class="row"><div><strong>${esc(r.service||"Request")}</strong><div class="small muted">${esc(r.customer_name||"Customer")} · ${esc(r.phone||"")}</div><div class="small">${esc(typeof r.details==="string"?r.details:JSON.stringify(r.details||{}))}</div></div><div><span class="status">${esc(r.status||"new")}</span><div class="small muted">${esc(r.created_at?new Date(r.created_at).toLocaleString():"")}</div></div></div>`).join(""):'<p class="muted">No requests are currently visible to this account.</p>'}
+document.addEventListener("DOMContentLoaded",async()=>{
+initDB();renderCleaning();renderConstruction();renderFood();$("requestForm").addEventListener("submit",submitRequest);
+["reqPickup","reqDropoff"].forEach(id=>$(id).addEventListener("input",()=>{calculatedRoute=null;$("routeResult").textContent="Address changed. Recalculate the route.";updateMapLinks()}));
+if(db){let {data}=await db.auth.getSession();if(data?.session?.user){user=data.session.user;role="customer";$("accountInfo").textContent="Signed in as "+user.email+" · Customer access. Select an approved dashboard by signing in again.";}}
+});
+window.addEventListener("online",()=>toast("You are back online."));
+window.addEventListener("offline",()=>toast("You are offline. Requests cannot be saved until connection returns."));
+</script>
+</body>
+</html>
