@@ -148,7 +148,144 @@ window.addEventListener('online',()=>toast('You are back online.'));window.addEv
   </form>
 
   <p style="font-size:13px;margin-bottom:0;">Applications require verification and approval. Submitting a form does not grant dashboard access.</p>
-</section>
+<section id="v-food" class="view">
+  <div class="back">
+    <button class="btn outline smallbtn" onclick="showView('home')">← Home</button>
+    <div>
+      <h2>Izandla Food Marketplace</h2>
+      <div class="muted small">Discover stores, restaurants and menus</div>
+    </div>
+  </div>
+
+  <div class="food-banner">
+    <div>
+      <span class="pill">IZANDLA ONE MARKETPLACE</span>
+      <h2>Good food. Great choices.</h2>
+      <p>Explore participating restaurants and stores in one place.</p>
+    </div>
+    <span style="font-size:55px">🍔</span>
+  </div>
+
+  <div class="notice section">
+    Demo catalogue: these three products per store are temporary examples,
+    not verified menus, stock or official prices. Real menus and photos
+    will be added after store information is supplied.
+  </div>
+
+  <div class="field section">
+    <label for="foodSearch">Search stores or menu items</label>
+    <input id="foodSearch" placeholder="Search burgers, chicken, groceries..."
+      oninput="renderFood()">
+  </div>
+
+  <div class="actions">
+    <button class="btn primary smallbtn" onclick="foodFilter('all')">All stores</button>
+    <button class="btn outline smallbtn" onclick="foodFilter('restaurant')">Restaurants</button>
+    <button class="btn outline smallbtn" onclick="foodFilter('grocery')">Groceries</button>
+    <button class="btn outline smallbtn" onclick="foodFilter('liquor')">Liquor</button>
+  </div>
+
+  <div class="section">
+    <div class="heading">
+      <div>
+        <h2>Participating stores</h2>
+        <p>Choose a store to explore its menu.</p>
+      </div>
+      <span class="pill" id="foodStoreCount">8 stores</span>
+    </div>
+    <div id="foodStores" class="food-store-grid"></div>
+  </div>
+
+  <div id="foodMenuPanel" class="section hide">
+    <div class="card">
+      <div class="back">
+        <button class="btn outline smallbtn" onclick="closeFoodMenu()">← Stores</button>
+        <div>
+          <h2 id="foodMenuTitle">Store menu</h2>
+          <div class="muted small" id="foodMenuSubtitle"></div>
+        </div>
+      </div>
+
+      <div class="notice">
+        <strong>Temporary demonstration menu.</strong>
+        Replace these products with the store's approved menu tomorrow.
+      </div>
+
+      <div id="foodProducts" class="food-product-grid section"></div>
+
+      <div class="section card">
+        <h3>Add a menu item</h3>
+        <p class="muted small">Use this to test menu management. Items remain local to this browser until backend integration.</p>
+        <form id="foodItemForm">
+          <input type="hidden" id="foodEditId">
+          <div class="field">
+            <label for="foodItemName">Product name</label>
+            <input id="foodItemName" required placeholder="Product name">
+          </div>
+          <div class="field">
+            <label for="foodItemDescription">Description</label>
+            <textarea id="foodItemDescription" placeholder="Describe the product"></textarea>
+          </div>
+          <div class="two">
+            <div class="field">
+              <label for="foodItemPrice">Price (R)</label>
+              <input id="foodItemPrice" type="number" min="0" step="0.01" required>
+            </div>
+            <div class="field">
+              <label for="foodItemEmoji">Product icon</label>
+              <select id="foodItemEmoji">
+                <option>🍔</option>
+                <option>🍟</option>
+                <option>🍗</option>
+                <option>🍕</option>
+                <option>🥗</option>
+                <option>🥤</option>
+                <option>🍎</option>
+                <option>🥩</option>
+                <option>🛒</option>
+                <option>🍽️</option>
+              </select>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn primary" type="submit">Save menu item</button>
+            <button class="btn outline" type="button" onclick="cancelFoodEdit()">Cancel edit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="section card">
+    <h3>Future store registration</h3>
+    <p class="muted small">Add another participating store or reserve a space for a liquor store. Approval and backend account linking will be added later.</p>
+    <form id="foodStoreForm">
+      <div class="field">
+        <label for="newFoodStore">Store / restaurant name</label>
+        <input id="newFoodStore" required placeholder="Enter business name">
+      </div>
+      <div class="field">
+        <label for="newFoodType">Business category</label>
+        <select id="newFoodType">
+          <option value="restaurant">Restaurant</option>
+          <option value="grocery">Grocery store</option>
+          <option value="liquor">Liquor store</option>
+        </select>
+      </div>
+      <button class="btn primary" type="submit">Add future store</button>
+    </form>
+    <div id="futureStoreMessage" class="small muted"></div>
+  </div>
+
+  <div class="section card">
+    <h3>Demo menu maintenance</h3>
+    <p class="small muted">These controls affect only the temporary local demonstration catalogue. They do not delete or change anything in Supabase.</p>
+    <div class="actions">
+      <button class="btn danger smallbtn" onclick="removeAllDemoItems()">Remove all demo products</button>
+      <button class="btn outline smallbtn" onclick="restoreDemoItems()">Restore demo products</button>
+    </div>
+  </div>
+</section></section>
 
 <script>
 (function () {
