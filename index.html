@@ -323,5 +323,95 @@ if(db){let {data}=await db.auth.getSession();if(data?.session?.user){user=data.s
 window.addEventListener("online",()=>toast("You are back online."));
 window.addEventListener("offline",()=>toast("You are offline. Requests cannot be saved until connection returns."));
 </script>
+
+<!-- IZANDLA ONE PARTNER REGISTRATION -->
+<section id="partner-registration" style="
+  padding:28px 16px;
+  margin:25px 0;
+  background:linear-gradient(135deg,#e0f2fe,#ffffff);
+  border:2px solid #38bdf8;
+  border-radius:20px;
+  text-align:center;
+">
+  <h2 style="color:#075985;font-size:25px;margin-bottom:8px;">
+    🤝 Join Izandla One
+  </h2>
+
+  <p style="color:#334155;margin-bottom:22px;">
+    Become an Izandla One partner. Register your business
+    or apply to become a delivery driver.
+  </p>
+
+  <div style="
+    display:grid;
+    grid-template-columns:1fr;
+    gap:14px;
+    max-width:480px;
+    margin:auto;
+  ">
+
+    <button onclick="openPartnerRegistration('driver')"
+      style="
+        width:100%;
+        padding:19px 14px;
+        border:0;
+        border-radius:14px;
+        background:#0284c7;
+        color:white;
+        font-size:18px;
+        font-weight:800;
+        cursor:pointer;
+        box-shadow:0 5px 12px #0284c744;
+      ">
+      🛵 DRIVER SIGN-UP
+      <small style="display:block;font-size:12px;font-weight:400;margin-top:5px;">
+        Cars • Motorcycles • Bakkies • Vans
+      </small>
+    </button>
+
+    <button onclick="openPartnerRegistration('store')"
+      style="
+        width:100%;
+        padding:19px 14px;
+        border:2px solid #0284c7;
+        border-radius:14px;
+        background:white;
+        color:#075985;
+        font-size:18px;
+        font-weight:800;
+        cursor:pointer;
+        box-shadow:0 5px 12px #0284c722;
+      ">
+      🏪 STORE SIGN-UP
+      <small style="display:block;font-size:12px;font-weight:400;margin-top:5px;">
+        Restaurants • Shops • Liquor Stores
+      </small>
+    </button>
+
+  </div>
+
+  <p style="font-size:12px;color:#64748b;margin-top:17px;">
+    All applications are reviewed by Izandla One Admin.
+  </p>
+</section>
+
+<script>
+function openPartnerRegistration(type) {
+  if (typeof showPage === "function") {
+    showPage("registration");
+
+    const selector = document.getElementById("application-type");
+    if (selector) selector.value = type;
+
+    return;
+  }
+
+  alert(
+    type === "driver"
+      ? "Driver registration page is coming next."
+      : "Store registration page is coming next."
+  );
+}
+</script>
 </body>
 </html>
