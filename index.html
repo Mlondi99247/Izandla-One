@@ -397,19 +397,36 @@ window.addEventListener("offline",()=>toast("You are offline. Requests cannot be
 
 <script>
 <script>
+<!-- IZANDLA ONE PARTNER REGISTRATION -->
+<section id="partner-registration" style="padding:28px 16px;margin:25px 0;background:linear-gradient(135deg,#e0f2fe,#ffffff);border:2px solid #38bdf8;border-radius:20px;text-align:center;">
+  <h2 style="color:#075985;font-size:25px;">🤝 Join Izandla One</h2>
+  <p>Become an Izandla One driver or business partner.</p>
+
+  <div style="display:grid;gap:14px;max-width:480px;margin:auto;">
+    <button class="btn primary" style="padding:19px" onclick="openPartnerRegistration('driver')">
+      🛵 DRIVER SIGN-UP
+    </button>
+    <button class="btn outline" style="padding:19px" onclick="openPartnerRegistration('store')">
+      🏪 STORE SIGN-UP
+    </button>
+  </div>
+</section>
+
+<script>
 function openPartnerRegistration(type) {
+  const registration = document.getElementById('v-registration');
+  const title = registration.querySelector('.back h2');
+
+  title.textContent = type === 'driver'
+    ? '🛵 Driver Registration'
+    : '🏪 Store Registration';
+
   showView('registration');
-
-  const title = document.querySelector('#v-registration .back h2');
-
-  if (title) {
-    title.textContent = type === 'driver'
-      ? '🚗 Driver Registration'
-      : '🏪 Store Registration';
-  }
 
   window.scrollTo({top: 0, behavior: 'smooth'});
 }
 </script>
+</body>
+</html>
 </body>
 </html>
