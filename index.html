@@ -396,21 +396,19 @@ window.addEventListener("offline",()=>toast("You are offline. Requests cannot be
 </section>
 
 <script>
+<script>
 function openPartnerRegistration(type) {
-  if (typeof showPage === "function") {
-    showPage("registration");
+  showView('registration');
 
-    const selector = document.getElementById("application-type");
-    if (selector) selector.value = type;
+  const title = document.querySelector('#v-registration .back h2');
 
-    return;
+  if (title) {
+    title.textContent = type === 'driver'
+      ? '🚗 Driver Registration'
+      : '🏪 Store Registration';
   }
 
-  alert(
-    type === "driver"
-      ? "Driver registration page is coming next."
-      : "Store registration page is coming next."
-  );
+  window.scrollTo({top: 0, behavior: 'smooth'});
 }
 </script>
 </body>
