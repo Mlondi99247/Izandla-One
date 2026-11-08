@@ -1,0 +1,701 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0284c7">
+<title>Izandla One | Careers & Applications</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+  --blue:#0284c7;
+  --sky:#38bdf8;
+  --navy:#082b50;
+  --light:#f0f9ff;
+  --white:#fff;
+  --ink:#172b40;
+  --muted:#64748b;
+  --border:#dbeafe;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f1f8fd;
+  color:var(--ink);
+}
+header {
+  background:linear-gradient(130deg,#082b50,#0369a1);
+  color:white;
+  padding:25px 18px 30px;
+}
+.wrap {max-width:850px;margin:auto}
+.brand {font-weight:900;font-size:24px;letter-spacing:.5px}
+.slogan {font-size:12px;color:#bae6fd;margin-top:5px}
+.hero {padding-top:24px}
+.hero h1 {font-size:32px;line-height:1.1;margin:0 0 12px}
+.hero p {color:#e0f2fe;line-height:1.6;font-size:14px}
+.tag {
+  display:inline-block;
+  background:#dff5ff;
+  color:#075985;
+  border-radius:30px;
+  padding:7px 12px;
+  font-size:11px;
+  font-weight:bold;
+}
+main {padding:18px 13px 40px}
+.panel {
+  background:white;
+  padding:19px;
+  border-radius:17px;
+  margin:0 0 17px;
+  border:1px solid var(--border);
+  box-shadow:0 5px 18px #082b5010;
+}
+h2 {font-size:19px;margin:0 0 13px;color:var(--navy)}
+h3 {font-size:15px;margin:0 0 8px}
+p {line-height:1.55}
+.jobs {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;
+}
+.job {
+  background:#f0f9ff;
+  padding:13px 10px;
+  border-radius:12px;
+  border:1px solid #dbeafe;
+}
+.job strong {display:block;font-size:13px}
+.job span {font-size:12px;color:#0369a1;font-weight:bold}
+label {
+  display:block;
+  font-weight:bold;
+  font-size:13px;
+  margin:13px 0 6px;
+}
+input,select,textarea {
+  width:100%;
+  border:1px solid #cbd5e1;
+  background:white;
+  padding:13px;
+  border-radius:10px;
+  font-size:15px;
+  color:#172b40;
+  outline:none;
+}
+input:focus,select:focus,textarea:focus {
+  border-color:var(--blue);
+  box-shadow:0 0 0 3px #38bdf822;
+}
+textarea {min-height:95px;resize:vertical}
+button,.btn {
+  display:inline-block;
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:11px;
+  background:var(--blue);
+  color:white;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  text-align:center;
+  text-decoration:none;
+}
+button:disabled {opacity:.55;cursor:wait}
+.secondary {background:#082b50}
+.small {font-size:12px;color:var(--muted);line-height:1.6}
+.notice {
+  background:#eff6ff;
+  border-left:4px solid var(--blue);
+  padding:12px;
+  border-radius:8px;
+  font-size:12px;
+  line-height:1.6;
+}
+#message {
+  display:none;
+  margin:12px 0;
+  padding:12px;
+  border-radius:9px;
+  font-size:13px;
+  line-height:1.5;
+}
+.success {display:block!important;background:#dcfce7;color:#166534}
+.error {display:block!important;background:#fee2e2;color:#991b1b}
+footer {
+  text-align:center;
+  color:#64748b;
+  padding:20px;
+  font-size:12px;
+}
+.admin {display:none}
+.application {
+  padding:14px 0;
+  border-bottom:1px solid #e2e8f0;
+  overflow-wrap:anywhere;
+}
+.application:last-child {border-bottom:0}
+.application p {font-size:13px;margin:5px 0}
+.status {font-weight:bold;color:#0369a1}
+.doclink {display:block;margin:7px 0;font-size:13px}
+.admin-actions {display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.admin-actions button {font-size:12px;padding:11px}
+@media(max-width:380px) {
+  .jobs {grid-template-columns:1fr}
+  .hero h1 {font-size:27px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brand">IZANDLA ONE 🤝🏿</div>
+    <div class="slogan">QUALITY UPLIFTS THE WORLD</div>
+    <div class="hero">
+      <span class="tag">CAREERS & CONTRACT OPPORTUNITIES</span>
+      <h1>Your Skills.<br>Your Opportunity.</h1>
+      <p>
+        Join our growing professional network.
+        Apply as a driver or skilled construction professional.
+        Work independently while meeting agreed Izandla
+        standards and contract terms.
+      </p>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section id="applicantSection">
+
+  <div class="panel">
+    <h2>Current recruitment opportunities</h2>
+    <div class="jobs">
+      <div class="job"><strong>Drivers</strong><span>5 spaces</span></div>
+      <div class="job"><strong>Roofing</strong><span>6 spaces</span></div>
+      <div class="job"><strong>Waterproofing</strong><span>5 spaces</span></div>
+      <div class="job"><strong>Plumbing</strong><span>5 spaces</span></div>
+      <div class="job"><strong>Painting</strong><span>5 spaces</span></div>
+      <div class="job"><strong>Air-conditioning</strong><span>5 spaces</span></div>
+      <div class="job"><strong>Renovations & Maintenance</strong><span>5 spaces</span></div>
+    </div>
+    <p class="small">
+      These are current intake targets, not guaranteed employment.
+      Selection depends on qualifications, verification, client demand
+      and agreement between the parties.
+    </p>
+  </div>
+
+  <div class="panel">
+    <h2>Apply to join Izandla One</h2>
+    <p class="small">
+      Complete your details accurately. Supporting documents help
+      our team assess your experience and qualifications.
+      All applications are reviewed by Izandla administration.
+    </p>
+
+    <div id="message" role="status"></div>
+
+    <form id="applicationForm">
+
+      <label>Full name and surname *</label>
+      <input name="full_name" required maxlength="120"
+        placeholder="Enter your full name">
+
+      <label>Contact number / WhatsApp *</label>
+      <input name="phone" required type="tel" maxlength="25"
+        placeholder="e.g. 079 000 0000">
+
+      <label>Email address</label>
+      <input name="email" type="email" maxlength="150"
+        placeholder="Your email address">
+
+      <label>Opportunity you are applying for *</label>
+      <select name="category" required>
+        <option value="">Select your opportunity</option>
+        <option>Driver</option>
+        <option>Roofing</option>
+        <option>Waterproofing</option>
+        <option>Plumbing</option>
+        <option>Painting</option>
+        <option>Air-conditioning</option>
+        <option>Renovations & Maintenance</option>
+      </select>
+
+      <label>Your town / working location *</label>
+      <input name="location" required maxlength="150"
+        placeholder="e.g. Durban, KwaZulu-Natal">
+
+      <label>Years of relevant experience</label>
+      <select name="experience">
+        <option value="">Select experience</option>
+        <option>New entrant</option>
+        <option>Less than 1 year</option>
+        <option>1–2 years</option>
+        <option>3–5 years</option>
+        <option>6–10 years</option>
+        <option>More than 10 years</option>
+      </select>
+
+      <label>Qualifications / certificates / skills *</label>
+      <textarea name="qualifications" required maxlength="3000"
+        placeholder="Describe your certificates, qualifications, skills and experience"></textarea>
+
+      <label>Availability</label>
+      <select name="availability">
+        <option value="">Select availability</option>
+        <option>Immediately</option>
+        <option>Within 7 days</option>
+        <option>Within 14 days</option>
+        <option>Within 30 days</option>
+        <option>Discuss during contract talks</option>
+      </select>
+
+      <label>Upload supporting documents</label>
+      <input id="documents" type="file" multiple
+        accept=".pdf,.jpg,.jpeg,.png">
+      <p class="small">
+        PDF, JPG or PNG only. Maximum 5 files, 10 MB per file.
+        Upload relevant certificates, qualifications, experience
+        proof and a valid driver's licence where applicable.
+        Do not upload passwords or bank details.
+      </p>
+
+      <label>Additional information</label>
+      <textarea name="message" maxlength="3000"
+        placeholder="Tell us more about your services, tools, team or work preferences"></textarea>
+
+      <div class="notice">
+        <strong>Independent professional opportunities</strong><br>
+        You are welcome to work independently, provided you meet
+        agreed service standards and written contract terms.
+        Online contract discussions will explain the scope of work,
+        responsibilities, payment and any agreed sourcing or service
+        amount payable to Izandla. No undisclosed charges.
+        Submitting an application does not guarantee a job.
+      </div>
+
+      <p class="small">
+        By submitting, you confirm that the information is accurate
+        and consent to Izandla One reviewing your application and
+        supporting documents for recruitment purposes.
+      </p>
+
+      <button id="submitBtn" type="submit">SUBMIT MY APPLICATION</button>
+    </form>
+  </div>
+
+</section>
+
+<!-- ADMIN ONLY -->
+
+<section class="panel" id="adminLogin">
+  <h2>Izandla administration</h2>
+  <p class="small">Authorized administrators only.</p>
+
+  <form id="loginForm">
+    <label>Administrator email</label>
+    <input type="email" id="adminEmail"
+      value="izandla.one@gmail.com" required>
+
+    <label>Password</label>
+    <input type="password" id="adminPassword"
+      required autocomplete="current-password">
+
+    <button type="submit" class="secondary">ADMIN LOGIN</button>
+  </form>
+  <div id="loginMessage" class="small"></div>
+</section>
+
+<section class="panel admin" id="adminDashboard">
+  <h2>Recruitment control centre</h2>
+  <p class="small">Private administrator dashboard.</p>
+
+  <div id="adminStats" class="notice">Loading applications...</div>
+
+  <button id="refreshBtn" type="button">REFRESH APPLICATIONS</button>
+  <div id="applicationsList"></div>
+
+  <button id="logoutBtn" class="secondary" type="button">
+    LOG OUT
+  </button>
+</section>
+
+</main>
+
+<footer>
+  <strong>IZANDLA ONE 🤝🏿</strong><br>
+  Quality uplifts the world<br>
+  Izandla.one@gmail.com<br>
+  079 510 0296<br>
+  <a href="/" style="color:#0284c7">Return to Izandla One</a>
+</footer>
+
+<script>
+/* ===================================
+   IZANDLA ONE SUPABASE CONNECTION
+   =================================== */
+
+const SUPABASE_URL =
+  "https://ejsdxxapryebecgmkekf.supabase.co";
+
+const SUPABASE_KEY =
+  "PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE";
+
+const ADMIN_EMAIL = "izandla.one@gmail.com";
+
+const BUCKET = "izandla-application-documents";
+
+const { createClient } = supabase;
+
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const form = document.getElementById("applicationForm");
+const submitBtn = document.getElementById("submitBtn");
+const message = document.getElementById("message");
+const documents = document.getElementById("documents");
+
+function showMessage(text, type) {
+  message.textContent = text;
+  message.className = type;
+}
+
+function cleanFileName(name) {
+  return name.replace(/[^a-zA-Z0-9._-]/g, "_").slice(-100);
+}
+
+/* ===================================
+   APPLICANT SUBMISSION
+   =================================== */
+
+form.addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  message.className = "";
+  message.textContent = "";
+
+  if (documents.files.length > 5) {
+    showMessage("Please upload no more than 5 documents.", "error");
+    return;
+  }
+
+  const files = Array.from(documents.files);
+
+  const allowedTypes = [
+    "application/pdf",
+    "image/jpeg",
+    "image/png"
+  ];
+
+  for (const file of files) {
+    if (!allowedTypes.includes(file.type)) {
+      showMessage("Only PDF, JPG and PNG files are accepted.", "error");
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      showMessage("Each document must be 10 MB or smaller.", "error");
+      return;
+    }
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = "SUBMITTING APPLICATION...";
+
+  try {
+    const data = Object.fromEntries(new FormData(form).entries());
+
+    const documentPaths = [];
+
+    for (const file of files) {
+      const path =
+        "applications/" +
+        crypto.randomUUID() + "/" +
+        Date.now() + "-" +
+        cleanFileName(file.name);
+
+      const { error: uploadError } =
+        await db.storage.from(BUCKET).upload(path, file, {
+          upsert: false,
+          contentType: file.type
+        });
+
+      if (uploadError) throw uploadError;
+
+      documentPaths.push(path);
+    }
+
+    const { error } = await db
+      .from("izandla_applications")
+      .insert([{
+        full_name: data.full_name.trim(),
+        phone: data.phone.trim(),
+        email: data.email.trim() || null,
+        category: data.category,
+        location: data.location.trim(),
+        experience: data.experience || null,
+        qualifications: data.qualifications.trim(),
+        availability: data.availability || null,
+        message: data.message.trim() || null,
+        document_paths: documentPaths,
+        status: "Pending"
+      }]);
+
+    if (error) throw error;
+
+    form.reset();
+
+    showMessage(
+      "Application submitted successfully! Izandla One has received your application. Our team will review it and contact you using your supplied details.",
+      "success"
+    );
+
+    window.scrollTo({top:0,behavior:"smooth"});
+
+  } catch (error) {
+    console.error(error);
+
+    showMessage(
+      "We could not complete your application. Please check your internet connection and try again. If the problem continues, contact Izandla One on 079 510 0296. " +
+      (error.message || ""),
+      "error"
+    );
+
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "SUBMIT MY APPLICATION";
+  }
+});
+
+/* ===================================
+   ADMIN LOGIN
+   =================================== */
+
+const adminLogin = document.getElementById("adminLogin");
+const adminDashboard = document.getElementById("adminDashboard");
+
+function isIzandlaAdmin(user) {
+  return user &&
+    user.email &&
+    user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+}
+
+async function displayAdmin(user) {
+  if (!isIzandlaAdmin(user)) {
+    adminDashboard.style.display = "none";
+    adminLogin.style.display = "block";
+    return;
+  }
+
+  adminLogin.style.display = "none";
+  adminDashboard.style.display = "block";
+
+  await loadApplications();
+}
+
+document.getElementById("loginForm")
+.addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const output = document.getElementById("loginMessage");
+  output.textContent = "Checking administrator credentials...";
+
+  const email = document.getElementById("adminEmail").value.trim();
+  const password = document.getElementById("adminPassword").value;
+
+  if (email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+    output.textContent = "Administrator email not authorized.";
+    return;
+  }
+
+  const {data,error} = await db.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    output.textContent = "Login failed: " + error.message;
+    return;
+  }
+
+  if (!isIzandlaAdmin(data.user)) {
+    await db.auth.signOut();
+    output.textContent = "This account is not authorized.";
+    return;
+  }
+
+  output.textContent = "";
+  await displayAdmin(data.user);
+});
+
+/* ===================================
+   APPLICATION MANAGEMENT
+   =================================== */
+
+const list = document.getElementById("applicationsList");
+const stats = document.getElementById("adminStats");
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, function(c) {
+    return {
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#039;"
+    }[c];
+  });
+}
+
+async function loadApplications() {
+  list.innerHTML = "<p>Loading applications...</p>";
+  stats.textContent = "Loading...";
+
+  const {data,error} = await db
+    .from("izandla_applications")
+    .select("*")
+    .order("created_at", {ascending:false});
+
+  if (error) {
+    list.textContent = "Unable to load applications: " + error.message;
+    return;
+  }
+
+  const rows = data || [];
+
+  stats.textContent =
+    "TOTAL: " + rows.length +
+    " | PENDING: " + rows.filter(x=>x.status==="Pending").length +
+    " | SHORTLISTED: " + rows.filter(x=>x.status==="Shortlisted").length +
+    " | APPROVED: " + rows.filter(x=>x.status==="Approved").length;
+
+  if (!rows.length) {
+    list.innerHTML = "<p>No applications received yet.</p>";
+    return;
+  }
+
+  list.innerHTML = rows.map(a => `
+    <article class="application">
+      <h3>${escapeHTML(a.full_name)}</h3>
+      <p><strong>Application:</strong> ${escapeHTML(a.category)}</p>
+      <p><strong>Phone:</strong> ${escapeHTML(a.phone)}</p>
+      <p><strong>Email:</strong> ${escapeHTML(a.email || "Not supplied")}</p>
+      <p><strong>Location:</strong> ${escapeHTML(a.location)}</p>
+      <p><strong>Experience:</strong> ${escapeHTML(a.experience || "Not supplied")}</p>
+      <p><strong>Qualifications:</strong> ${escapeHTML(a.qualifications)}</p>
+      <p><strong>Availability:</strong> ${escapeHTML(a.availability || "Not supplied")}</p>
+      <p><strong>Additional details:</strong> ${escapeHTML(a.message || "None")}</p>
+      <p><strong>Date:</strong> ${escapeHTML(new Date(a.created_at).toLocaleString())}</p>
+      <p class="status">STATUS: ${escapeHTML(a.status)}</p>
+      <div id="docs-${a.id}">Loading document links...</div>
+
+      <label>Update application status</label>
+      <select id="status-${a.id}">
+        ${["Pending","Under Review","Shortlisted","Approved","Declined"].map(s =>
+          `<option value="${s}" ${a.status===s?"selected":""}>${s}</option>`
+        ).join("")}
+      </select>
+
+      <label>Administrator notes</label>
+      <textarea id="notes-${a.id}" maxlength="3000">${escapeHTML(a.admin_notes || "")}</textarea>
+
+      <button type="button" onclick="updateApplication('${a.id}')">
+        SAVE APPLICATION UPDATE
+      </button>
+    </article>
+  `).join("");
+
+  for (const a of rows) {
+    const holder = document.getElementById("docs-" + a.id);
+    if (!holder) continue;
+
+    holder.innerHTML = "";
+
+    for (const path of (a.document_paths || [])) {
+      const {data:linkData,error:linkError} =
+        await db.storage.from(BUCKET).createSignedUrl(path,300);
+
+      if (linkError) {
+        const p = document.createElement("p");
+        p.textContent = "Document unavailable.";
+        holder.appendChild(p);
+        continue;
+      }
+
+      const link = document.createElement("a");
+      link.href = linkData.signedUrl;
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.className = "doclink";
+      link.textContent = "View supporting document";
+      holder.appendChild(link);
+    }
+
+    if (!(a.document_paths || []).length) {
+      holder.textContent = "No documents uploaded.";
+    }
+  }
+}
+
+async function updateApplication(id) {
+  const status = document.getElementById("status-" + id).value;
+  const notes = document.getElementById("notes-" + id).value;
+
+  const {error} = await db
+    .from("izandla_applications")
+    .update({
+      status: status,
+      admin_notes: notes
+    })
+    .eq("id",id);
+
+  if (error) {
+    alert("Update failed: " + error.message);
+    return;
+  }
+
+  alert("Application successfully updated.");
+  await loadApplications();
+}
+
+document.getElementById("refreshBtn")
+.addEventListener("click", loadApplications);
+
+document.getElementById("logoutBtn")
+.addEventListener("click", async function() {
+  await db.auth.signOut();
+  adminDashboard.style.display = "none";
+  adminLogin.style.display = "block";
+});
+
+/* ===================================
+   RESTORE ADMIN SESSION
+   =================================== */
+
+db.auth.onAuthStateChange((event,session) => {
+  if (session && isIzandlaAdmin(session.user)) {
+    setTimeout(() => displayAdmin(session.user),0);
+  } else if (event === "SIGNED_OUT") {
+    adminDashboard.style.display = "none";
+    adminLogin.style.display = "block";
+  }
+});
+
+(async function() {
+  const {data} = await db.auth.getSession();
+
+  if (data.session && isIzandlaAdmin(data.session.user)) {
+    await displayAdmin(data.session.user);
+  }
+})();
+</script>
+
+</body>
+</html>
