@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#38bdf8">
+<meta name="description" content="Izandla One — Quality uplifts the world">
+<title>Izandla One 🤝🏿</title>
+<style>
+:root{--sky:#38bdf8;--blue:#0284c7;--deep:#075985;--pale:#e0f2fe;--ink:#0f172a;--muted:#64748b;--line:#dbeafe;--red:#991b1b}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,Arial,sans-serif;background:linear-gradient(#effaff,#fff 55%);color:var(--ink);line-height:1.5}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.top{position:sticky;top:0;z-index:30;background:#ffffffed;backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topin,.wrap,.footin{max-width:1100px;margin:auto}
+.topin{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 15px}
+.brand{display:flex;align-items:center;gap:10px}
+.mark{width:45px;height:45px;border-radius:14px;background:var(--pale);display:grid;place-items:center;font-size:27px}
+.brand h1{font-size:1.15rem;color:var(--deep);margin:0}
+.brand p{font-size:.75rem;color:var(--muted);margin:2px 0}
+.wrap{padding:16px}
+.hero{background:linear-gradient(135deg,#0369a1,#38bdf8 65%,#7dd3fc);color:white;padding:28px 20px;border-radius:25px}
+.hero h2{font-size:clamp(1.8rem,6vw,3rem);line-height:1.1;margin:0 0 10px}
+.btn{border:0;border-radius:12px;padding:11px 15px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.primary{background:var(--blue);color:white}
+.light{background:white;color:var(--deep)}
+.outline{background:white;color:var(--deep);border:1px solid #bae6fd}
+.danger{background:#fee2e2;color:var(--red)}
+.smallbtn{font-size:.85rem;padding:8px 11px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+.section{margin-top:23px}
+.heading{display:flex;justify-content:space-between;align-items:end;gap:10px;margin-bottom:12px}
+.heading h2,.back h2{margin:0;color:var(--deep);font-size:1.35rem}
+.heading p{margin:3px 0 0;color:var(--muted);font-size:.88rem}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.service{border:1px solid var(--line);border-radius:17px;background:white;padding:15px 13px;display:flex;flex-direction:column;text-align:left;min-height:135px;color:var(--ink);text-decoration:none}
+.service strong{color:var(--deep)}
+.service span:last-child{color:var(--muted);font-size:.83rem;margin-top:5px}
+.emoji{font-size:1.9rem;margin-bottom:6px}
+.view{display:none}
+.view.active{display:block}
+.back{display:flex;align-items:center;gap:10px;margin:7px 0 17px}
+.notice{border:1px solid #bae6fd;background:#f0f9ff;color:#075985;padding:12px 14px;border-radius:13px;font-size:.9rem}
+.card,.clean{background:white;border:1px solid var(--line);border-radius:18px;padding:15px}
+.catalog{display:grid;grid-template-columns:1fr;gap:12px}
+.clean h3{color:var(--deep);margin:8px 0 4px}
+.clean p{margin:7px 0}
+.price{font-weight:900;color:var(--blue);font-size:1.08rem}
+.pill{display:inline-block;border-radius:99px;background:var(--pale);color:var(--deep);padding:4px 9px;font-size:.75rem;font-weight:800}
+.muted{color:var(--muted)}
+.small{font-size:.85rem}
+.field{display:grid;gap:5px;margin:11px 0}
+.field label{font-weight:750;font-size:.9rem}
+.field input,.field select,.field textarea{width:100%;border:1px solid #cbd5e1;border-radius:11px;padding:11px;background:white;color:var(--ink)}
+.field textarea{min-height:85px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.addonlist{display:grid;gap:8px}
+.addon{display:flex;gap:9px;padding:10px;border:1px solid var(--line);border-radius:12px;background:#fbfdff}
+.addon input{width:18px;height:18px;margin-top:4px}
+.total{background:#082f49;color:white;border-radius:13px;padding:13px;display:flex;justify-content:space-between;gap:10px;margin:12px 0}
+.total strong{font-size:1.2rem}
+.row{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}
+.status{display:inline-block;background:#fef3c7;color:#92400e;border-radius:99px;padding:4px 8px;font-size:.78rem;font-weight:800}
+footer{margin-top:30px;background:#082f49;color:#e0f2fe;padding:25px 17px}
+.footin{display:grid;gap:12px}
+footer h2{margin:0}
+footer p{margin:4px 0}
+footer a{color:#bae6fd}
+.modalbg{display:none;position:fixed;inset:0;background:#0f172a99;z-index:70;align-items:flex-end;justify-content:center;padding:10px}
+.modalbg.open{display:flex}
+.modal{background:white;border-radius:20px;padding:18px;width:min(100%,620px);max-height:93vh;overflow:auto}
+.modalhead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.modalhead h2{margin:0;color:var(--deep)}
+.close{border:0;background:var(--pale);border-radius:10px;padding:8px 11px;font-weight:800}
+.toast{display:none;position:fixed;z-index:100;bottom:18px;left:14px;right:14px;background:#0f172a;color:white;padding:13px;border-radius:13px}
+.toast.show{display:block}
+.hide{display:none!important}
+.food-banner{background:linear-gradient(120deg,#075985,#38bdf8);color:white;border-radius:18px;padding:18px;display:flex;justify-content:space-between;align-items:center}
+.food-store-grid,.food-product-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.food-store,.food-product{border:1px solid var(--line);border-radius:15px;padding:13px;background:white}
+.food-store h3,.food-product h3{margin:5px 0;color:var(--deep)}
+.food-product button{margin-top:8px}
+.checkout-panel{border:1px solid #7dd3fc;background:#f0f9ff;border-radius:16px;padding:15px;margin-top:15px}
+.checkout-panel h3{margin:0 0 8px;color:#075985}
+.checkout-line{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid #dbeafe}
+.checkout-line.total-line{font-weight:900;font-size:1.12rem;border:0}
+.cartbar{position:sticky;bottom:8px;background:#082f49;color:white;padding:12px 14px;border-radius:15px;display:flex;justify-content:space-between;align-items:center;gap:10px;box-shadow:0 8px 25px #082f4933;z-index:5}
+.ride-hero{background:linear-gradient(130deg,#082f49,#0369a1 58%,#38bdf8);color:#fff;padding:19px;border-radius:18px;margin-bottom:14px}
+.farebox{background:#082f49;color:#fff;padding:16px;border-radius:16px;margin:14px 0}
+.farebox strong{font-size:1.65rem}
+
+/* Main menu */
+.main-menu{max-width:760px;margin:25px auto 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.main-menu .menu-button{min-height:125px;border:1px solid #bae6fd;border-radius:20px;background:white;box-shadow:0 7px 20px #07598512;padding:17px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:5px;color:var(--deep)}
+.main-menu .menu-button .emoji{font-size:2.1rem;margin:0}
+.main-menu .menu-button strong{font-size:1.05rem}
+.main-menu .menu-button span:last-child{font-size:.8rem;color:var(--muted)}
+.main-menu .menu-button.featured{background:linear-gradient(145deg,#e0f2fe,#fff);border:2px solid #7dd3fc}
+.main-menu .menu-button:last-child{grid-column:1/-1;min-height:105px}
+.auto-combo{background:linear-gradient(120deg,#082f49,#0369a1);color:white;border-radius:19px;padding:19px;margin-top:18px}
+.auto-combo h2{margin:0 0 5px}
+.auto-combo p{margin:4px 0 12px;color:#e0f2fe}
+.medical-choice{border:1px solid var(--line);padding:12px;border-radius:13px;margin:8px 0;background:#fbfdff}
+@media(min-width:650px){
+.wrap{padding:23px}
+.grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.catalog{grid-template-columns:repeat(2,minmax(0,1fr))}
+.footin{grid-template-columns:2fr 1fr 1fr}
+.hero{padding:38px}
+.food-store-grid,.food-product-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.main-menu{grid-template-columns:repeat(3,minmax(0,1fr))}
+.main-menu .menu-button:last-child{grid-column:auto}
+}
+@media(max-width:420px){.two{grid-template-columns:1fr}.wrap{padding:13px}.hero{padding:22px 17px}}
+</style>
+</head>
+<body>
+<header class="top">
+<div class="topin">
+<div class="brand"><div class="mark">🤝🏿</div><div><h1>Izandla One</h1><p>Quality uplifts the world 🌎</p></div></div>
+<div class="actions" style="margin:0">
+<button class="btn outline smallbtn" onclick="showView('home')">Home</button>
+<button class="btn outline smallbtn" onclick="openLogin()">Login</button>
+</div>
+</div>
+</header>
+
+<main class="wrap">
+<section id="v-home" class="view active">
+<div class="hero">
+<h2>Spotless Homes. Everyday Solutions.</h2>
+<p>Move, eat, clean, build and access helpful local services — all in one place.</p>
+<div class="actions">
+<button class="btn light" onclick="showView('cleaning')">Explore Cleaning</button>
+<button class="btn light" onclick="openRequest('Ride request')">Request a Ride</button>
+</div>
+</div>
+
+<div class="section">
+<div class="heading"><div><h2>Explore Izandla One</h2><p>Choose your service to get started.</p></div></div>
+<div class="main-menu">
+<button class="menu-button featured" onclick="openRequest('Ride request')"><span class="emoji">🚗</span><strong>Rides</strong><span>Request a safe, reliable trip</span></button>
+<button class="menu-button featured" onclick="showView('food')"><span class="emoji">🍔</span><strong>Meals</strong><span>Restaurants and groceries</span></button>
+<button class="menu-button featured" onclick="showView('cleaning')"><span class="emoji">🧹</span><strong>Cleaning</strong><span>Home, business and vehicle care</span></button>
+<button class="menu-button featured" onclick="showView('construction')"><span class="emoji">🛠️</span><strong>Construction Level</strong><span>Repairs, installations and renovations</span></button>
+<button class="menu-button featured" onclick="showView('medical')"><span class="emoji">🩺</span><strong>Doctor / Vet</strong><span>Medical and veterinary requests</span></button>
+</div>
+</div>
+
+<div class="auto-combo">
+<h2>🚘 Auto Valet Combo</h2>
+<p>Give your vehicle a fresh finish with interior cleaning, exterior washing, polishing and optional rim care.</p>
+<button class="btn light" onclick="openClean('valet')">Explore Auto Valet Combo →</button>
+</div>
+
+<div class="section">
+<div class="heading"><div><h2>More services</h2><p>Additional services available through Izandla.</p></div></div>
+<div class="grid">
+<button class="service" onclick="openRequest('Petrol / Diesel delivery')"><span class="emoji">⛽</span><strong>Petrol / Diesel</strong><span>Request fuel delivery, subject to availability.</span></button>
+<button class="service" onclick="openRequest('Gas swap 9kg–48kg')"><span class="emoji">🔥</span><strong>Gas Swap</strong><span>Request a cylinder swap.</span></button>
+<button class="service" onclick="openPanelBooking()"><span class="emoji">🚘</span><strong>Panel Beating</strong><span>Accident repairs, dents, bumpers, spray painting and bodywork.</span></button>
+<button class="service" onclick="showView('news')"><span class="emoji">📰</span><strong>News Updates</strong><span>South African, global and sports links.</span></button>
+<button class="service" onclick="showView('registration')"><span class="emoji">🛵</span><strong>Join Izandla</strong><span>Driver and store applications.</span></button>
+<button class="service" onclick="openLogin()"><span class="emoji">📊</span><strong>Dashboards</strong><span>Customer, driver, store or admin login.</span></button>
+</div>
+</div>
+
+<div class="section notice">
+Rides and food delivery: R20 base + R5/km. Store and restaurant commission: 0%. Liquor commission: 2%. Izandla’s R5 service deduction is recorded for successful completion only. Final deductions and payment settlement require secure backend processing. Demo menus are examples until partners confirm their live menus.
+</div>
+</section>
+
+<section id="v-cleaning" class="view">
+<div class="back"><button class="btn outline smallbtn" onclick="showView('home')">← Home</button><div><h2>IZANDLA CLEANING SERVICES</h2><div class="muted small">Quality uplifts the world 🌎</div></div></div>
+<div class="notice">Choose a service and optional add-ons. Cleaning bookings are sent to Izandla WhatsApp.</div>
+<div id="cleanCatalog" class="section catalog"></div>
+</section>
+
+<section id="v-food" class="view">
+<div class="back"><button class="btn outline smallbtn" onclick="showView('home')">← Home</button><h2>Izandla Food Marketplace</h2></div>
+<div class="food-banner"><div><span class="pill">IZANDLA ONE MARKETPLACE</span><h2>Good food. Great choices.</h2><p>Explore participating stores.</p></div><span style="font-size:48px">🍔</span></div>
+<div class="notice section">Temporary demo products only. Replace with approved store menus before launch.</div>
+<div class="field"><label>Search stores or menu items</label><input id="foodSearch" placeholder="Search burgers, chicken, groceries..." oninput="renderFood()"></div>
+<div class="actions">
+<button class="btn primary smallbtn" onclick="foodFilter('all')">All</button>
+<button class="btn outline smallbtn" onclick="foodFilter('restaurant')">Restaurants</button>
+<button class="btn outline smallbtn" onclick="foodFilter('grocery')">Groceries</button>
+<button class="btn outline smallbtn" onclick="foodFilter('liquor')">Liquor</button>
+</div>
+<div class="section"><h2>Stores</h2><div id="foodStores" class="food-store-grid"></div></div>
+<div id="foodMenuPanel" class="section hide card">
+<div class="back"><button class="btn outline smallbtn" onclick="closeFoodMenu()">← Stores</button><h2 id="foodMenuTitle"></h2></div>
+<div id="foodProducts" class="food-product-grid"></div>
+<div id="foodCartBar" class="cartbar hide"><span id="foodCartSummary">Basket empty</span><button class="btn light smallbtn" onclick="openFoodCheckout()">Checkout →</button></div>
+<div id="foodCheckout" class="checkout-panel hide">
+<h3>Order review</h3><div id="foodCheckoutLines"></div>
+<div class="field"><label>Customer name</label><input id="foodCustomerName" required></div>
+<div class="field"><label>WhatsApp number</label><input id="foodCustomerPhone" inputmode="tel" required></div>
+<div class="field"><label>Delivery address</label><input id="foodDeliveryAddress" required></div>
+<div class="field"><label>Estimated delivery distance (km)</label><input id="foodDeliveryKm" type="number" min="0.1" step="0.1" required placeholder="Enter road distance in km"></div>
+<div class="field"><label>Payment method</label><select id="foodPayment"><option value="cash">Cash on delivery / collection</option><option value="eft">EFT — arrange securely with Izandla</option></select></div>
+<p class="small muted">Card processing is not active yet. No card details are collected here.</p>
+<button class="btn primary" onclick="confirmFoodCheckout()">Place order</button>
+</div>
+</div>
+</section>
+
+<section id="v-medical" class="view">
+<div class="back"><button class="btn outline smallbtn" onclick="showView('home')">← Home</button><h2>Doctor / Vet Services</h2></div>
+<div class="notice">Request an appointment or ask whether a qualified provider can visit your home. Availability, professional credentials, fees and medical suitability must be confirmed by the provider.</div>
+<div class="section grid">
+<button class="service" onclick="openMedical('Eye Specialist')"><span class="emoji">👁️</span><strong>Eye Specialist</strong><span>Eye examinations, vision concerns and specialist appointments.</span></button>
+<button class="service" onclick="openMedical('Dental Care')"><span class="emoji">🦷</span><strong>Dental Care</strong><span>Dental check-ups, oral health and dental appointments.</span></button>
+<button class="service" onclick="openMedical('Doctor / General Practitioner')"><span class="emoji">🩺</span><strong>Doctor</strong><span>Request a general medical appointment.</span></button>
+<button class="service" onclick="openMedical('Veterinary')"><span class="emoji">🐾</span><strong>Veterinary</strong><span>Request veterinary assistance for your animal.</span></button>
+</div>
+<div class="card section">
+<h3>Home visit requests</h3>
+<p class="muted small">For elderly customers and people who are paralysed or have difficulty travelling, select the home-visit option when booking. The provider must confirm whether a home visit is available and appropriate.</p>
+<button class="btn primary" onclick="openMedical('Doctor home visit')">Request a doctor home visit</button>
+</div>
+</section>
+
+<section id="v-construction" class="view">
+<div class="back"><button class="btn outline smallbtn" onclick="showView('home')">← Home</button><h2>Construction Level</h2></div>
+<div class="notice">Request a quote. Final scope, materials and price must be confirmed before work starts.</div>
+<div id="constructionGrid" class="section grid"></div>
+</section>
+
+<section id="v-request" class="view">
+<div class="back"><button class="btn outline smallbtn" onclick="showView('home')">← Home</button><h2 id="requestTitle">Service request</h2></div>
+<div class="ride-hero"><h3>Move with confidence.</h3><p>Clear trip pricing. Reliable local service. Your journey starts here.</p></div>
+<div class="card">
+<form id="requestForm">
+<div class="field"><label>Service</label><input id="reqService" required readonly></div>
+<div class="two">
+<div class="field"><label>Your name</label><input id="reqName" autocomplete="name" required></div>
+<div class="field"><label>WhatsApp number</label><input id="reqPhone" required inputmode="tel"></div>
+</div>
+<div class="two">
+<div class="field"><label>Pickup / service address</label><input id="reqPickup" placeholder="Enter street, suburb and town" required></div>
+<div class="field"><label>Destination / drop-off</label><input id="reqDropoff" placeholder="Where are you going?"></div>
+</div>
+<div id="rideDistanceWrap" class="field hide">
+<label>Estimated road / delivery distance (kilometres)</label>
+<input id="reqKm" type="number" min="0.1" step="0.1" placeholder="Enter trip distance in km">
+<small class="muted">Google Maps connection will be added in the next stage. Enter road distance manually for now.</small>
+</div>
+<div id="rideFareBox" class="farebox hide">
+<div class="small">YOUR ESTIMATED FARE</div><strong id="rideFare">R20.00</strong>
+<div id="rideFareBreakdown" class="small">R20 base fare + R5 per kilometre</div>
+</div>
+<div class="field"><label>Additional instructions</label><textarea id="reqDetails" placeholder="Passengers, parcel details, preferred timing or special instructions"></textarea></div>
+<button class="btn primary" type="submit">Review request &amp; proceed to checkout →</button>
+</form>
+<div id="requestCheckout" class="checkout-panel hide">
+<h3>Review your request</h3><div id="requestCheckoutLines"></div>
+<div class="field"><label>Payment method</label><select id="requestPayment"><option value="cash">Cash to driver / provider</option><option value="eft">EFT — arrange securely with Izandla</option></select></div>
+<p class="small muted">Card payments are not active yet. No card details are collected here.</p>
+<button class="btn primary" onclick="confirmRequestCheckout()">Confirm request</button>
+<button class="btn outline" onclick="editRequest()">← Edit details</button>
+</div>
+</div>
+</section>
+
+<section id="v-registration" class="view">
+<div class="back"><button class="btn outline smallbtn" onclick="showView('home')">← Home</button><h2>Join Izandla One</h2></div>
+<div class="notice">Driver and store applications require a signed-in account and admin review.</div>
+<div class="card section">
+<div class="actions">
+<button class="btn primary" onclick="choosePartner('driver')">🛵 Driver sign-up</button>
+<button class="btn outline" onclick="choosePartner('store')">🏪 Store sign-up</button>
+</div>
+<form id="partnerForm" class="hide">
+<input type="hidden" id="partnerType">
+<div class="field"><label>Full name / manager name</label><input id="partnerName" required></div>
+<div class="field"><label>Phone / WhatsApp</label><input id="partnerPhone" required></div>
+<div id="partnerBusinessWrap" class="field hide"><label>Business / store name</label><input id="partnerBusiness"></div>
+<div class="field"><label>Location</label><input id="partnerLocation" placeholder="Town / suburb"></div>
+<div id="partnerVehicleWrap" class="field"><label>Vehicle type</label><select id="partnerVehicle"><option value="">Select vehicle</option><option>Motorcycle</option><option>Car</option><option>Bakkie</option><option>Van</option><option>Bicycle</option></select></div>
+<div class="field"><label>Additional information</label><textarea id="partnerNotes"></textarea></div>
+<button class="btn primary" type="submit">Submit application</button>
+</form>
+<p id="partnerAuthHint" class="small muted">Select driver or store sign-up.</p>
+<button class="btn outline" onclick="openLogin()">Login / create account</button>
+</div>
+</section>
+
+<section id="v-news" class="view">
+<div class="back"><button class="btn outline smallbtn" onclick="showView('home')">← Home</button><h2>News Updates</h2></div>
+<div class="grid">
+<a class="service" href="https://www.sabcnews.com/" target="_blank" rel="noopener"><span class="emoji">🇿🇦</span><strong>SABC News</strong><span>South African headlines</span></a>
+<a class="service" href="https://www.news24.com/" target="_blank" rel="noopener"><span class="emoji">🗞️</span><strong>News24</strong><span>Local news</span></a>
+<a class="service" href="https://www.reuters.com/world/" target="_blank" rel="noopener"><span class="emoji">🌍</span><strong>Reuters World</strong><span>International reporting</span></a>
+<a class="service" href="https://www.espn.com/" target="_blank" rel="noopener"><span class="emoji">🏆</span><strong>ESPN</strong><span>Sports news</span></a>
+<a class="service" href="https://www.supersport.com/" target="_blank" rel="noopener"><span class="emoji">⚽</span><strong>SuperSport</strong><span>Sports coverage</span></a>
+</div>
+</section>
+
+<section id="v-dashboard" class="view">
+<div class="back"><button class="btn outline smallbtn" onclick="showView('home')">← Home</button><h2 id="dashTitle">Dashboard</h2></div>
+<div id="dashStatus" class="notice">Sign in to load dashboard data.</div>
+<div class="card section">
+<div class="heading"><div><h2>Requests and bookings</h2><p>Records visible under your Supabase Row Level Security policies.</p></div><button class="btn outline smallbtn" onclick="loadDashboard()">Refresh</button></div>
+<div id="dashRows">No records loaded.</div>
+</div>
+<div class="card section"><p id="accountInfo" class="small muted">Not signed in.</p><button class="btn danger smallbtn" onclick="signOut()">Sign out</button></div>
+</section>
+</main>
+
+<footer>
+<div class="footin">
+<div><h2>Izandla One 🤝🏿</h2><p><strong>Quality uplifts the world 🌎</strong></p><p>Spotless Homes. Everyday Solutions.</p></div>
+<div><strong>Contact</strong><p><a href="tel:+27795100296">079 510 0296</a></p><p><a href="mailto:Izandla.one@gmail.com">Izandla.one@gmail.com</a></p></div>
+<div><strong>Quick links</strong><p><a href="#" onclick="showView('cleaning');return false">Cleaning</a></p><p><a href="#" onclick="showView('medical');return false">Doctor / Vet</a></p><p><a href="#" onclick="showView('registration');return false">Driver / Store registration</a></p><p><a href="#" onclick="openLogin();return false">Dashboard login</a></p></div>
+</div>
+</footer>
+
+<div id="toast" class="toast" role="status"></div>
+
+<div id="loginModal" class="modalbg" role="dialog" aria-modal="true">
+<div class="modal">
+<div class="modalhead"><h2>Izandla One Login</h2><button class="close" onclick="closeModal('loginModal')">Close ✕</button></div>
+<div class="notice">Use your registered Supabase account. Dashboard access is checked against your approved profile.</div>
+<form id="loginForm" class="section">
+<div class="field"><label>Dashboard</label><select id="loginRole"><option value="customer">Customer</option><option value="driver">Driver</option><option value="store">Store / Restaurant</option><option value="admin">Admin</option></select></div>
+<div class="field"><label>Email</label><input id="loginEmail" type="email" required autocomplete="username"></div>
+<div class="field"><label>Password</label><input id="loginPassword" type="password" required autocomplete="current-password"></div>
+<button class="btn primary" type="submit">Sign in</button>
+<button class="btn outline" type="button" onclick="registerAccount()">Create customer account</button>
+<button class="btn outline" type="button" onclick="resetPassword()">Reset password</button>
+</form>
+<p id="loginMessage" class="small muted"></p>
+</div>
+</div>
+
+<div id="cleanModal" class="modalbg" role="dialog" aria-modal="true">
+<div class="modal">
+<div class="modalhead"><h2 id="cleanModalTitle">Cleaning booking</h2><button class="close" onclick="closeModal('cleanModal')">Close ✕</button></div>
+<div id="cleanModalBody"></div>
+</div>
+</div>
+
+<div id="medicalModal" class="modalbg" role="dialog" aria-modal="true">
+<div class="modal">
+<div class="modalhead"><h2 id="medicalModalTitle">Medical booking</h2><button class="close" onclick="closeModal('medicalModal')">Close ✕</button></div>
+<div class="notice">Izandla will forward your request for provider confirmation. This is not an emergency service. For an emergency, contact emergency services directly.</div>
+<form id="medicalForm" class="section">
+<input type="hidden" id="medicalService">
+<div class="two">
+<div class="field"><label>Patient / owner name</label><input id="mName" required></div>
+<div class="field"><label>WhatsApp number</label><input id="mPhone" required inputmode="tel"></div>
+</div>
+<div class="field"><label>Who needs the appointment?</label><select id="mPatient"><option>Myself</option><option>Child / family member</option><option>Elderly family member</option><option>Person with limited mobility</option><option>My animal / pet</option></select></div>
+<div class="field"><label>Appointment type</label><select id="mVisit"><option value="clinic">I can travel to the provider</option><option value="home">Please ask if a home visit is possible</option></select></div>
+<div class="field"><label>Home visit reason (optional)</label><select id="mMobility"><option value="">Not applicable / not specified</option><option>Elderly person unable to travel easily</option><option>Paralysed person</option><option>Limited mobility / disability</option><option>Patient is bedbound</option><option>Other reason</option></select></div>
+<div class="field"><label>Address / area</label><input id="mAddress" required placeholder="Suburb, town and address"></div>
+<div class="field"><label>Preferred date</label><input id="mDate" type="date"></div>
+<div class="field"><label>Brief reason for appointment</label><textarea id="mReason" required placeholder="Describe the appointment needed. Avoid sharing unnecessary private medical information."></textarea></div>
+<div class="field"><label>Additional instructions</label><textarea id="mNotes"></textarea></div>
+<button class="btn primary" type="submit">Submit appointment request →</button>
+</form>
+</div>
+</div>
+
+<div id="panelModal" class="modalbg" role="dialog" aria-modal="true">
+<div class="modal">
+<div class="modalhead"><h2>Panel Beating Booking</h2><button class="close" onclick="closeModal('panelModal')">Close ✕</button></div>
+<div class="notice">Tell us about the vehicle damage. Izandla will review the request and arrange a panel-beating quote. No repair price is confirmed until inspection.</div>
+<form id="panelForm" class="section">
+<div class="two"><div class="field"><label>Full name</label><input id="pName" required></div><div class="field"><label>WhatsApp number</label><input id="pPhone" required inputmode="tel"></div></div>
+<div class="two"><div class="field"><label>Vehicle make</label><input id="pMake" placeholder="e.g. Toyota" required></div><div class="field"><label>Vehicle model</label><input id="pModel" placeholder="e.g. Corolla" required></div></div>
+<div class="two"><div class="field"><label>Vehicle year</label><input id="pYear" type="number" min="1950" max="2100"></div><div class="field"><label>Vehicle colour</label><input id="pColour"></div></div>
+<div class="field"><label>Repair required</label><select id="pRepair" required><option value="">Choose repair</option><option>Accident damage assessment</option><option>Dent removal</option><option>Spray painting / respray</option><option>Bumper repair or replacement</option><option>Scratch and paint repair</option><option>Panel beating / body alignment</option><option>Windscreen or window damage</option><option>Full bodywork</option><option>Other — explain below</option></select></div>
+<div class="field"><label>Where is the vehicle damage?</label><textarea id="pDamage" required></textarea></div>
+<div class="field"><label>Vehicle location / collection address</label><input id="pAddress" required></div>
+<div class="field"><label>Can the vehicle be driven?</label><select id="pDrive"><option>Yes</option><option>No — vehicle is not safe to drive</option><option>Not sure</option></select></div>
+<div class="field"><label>Preferred inspection date</label><input id="pDate" type="date"></div>
+<div class="field"><label>Damage photos (optional)</label><input id="pPhotos" type="file" accept="image/*" multiple><small class="muted">Online photo storage is not active yet. Send the actual photos through WhatsApp after submitting.</small></div>
+<div class="field"><label>Additional notes</label><textarea id="pNotes"></textarea></div>
+<button class="btn primary" type="submit">Submit panel beating booking →</button>
+</form>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+'use strict';
+
+const SUPABASE_URL='https://ejsdxxapryebecgmkekf.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable_hvKxq3KkZNrmKMSNXlyYWg_hmFm5AYd';
+const WHATSAPP_NUMBER='27795100296';
+
+let db=null,user=null,role='customer',selectedService=null,selectedAddons={},foodCategory='all',activeFoodStore=null,foodCart=[],pendingRequest=null;
+const $=id=>document.getElementById(id);
+
+function initDB(){
+ if(db)return db;
+ if(!window.supabase)throw Error('Supabase library did not load. Check your internet connection.');
+ db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+ return db;
+}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+let toastTimer;
+function toast(s){$('toast').textContent=s;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),4200)}
+function showView(n){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('v-'+n)?.classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
+function closeModal(id){$(id).classList.remove('open')}
+function contactWhatsApp(m){window.open('https://wa.me/'+WHATSAPP_NUMBER+'?text='+encodeURIComponent(m),'_blank','noopener')}
+function openLogin(){try{initDB();$('loginMessage').textContent='Sign in with your registered account.'}catch(e){$('loginMessage').textContent=e.message}$('loginModal').classList.add('open')}
+
+/* Cleaning catalogue */
+const cleaning=[
+{id:'tank',name:'JoJo Tank Cleaning — Basic',price:300,unit:'R300 basic service',desc:'Basic accessible tank cleaning and ordinary sediment removal.',addons:[['tankdeep','Deep wash and algae-residue removal',0,'quote'],['tankchem','Tank-safe treatment chemical',40,'fixed'],['tankwater','Water treatment / purification',30,'from']]},
+{id:'room',name:'House Cleaning — Per Room',price:200,unit:'R200 per room',desc:'General cleaning for a room in a house, flat or rental property.',addons:[['roomdeep','Deep-clean upgrade',0,'quote'],['appliance','Appliance deep clean / maintenance',45,'from'],['windows','Extra window cleaning',0,'quote']]},
+{id:'homecombo',name:'Full Home Wash Combo + Yard',price:1500,unit:'R1,500 package',desc:'Combined home and yard cleaning. Confirm property size and checklist.',addons:[['fridge','Fridge interior clean',0,'quote'],['oven','Oven deep clean',0,'quote'],['extraroom','Additional room',200,'perunit']]},
+{id:'yard',name:'Yard, Walls and Paving Cleaning',price:150,unit:'From R150',desc:'Outdoor cleaning for an agreed yard, wall or paved area.',addons:[['wallwash','Wall washing',0,'quote'],['paving','Paving pressure wash',0,'quote']]},
+{id:'roof',name:'Roof Washing and Maintenance',price:200,unit:'From R200',desc:'Roof washing or maintenance; access and safety assessment required.',addons:[['gutters','Gutter clearing',0,'quote']]},
+{id:'school',name:'School / Classroom Deep Cleaning',price:200,unit:'R200 per classroom',desc:'Deep cleaning for classrooms. Desks R8 each.',addons:[['desks','Desk cleaning',8,'perextra']]},
+{id:'polish',name:'Car Polishing',price:200,unit:'R200 basic polish',desc:'Basic car polishing service. Paint condition checked first.',addons:[['dashboard','Dashboard dressing spray',15,'fixed'],['surfacespray','Compatible surface spray',25,'fixed'],['rims','Optional rims wash and shine',80,'from']]},
+{id:'valet',name:'Auto Valet Combo — Full Vehicle Care',price:600,unit:'From R600',desc:'Interior and exterior vehicle cleaning. Add polishing, dashboard dressing and optional rim wash.',addons:[['seatremove','Full valet with seat removal',700,'package'],['interiordeep','Interior deep clean',0,'quote'],['valetpolish','Car polishing',200,'fixed'],['valetrims','Optional rims wash and shine',80,'from'],['dashboard','Dashboard dressing spray',15,'fixed'],['surfacespray','Compatible surface spray',25,'fixed']]},
+{id:'sneakers',name:'Sneaker Cleaning',price:100,unit:'From R100 per pair',desc:'Cleaning for suitable sneakers. Results vary by material.',addons:[['sneakerstain','Deep stain treatment',0,'quote']]},
+{id:'aircon',name:'Aircon Installation and Servicing',price:0,unit:'Quote required',desc:'New installation, servicing, filter cleaning or repair.',addons:[['airconinstall','New installation',0,'quote'],['airconservice','Routine service',0,'quote']]},
+{id:'maintenance',name:'General Cleaning Maintenance',price:0,unit:'Quote required',desc:'Once-off or recurring cleaning for homes and offices.',addons:[['weekly','Weekly recurring clean',0,'quote']]}
+];
+
+function renderCleaning(){
+ $('cleanCatalog').innerHTML=cleaning.map(s=>`<article class="clean">
+ <span class="pill">IZANDLA CLEANING SERVICES</span><h3>${esc(s.name)}</h3>
+ <div class="price">${esc(s.unit)}</div><p>${esc(s.desc)}</p>
+ <p class="small muted">${s.addons.length} optional add-ons</p>
+ <button class="btn primary" onclick="openClean('${s.id}')">Book this service</button>
+ </article>`).join('');
+}
+function openClean(id){
+ selectedService=cleaning.find(s=>s.id===id);selectedAddons={};let s=selectedService;
+ if(!s)return;
+ $('cleanModalTitle').textContent=s.name;
+ $('cleanModalBody').innerHTML=`<p>${esc(s.desc)}</p>
+ <div class="notice">Base price: <strong>${esc(s.unit)}</strong>. Optional add-ons are shown below. Quote items require confirmation.</div>
+ <form id="cleanForm">
+ <div class="two"><div class="field"><label>Your name</label><input id="cName" required></div><div class="field"><label>WhatsApp number</label><input id="cPhone" required></div></div>
+ <div class="two"><div class="field"><label>Service address</label><input id="cAddress" required></div><div class="field"><label>Preferred date</label><input id="cDate" type="date"></div></div>
+ <div class="two"><div class="field"><label>Quantity / rooms / classrooms</label><input id="cQty" type="number" min="1" value="1"></div><div class="field"><label>Extra quantity / desks</label><input id="cExtra" type="number" min="0" value="0"></div></div>
+ <div class="field"><label>Optional add-ons — select any you want</label><div class="addonlist">
+ ${s.addons.map(a=>`<label class="addon"><input type="checkbox" onchange="toggleAddon('${a[0]}',this.checked)"><span><strong>${esc(a[1])} — ${a[2]?(a[3]==='from'?'From R':'R')+a[2]:'Quote required'}</strong></span></label>`).join('')}
+ </div></div>
+ <div class="field"><label>Extra details</label><textarea id="cNotes"></textarea></div>
+ <div class="total"><div>Estimate<br><strong id="cTotal"></strong></div><span id="cFlag">Estimate only</span></div>
+ <button class="btn primary" type="submit">Save booking and WhatsApp</button>
+ </form>`;
+ $('cleanForm').addEventListener('submit',submitCleaning);
+ $('cQty').addEventListener('input',updateTotal);$('cExtra').addEventListener('input',updateTotal);
+ $('cleanModal').classList.add('open');updateTotal();
+}
+function toggleAddon(id,on){if(on)selectedAddons[id]=true;else delete selectedAddons[id];updateTotal()}
+function calcCleaning(){
+ let s=selectedService,q=Math.max(1,Number($('cQty').value||1)),extra=Math.max(0,Number($('cExtra').value||0)),total=s.price*q,quote=!s.price;
+ for(let a of s.addons){
+  if(!selectedAddons[a[0]])continue;
+  if(a[3]==='quote'||!a[2])quote=true;
+  else if(a[3]==='perunit')total+=a[2]*(s.id==='school'?extra:1);
+  else if(a[3]==='package')total=Math.max(total,a[2]);
+  else if(a[3]==='from'){total+=a[2];quote=true}
+  else total+=a[2];
+ }
+ if(s.id==='school')total+=extra*8;
+ return{total,quote};
+}
+function updateTotal(){
+ if(!selectedService)return;
+ let c=calcCleaning();$('cTotal').textContent=c.total?'R'+c.total.toFixed(2):'Quote required';
+ $('cFlag').textContent=c.quote?'Quote item selected':'Estimate only';
+}
+async function submitCleaning(e){
+ e.preventDefault();let s=selectedService,c=calcCleaning(),name=$('cName').value.trim(),phone=$('cPhone').value.trim(),address=$('cAddress').value.trim(),addons=s.addons.filter(a=>selectedAddons[a[0]]);
+ if(!name||!phone||!address)return toast('Complete your name, WhatsApp and address.');
+ let details={source:'cleaning',address,date:$('cDate').value||null,quantity:Number($('cQty').value||1),extra:Number($('cExtra').value||0),addons:addons.map(a=>a[1]),notes:$('cNotes').value,estimated_total:c.total,quote_required:c.quote,store_commission_percent:0,izandla_deduction_amount:5,izandla_deduction_trigger:'only_after_successful_completion'};
+ try{
+  await insertRequest({service:s.name,customer_name:name,phone,details,status:'new',verified:false,available_to_drivers:false});
+  contactWhatsApp(`IZANDLA CLEANING SERVICES\nService: ${s.name}\nName: ${name}\nWhatsApp: ${phone}\nAddress: ${address}\nEstimate: R${c.total.toFixed(2)}${c.quote?' — quote required':''}\nAdd-ons: ${addons.map(a=>a[1]).join(', ')||'None'}\nDetails: ${details.notes||'None'}`);
+  closeModal('cleanModal');toast('Booking saved. WhatsApp opened.');
+ }catch(err){toast('Booking could not be saved: '+err.message)}
+}
+
+/* Medical and home-visit requests */
+function openMedical(service){
+ $('medicalForm').reset();$('medicalService').value=service;
+ $('medicalModalTitle').textContent=service+' booking';
+ $('medicalModal').classList.add('open');
+}
+async function submitMedical(e){
+ e.preventDefault();
+ let service=$('medicalService').value,name=$('mName').value.trim(),phone=$('mPhone').value.trim(),address=$('mAddress').value.trim();
+ if(!name||!phone||!address)return toast('Complete the name, WhatsApp number and address.');
+ let visit=$('mVisit').value,patient=$('mPatient').value,mobility=$('mMobility').value,reason=$('mReason').value.trim();
+ let details={
+  source:'medical_provider_request',
+  patient_type:patient,
+  appointment_type:visit,
+  home_visit_requested:visit==='home',
+  home_visit_reason:mobility||null,
+  service_address:address,
+  preferred_date:$('mDate').value||null,
+  appointment_reason:reason,
+  additional_notes:$('mNotes').value.trim(),
+  provider_confirmation_required:true,
+  medical_emergency_service:false,
+  izandla_deduction_amount:5,
+  izandla_deduction_trigger:'only_after_successful_completion'
+ };
+ try{
+  await insertRequest({service:service,customer_name:name,phone,details,status:'new',verified:false,available_to_drivers:false});
+  contactWhatsApp(`IZANDLA ONE — APPOINTMENT REQUEST\nService: ${service}\nName: ${name}\nWhatsApp: ${phone}\nPatient: ${patient}\nAppointment: ${visit==='home'?'Please check home-visit availability':'I can travel to provider'}\nHome visit reason: ${mobility||'Not specified'}\nAddress: ${address}\nPreferred date: ${details.preferred_date||'To arrange'}\nReason: ${reason}\nNotes: ${details.additional_notes||'None'}\nPlease confirm provider availability, qualifications and fees.`);
+  closeModal('medicalModal');toast('Appointment request submitted. Await provider confirmation.');
+ }catch(err){toast('Medical request could not be saved: '+err.message)}
+}
+
+/* Panel beating */
+function openPanelBooking(){$('panelForm').reset();$('panelModal').classList.add('open')}
+async function submitPanelBooking(e){
+ e.preventDefault();let photos=[...($('pPhotos').files||[])].map(f=>f.name);
+ let name=$('pName').value.trim(),phone=$('pPhone').value.trim(),make=$('pMake').value.trim(),model=$('pModel').value.trim(),address=$('pAddress').value.trim();
+ if(!name||!phone||!make||!model||!address)return toast('Complete the required vehicle and contact details.');
+ let details={source:'panel_beaters_booking',vehicle_make:make,vehicle_model:model,vehicle_year:$('pYear').value||null,vehicle_colour:$('pColour').value||null,repair_required:$('pRepair').value,damage_description:$('pDamage').value,vehicle_address:address,vehicle_drivable:$('pDrive').value,preferred_inspection_date:$('pDate').value||null,selected_photo_filenames:photos,photo_upload_status:'not_uploaded_send_photos_by_whatsapp',notes:$('pNotes').value,quote_required:true,store_commission_percent:0,izandla_deduction_amount:5,izandla_deduction_trigger:'only_after_successful_completion'};
+ try{
+  await insertRequest({service:'Panel Beaters Booking',customer_name:name,phone,details,status:'new',verified:false,available_to_drivers:false});
+  contactWhatsApp(`IZANDLA ONE — PANEL BEATERS BOOKING\nCustomer: ${name}\nWhatsApp: ${phone}\nVehicle: ${make} ${model} ${details.vehicle_year||''} ${details.vehicle_colour||''}\nRepair: ${details.repair_required}\nDamage: ${details.damage_description}\nVehicle location: ${address}\nCan drive: ${details.vehicle_drivable}\nInspection date: ${details.preferred_inspection_date||'To arrange'}\nPhotos selected: ${photos.join(', ')||'None selected'}\nPlease send actual damage photos in this WhatsApp chat.\nNotes: ${details.notes||'None'}\nQuote required — no repair price confirmed.`);
+  closeModal('panelModal');toast('Panel booking submitted. Send your photos in WhatsApp.');
+ }catch(err){toast('Panel booking could not be saved: '+err.message)}
+}
+
+/* Construction */
+const construction=[
+['Plumbing','🚰','Leaks, blocked drains, taps and installations'],
+['Waterproofing','💧','Roof, bathroom and wall waterproofing'],
+['Painting','🖌️','Interior, exterior and touch-up painting'],
+['Aircon installation / service','❄️','Installations, servicing and repairs'],
+['Geyser installation','♨️','Geyser replacement or installation assessment'],
+['Roofing','🏠','Roof repair and replacement quotes'],
+['Renovations','🧱','Home improvements and renovations'],
+['Maintenance','🛠️','Repairs and routine property maintenance']
+];
+function renderConstruction(){
+ $('constructionGrid').innerHTML=construction.map(s=>`<button class="service" onclick="openRequest('${esc(s[0])}')"><span class="emoji">${s[1]}</span><strong>${esc(s[0])}</strong><span>${esc(s[2])}</span></button>`).join('');
+}
+
+/* Ride and service requests */
+function openRequest(s){
+ $('requestTitle').textContent=s;$('reqService').value=s;
+ $('requestForm').classList.remove('hide');$('requestCheckout').classList.add('hide');
+ $('reqDropoff').required=isDriverRequest(s);
+ let ride=isRideService(s);
+ $('rideDistanceWrap').classList.toggle('hide',!ride);$('rideFareBox').classList.toggle('hide',!ride);
+ $('reqKm').required=ride;$('reqKm').value='';
+ $('rideFare').textContent='R20.00';$('rideFareBreakdown').textContent='R20 base fare + R5 per kilometre';
+ $('reqPickup').placeholder=ride?'Enter pickup address and suburb':'Enter service address';
+ showView('request');
+}
+function requestPayload(){
+ let service=$('reqService').value.trim(),name=$('reqName').value.trim(),phone=$('reqPhone').value.trim(),pickup=$('reqPickup').value.trim(),dropoff=$('reqDropoff').value.trim(),notes=$('reqDetails').value.trim(),km=Number($('reqKm').value||0);
+ return{service,name,phone,pickup,dropoff,notes,km};
+}
+function isRideService(s){return /ride|delivery|petrol|diesel|gas swap/i.test(s)}
+function isDriverRequest(s){return /ride|food delivery|petrol|diesel|gas swap/i.test(s)}
+function rideFare(km){return 20+Math.max(0,Number(km)||0)*5}
+function updateRideFare(){
+ let km=Number($('reqKm').value||0),fare=rideFare(km);
+ $('rideFare').textContent='R'+fare.toFixed(2);
+ $('rideFareBreakdown').textContent='R20.00 base fare + '+km.toFixed(1)+' km × R5.00 = R'+fare.toFixed(2);
+}
+function editRequest(){$('requestCheckout').classList.add('hide');$('requestForm').classList.remove('hide')}
+async function submitRequest(e){
+ e.preventDefault();let r=requestPayload();
+ if(!r.name||!r.phone||!r.pickup)return toast('Complete your name, WhatsApp and pickup/service address.');
+ if(isDriverRequest(r.service)&&!r.dropoff)return toast('Enter the destination.');
+ if(isRideService(r.service)&&(!r.km||r.km<=0))return toast('Enter the estimated road distance in kilometres.');
+ let fare=isRideService(r.service)?rideFare(r.km):null;pendingRequest={...r,fare};
+ let lines=`<div class="checkout-line"><span>Service</span><strong>${esc(r.service)}</strong></div><div class="checkout-line"><span>Pickup</span><strong>${esc(r.pickup)}</strong></div><div class="checkout-line"><span>Destination</span><strong>${esc(r.dropoff||'Not applicable')}</strong></div>`;
+ if(fare!==null)lines+=`<div class="checkout-line"><span>Base fare</span><span>R20.00</span></div><div class="checkout-line"><span>Distance (${r.km.toFixed(1)} km × R5)</span><span>R${(r.km*5).toFixed(2)}</span></div><div class="checkout-line total-line"><span>Estimated total</span><strong>R${fare.toFixed(2)}</strong></div>`;
+ else lines+='<div class="checkout-line"><span>Price</span><strong>Quote / confirmation required</strong></div>';
+ $('requestCheckoutLines').innerHTML=lines;$('requestForm').classList.add('hide');$('requestCheckout').classList.remove('hide');
+}
+async function confirmRequestCheckout(){
+ if(!pendingRequest)return;
+ let r=pendingRequest,payment=$('requestPayment').value,isRide=isRideService(r.service);
+ let details={pickup_address:r.pickup,dropoff_address:r.dropoff||null,estimated_distance_km:isRide?r.km:null,base_fare:isRide?20:null,per_km_rate:isRide?5:null,estimated_fare:r.fare,customer_notes:r.notes,source:'customer_web',payment_method:payment,payment_status:'pending',store_commission_percent:0,liquor_commission_percent:2,izandla_deduction_amount:5,izandla_deduction_trigger:'only_after_successful_completion'};
+ try{
+  await insertRequest({service:r.service,customer_name:r.name,phone:r.phone,details,status:'new',verified:false,available_to_drivers:isDriverRequest(r.service)});
+  contactWhatsApp(`IZANDLA ONE REQUEST\nService: ${r.service}\nName: ${r.name}\nWhatsApp: ${r.phone}\nPickup: ${r.pickup}\nDestination: ${r.dropoff||'Not supplied'}\nDistance: ${isRide?r.km+' km':'Not applicable'}\nEstimated fare: ${r.fare!==null?'R'+r.fare.toFixed(2):'Quote required'}\nPayment preference: ${payment}\nNotes: ${r.notes||'None'}`);
+  pendingRequest=null;$('requestCheckout').classList.add('hide');$('requestForm').reset();
+  toast('Request submitted. Izandla will confirm your provider and payment arrangement.');
+ }catch(err){toast('Request not saved: '+err.message)}
+}
+async function insertRequest(payload){
+ let {error}=await initDB().from('izandla_requests').insert(payload);
+ if(error)throw error;
+}
+
+/* Food marketplace */
+const defaultStores=[
+{id:'bk',name:'Burger King',type:'restaurant',location:'Location to be confirmed'},
+{id:'foodlovers',name:'Food Lovers',type:'grocery',location:'Queensburgh'},
+{id:'honchos',name:'Honchos',type:'restaurant',location:'Bizana'},
+{id:'hungrylion',name:'Hungry Lion',type:'restaurant',location:'Bizana'},
+{id:'pedros',name:'Pedro’s',type:'restaurant',location:'Bizana'},
+{id:'shoprite',name:'Shoprite',type:'grocery',location:'Bizana'},
+{id:'pizzahut',name:'Pizza Hut',type:'restaurant',location:'Queensburgh'},
+{id:'fishplaice',name:'Fish Plaice',type:'restaurant',location:'Durban North'}
+];
+function loadLocal(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}}
+let foodStores=loadLocal('iz_food_stores',defaultStores);
+function demoItems(){
+ let out=[];
+ foodStores.forEach(s=>{
+  let ps=s.type==='grocery'?[['Fresh produce selection','Temporary example',45,'🍎'],['Pantry essentials','Temporary example',65,'🛒']]:[['Classic meal','Temporary example menu item',75,'🍔'],['Chicken meal','Temporary example menu item',89,'🍗'],['Chips and drink','Temporary example menu item',39,'🍟']];
+  ps.forEach((p,i)=>out.push({id:s.id+'-'+i,storeId:s.id,name:p[0],description:p[1],price:p[2],emoji:p[3],demo:true}));
+ });
+ return out;
+}
+let foodItems=loadLocal('iz_food_items',null)||demoItems();
+function renderFood(){
+ let q=($('foodSearch')?.value||'').toLowerCase();
+ let list=foodStores.filter(s=>(foodCategory==='all'||s.type===foodCategory)&&(`${s.name} ${s.location} ${foodItems.filter(p=>p.storeId===s.id).map(p=>p.name).join(' ')}`).toLowerCase().includes(q));
+ $('foodStores').innerHTML=list.map(s=>`<article class="food-store"><div class="emoji">${s.type==='grocery'?'🛒':'🍽️'}</div><span class="pill">${esc(s.type)}</span><h3>${esc(s.name)}</h3><p class="small muted">${esc(s.location)}</p><button class="btn primary smallbtn" onclick="openFoodStore('${esc(s.id)}')">View menu</button></article>`).join('')||'<p>No matching stores.</p>';
+}
+function foodFilter(c){foodCategory=c;renderFood()}
+function openFoodStore(id){
+ let nextStore=foodStores.find(s=>s.id===id);if(!nextStore)return;
+ if(activeFoodStore&&activeFoodStore.id!==id&&foodCart.length){if(!confirm('Your basket belongs to another store. Clear it and switch stores?'))return;foodCart=[];updateFoodCart()}
+ activeFoodStore=nextStore;$('foodMenuTitle').textContent=activeFoodStore.name;
+ let items=foodItems.filter(p=>p.storeId===id);
+ $('foodProducts').innerHTML=items.map(p=>`<article class="food-product"><div class="emoji">${esc(p.emoji)}</div><h3>${esc(p.name)}</h3><p class="small muted">${esc(p.description)}</p><strong>R${Number(p.price).toFixed(2)}</strong><p><span class="pill">DEMO ITEM</span></p><button class="btn primary smallbtn" onclick="addFoodItem('${esc(p.id)}')">Add to basket</button></article>`).join('')||'<p>No menu items listed.</p>';
+ $('foodMenuPanel').classList.remove('hide');
+}
+function closeFoodMenu(){$('foodMenuPanel').classList.add('hide')}
+function addFoodItem(id){
+ let item=foodItems.find(x=>x.id===id);if(!item)return;
+ let found=foodCart.find(x=>x.id===id);if(found)found.qty++;else foodCart.push({...item,qty:1});
+ updateFoodCart();toast(item.name+' added to basket.');
+}
+function updateFoodCart(){
+ let count=foodCart.reduce((n,x)=>n+x.qty,0),sum=foodCart.reduce((n,x)=>n+x.price*x.qty,0);
+ $('foodCartBar').classList.toggle('hide',count===0);$('foodCartSummary').textContent=count+' item(s) · R'+sum.toFixed(2);
+}
+function openFoodCheckout(){
+ if(!foodCart.length)return toast('Add menu items first.');
+ let total=foodCart.reduce((n,x)=>n+x.price*x.qty,0),commission=activeFoodStore?.type==='liquor'?2:0;
+ $('foodCheckoutLines').innerHTML=foodCart.map(x=>`<div class="checkout-line"><span>${esc(x.name)} × ${x.qty}</span><strong>R${(x.price*x.qty).toFixed(2)}</strong></div>`).join('')+
+ `<div class="checkout-line total-line"><span>Order subtotal</span><strong>R${total.toFixed(2)}</strong></div><div class="checkout-line"><span>Delivery fee</span><strong>R20 + R5/km</strong></div><p class="small muted">Partner commission: ${commission}%. Izandla R5 deduction only after successful completion.</p>`;
+ $('foodCheckout').classList.remove('hide');$('foodCheckout').scrollIntoView({behavior:'smooth',block:'start'});
+}
+async function confirmFoodCheckout(){
+ if(!foodCart.length)return;
+ let name=$('foodCustomerName').value.trim(),phone=$('foodCustomerPhone').value.trim(),address=$('foodDeliveryAddress').value.trim();
+ if(!name||!phone||!address)return toast('Enter your name, WhatsApp number and delivery address.');
+ let subtotal=foodCart.reduce((n,x)=>n+x.price*x.qty,0),km=Number($('foodDeliveryKm').value||0);
+ if(!km||km<=0)return toast('Enter the delivery distance in kilometres.');
+ let deliveryFee=20+km*5,total=subtotal+deliveryFee,commission=activeFoodStore?.type==='liquor'?2:0,payment=$('foodPayment').value;
+ let items=foodCart.map(x=>({name:x.name,quantity:x.qty,unit_price:x.price,line_total:x.price*x.qty}));
+ let details={source:'food_marketplace',store_name:activeFoodStore?.name||'Partner store',items,subtotal,delivery_distance_km:km,delivery_fee:deliveryFee,total,store_commission_percent:commission,izandla_deduction_amount:5,izandla_deduction_trigger:'only_after_successful_completion',payment_method:payment,payment_status:'pending',delivery_address:address};
+ try{
+  await insertRequest({service:'Food delivery',customer_name:name,phone,details,status:'new',verified:false,available_to_drivers:true});
+  contactWhatsApp(`IZANDLA FOOD ORDER\nStore: ${details.store_name}\nCustomer: ${name}\nPhone: ${phone}\nDelivery: ${address}\nItems: ${items.map(i=>i.name+' x'+i.quantity).join(', ')}\nSubtotal: R${subtotal.toFixed(2)}\nDelivery fee: R${deliveryFee.toFixed(2)} (${km} km)\nTotal: R${total.toFixed(2)}\nStore commission: ${commission}%\nPayment preference: ${payment}\nIzandla R5 deduction only after successful completion`);
+  foodCart=[];updateFoodCart();$('foodCheckout').classList.add('hide');toast('Food order submitted. Store and delivery confirmation will follow.');
+ }catch(e){toast('Order could not be submitted: '+e.message)}
+}
+
+/* Driver and store applications */
+function openPartnerRegistration(type){
+ $('partnerType').value=type;$('partnerForm').classList.remove('hide');
+ $('partnerBusinessWrap').classList.toggle('hide',type!=='store');
+ $('partnerVehicleWrap').classList.toggle('hide',type!=='driver');
+ $('partnerBusiness').required=type==='store';
+ $('partnerName').focus();
+ if(!user){$('partnerAuthHint').textContent='Please sign in before submitting your application.';openLogin()}
+ else $('partnerAuthHint').textContent=(type==='driver'?'Driver':'Store')+' application. Admin approval is required.';
+ showView('registration');
+}
+function choosePartner(type){openPartnerRegistration(type)}
+async function submitPartner(e){
+ e.preventDefault();if(!user){toast('Please sign in first.');openLogin();return}
+ let type=$('partnerType').value,args={
+ p_partner_type:type,p_full_name:$('partnerName').value.trim(),p_phone:$('partnerPhone').value.trim(),
+ p_business_name:type==='store'?$('partnerBusiness').value.trim():null,
+ p_location:$('partnerLocation').value.trim()||null,
+ p_vehicle_type:type==='driver'?$('partnerVehicle').value||null:null,
+ p_notes:$('partnerNotes').value.trim()||null
+ };
+ try{
+  let {error}=await initDB().rpc('izandla_submit_partner_application',args);if(error)throw error;
+  $('partnerForm').reset();$('partnerForm').classList.add('hide');toast('Application submitted.');$('partnerAuthHint').textContent='Pending admin review.';
+ }catch(err){toast('Application submission needs the matching Supabase function: '+err.message)}
+}
+
+/* Authentication and dashboard */
+async function checkRole(u,wanted){
+ if(wanted==='customer')return{ok:true};
+ let {data:p,error}=await db.from('izandla_profiles').select('role,store_id').eq('user_id',u.id).maybeSingle();
+ if(error)return{ok:false,message:'Could not verify profile: '+error.message};
+ let actual=String(p?.role||'').toLowerCase();
+ if(wanted==='admin'&&actual==='admin')return{ok:true};
+ if(wanted==='store'&&actual==='store')return{ok:true};
+ if(wanted==='driver'&&actual==='driver'){
+  let d=await db.from('izandla_drivers').select('id,verified,activated').eq('user_id',u.id).maybeSingle();
+  if(d.error)return{ok:false,message:d.error.message};
+  if(d.data?.verified&&d.data?.activated)return{ok:true};
+ }
+ return{ok:false,message:'This account is not approved for the '+wanted+' dashboard.'};
+}
+async function signIn(e){
+ e.preventDefault();
+ try{
+  let client=initDB(),email=$('loginEmail').value.trim(),password=$('loginPassword').value,wanted=$('loginRole').value;
+  $('loginMessage').textContent='Signing in…';
+  let {data,error}=await client.auth.signInWithPassword({email,password});if(error)throw error;
+  let check=await checkRole(data.user,wanted);
+  if(!check.ok){await client.auth.signOut();throw Error(check.message)}
+  user=data.user;role=wanted;closeModal('loginModal');
+  $('dashTitle').textContent=({admin:'Admin Dashboard',driver:'Driver Dashboard',store:'Store Dashboard',customer:'Customer Dashboard'})[role];
+  $('accountInfo').textContent='Signed in: '+(user.email||'')+' · '+role;
+  showView('dashboard');await loadDashboard();
+ }catch(err){$('loginMessage').textContent=err.message}
+}
+async function registerAccount(){
+ try{
+  let email=$('loginEmail').value.trim(),password=$('loginPassword').value;
+  if(!email||password.length<6)throw Error('Enter an email and a password of at least 6 characters.');
+  let {error}=await initDB().auth.signUp({email,password});if(error)throw error;
+  $('loginMessage').textContent='Account created. Check your email if confirmation is enabled, then sign in.';
+ }catch(e){$('loginMessage').textContent=e.message}
+}
+async function resetPassword(){
+ try{
+  let email=$('loginEmail').value.trim();if(!email)throw Error('Enter your email first.');
+  let {error}=await initDB().auth.resetPasswordForEmail(email,{redirectTo:location.origin});if(error)throw error;
+  $('loginMessage').textContent='If the account exists, a password reset email will be sent.';
+ }catch(e){$('loginMessage').textContent=e.message}
+}
+async function signOut(){
+ try{await initDB().auth.signOut()}catch(e){}
+ user=null;role='customer';showView('home');toast('Signed out.');
+}
+async function loadDashboard(){
+ if(!user||!db){$('dashStatus').textContent='Sign in first.';return}
+ $('dashStatus').textContent='Loading requests…';
+ let {data:rows,error}=await db.from('izandla_requests').select('*').order('created_at',{ascending:false}).limit(100);
+ if(error){$('dashStatus').textContent='Could not load requests: '+error.message;return}
+ rows=rows||[];
+ $('dashStatus').textContent='Loaded '+rows.length+' visible booking(s). Access is controlled by Supabase Row Level Security.';
+ $('dashRows').innerHTML=rows.length?rows.map(r=>`<article class="card" style="margin:10px 0">
+ <div class="row"><div><strong>${esc(r.service)}</strong><div class="small muted">${esc(r.customer_name)} · ${esc(r.phone)}</div></div><span class="status">${esc(r.status)}</span></div>
+ <p class="small">${esc(JSON.stringify(r.details||{}))}</p>
+ <p class="small muted">${r.created_at?new Date(r.created_at).toLocaleString():''}</p>
+ </article>`).join(''):'<p class="muted">No requests are currently visible to this account.</p>';
+}
+
+/* Start-up */
+$('loginForm').addEventListener('submit',signIn);
+$('partnerForm').addEventListener('submit',submitPartner);
+$('requestForm').addEventListener('submit',submitRequest);
+$('reqKm').addEventListener('input',updateRideFare);
+$('panelForm').addEventListener('submit',submitPanelBooking);
+$('medicalForm').addEventListener('submit',submitMedical);
+
+document.addEventListener('DOMContentLoaded',async()=>{
+ try{
+  initDB();renderCleaning();renderConstruction();renderFood();
+  let {data}=await db.auth.getSession();
+  if(data?.session?.user){
+   user=data.session.user;
+   $('accountInfo').textContent='Signed in: '+(user.email||'')+' · Choose an approved dashboard by using Login.';
+  }
+ }catch(e){console.error(e);toast(e.message)}
+});
+</script>
+</body>
+</html>
