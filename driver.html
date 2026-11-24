@@ -217,7 +217,9 @@ async function registerDriver(){
   role:"driver"
  };
 
- const profileResult=await db.from("izandla_profiles").upsert(profile,{onConflict:"id"});
+ const profileResult=await db.from("izandla_profiles").upsert(profileData, {
+  onConflict: 'user_id'
+})
  if(profileResult.error){
   return message("Account created, but profile setup failed: "+profileResult.error.message,"error");
  }
