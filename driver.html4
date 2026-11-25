@@ -1,0 +1,889 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Izandla One | Driver Portal</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+ --blue:#168bd2;
+ --dark:#07558e;
+ --light:#eaf7ff;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;background:#eef8ff;color:#17354a;
+ font-family:Arial,sans-serif;
+}
+header{
+ background:linear-gradient(120deg,#0879bd,#31b4ed);
+ color:white;padding:25px 18px;text-align:center;
+}
+header h1{margin:0;font-size:27px}
+header p{margin:8px 0 0}
+main{max-width:520px;margin:22px auto;padding:0 14px}
+.card{
+ background:white;border-radius:17px;padding:22px;
+ margin-bottom:17px;box-shadow:0 5px 22px #174e7115;
+}
+h2{color:#0879bd;margin-top:0}
+input{
+ width:100%;padding:14px;margin:7px 0 13px;
+ border:1px solid #c9dce9;border-radius:9px;font-size:16px;
+}
+button{
+ width:100%;border:0;border-radius:10px;padding:15px;
+ background:#087fca;color:white;font-size:15px;
+ font-weight:bold;margin-top:8px;cursor:pointer;
+}
+button.secondary{background:#e4f4ff;color:#07558e}
+button:disabled{opacity:.55;cursor:wait}
+.small{text-align:center;font-size:13px;color:#668096}
+.message{
+ padding:13px;border-radius:9px;margin:12px 0;
+ display:none;line-height:1.5;overflow-wrap:anywhere;
+}
+.success{background:#e5f8ec;color:#176b37}
+.error{background:#fff0ed;color:#a52e20}
+.pending{background:#fff7df;color:#775500}
+.job{
+ border:1px solid #d6e9f5;border-radius:12px;
+ padding:14px;margin:12px 0;
+}
+.job h3{margin:0 0 8px;color:#0879bd}
+.hidden{display:none!important}
+footer{
+ text-align:center;padding:25px;color:#71899b;font-size:13px;
+}
+a{color:#0879bd}
+</style>
+</head>
+
+<body>
+
+<header>
+ <h1>🤝 IZANDLA ONE</h1>
+ <p>Driver Partner Portal</p>
+ <p><b>Quality uplifts the world</b></p>
+</header>
+
+<main>
+
+<section id="authSection">
+
+ <div class="card">
+  <h2>Driver Registration</h2>
+  <p>Register to become an Izandla One driver partner.</p>
+
+  <div id="registerMessage" class="message"></div>
+
+  <form id="registerForm">
+
+   <label>Full name</label>
+   <input id="fullName" required autocomplete="name"
+   placeholder="Your full name">
+
+   <label>Email address</label>
+   <input id="email" type="email" required autocomplete="email"
+   placeholder="Your email address">
+
+   <label>Phone number</label>
+   <input id="phone" type="tel" required autocomplete="tel"
+   placeholder="Your mobile number">
+
+   <label>Create password</label>
+   <input id="password" type="password" required minlength="8"
+   autocomplete="new-password" placeholder="At least 8 characters">
+
+   <label>Confirm password</label>
+   <input id="confirmPassword" type="password" required minlength="8"
+   autocomplete="new-password" placeholder="Repeat password">
+
+   <button id="registerButton" type="submit">
+    REGISTER AS DRIVER
+   </button>
+
+  </form>
+ </div>
+
+ <div class="card">
+  <h2>Already registered?</h2>
+  <div id="loginMessage" class="message"></div>
+
+  <form id="loginForm">
+   <label>Email address</label>
+   <input id="loginEmail" type="email" required
+   autocomplete="email" placeholder="Your email">
+
+   <label>Password</label>
+   <input id="loginPassword" type="password" required
+   autocomplete="current-password" placeholder="Your password">
+
+   <button id="loginButton" type="submit">DRIVER LOGIN</button>
+  </form>
+
+  <button class="secondary" id="resendButton" type="button">
+   RESEND CONFIRMATION EMAIL
+  </button>
+ </div>
+
+</section>
+
+<section id="emailSection" class="hidden">
+ <div class="card">
+  <h2>Confirm your email</h2>
+  <div class="message pending" style="display:block">
+   <b>Your registration account has been created.</b><br><br>
+   Please open the confirmation link sent to your email address.
+   After confirming, return to this portal and log in if necessary.
+  </div>
+  <p id="emailAddress"></p>
+  <button id="emailLoginButton">GO TO DRIVER LOGIN</button>
+ </div>
+</section>
+
+<section id="pendingSection" class="hidden">
+ <div class="card">
+  <h2>Application received!</h2>
+  <div class="message pending" style="display:block">
+   <b>Your driver application is awaiting administration approval.</b>
+  </div>
+  <p>Your profile has been registered. You cannot receive jobs until
+  Izandla One administration verifies and activates your account.</p>
+  <p><b>Administration contact:</b></p>
+  <p>Phone: 079 510 0296<br>
+  Email: Izandla.one@gmail.com</p>
+  <button id="pendingLogout">LOG OUT</button>
+ </div>
+</section>
+
+<section id="dashboardSection" class="hidden">
+
+ <div class="card">
+  <h2>Driver Dashboard</h2>
+  <p id="driverWelcome"></p>
+
+  <div class="message success" style="display:block">
+   Your driver account is approved and activated.
+  </div>
+
+  <h3>Job notifications</h3>
+  <p id="soundStatus" class="small">
+   Enable sound to receive audible new-job alerts.
+  </p>
+
+  <button id="soundButton">ENABLE JOB ALERT SOUND</button>
+
+  <div id="jobAlert" class="message pending"></div>
+
+  <h3>Available rides and deliveries</h3>
+  <div id="jobsList">Loading requests...</div>
+
+  <button class="secondary" id="refreshButton">
+   REFRESH REQUESTS
+  </button>
+
+  <button id="dashboardLogout">LOG OUT</button>
+ </div>
+
+</section>
+
+</main>
+
+<footer>
+ IZANDLA ONE · Quality uplifts the world<br>
+ Secure driver registration portal
+</footer>
+
+<script>
+"use strict";
+
+/* SUPABASE CONNECTION */
+
+const SUPABASE_URL =
+ "https://ejsdxxapryebecgmkekf.supabase.co";
+
+const SUPABASE_KEY =
+ "sb_publishable_hvKxq3KkZNrmKMSNXlyYWg_hmFm5AYd";
+
+const db = window.supabase.createClient(
+ SUPABASE_URL,
+ SUPABASE_KEY,
+ {
+  auth:{
+   persistSession:true,
+   autoRefreshToken:true,
+   detectSessionInUrl:true
+  }
+ }
+);
+
+const $ = id => document.getElementById(id);
+
+let currentUser = null;
+let pollingTimer = null;
+let audioContext = null;
+let soundEnabled = false;
+let knownJobIds = new Set();
+let firstJobLoad = true;
+let busy = false;
+
+/* MESSAGES */
+
+function showMessage(id,message,type="error"){
+ const box = $(id);
+ box.textContent = message;
+ box.className = "message " + type;
+ box.style.display = "block";
+}
+
+function hideMessage(id){
+ $(id).style.display = "none";
+}
+
+function hideSections(){
+ [
+  "authSection",
+  "emailSection",
+  "pendingSection",
+  "dashboardSection"
+ ].forEach(id => $(id).classList.add("hidden"));
+}
+
+function showAuth(){
+ stopPolling();
+ hideSections();
+ $("authSection").classList.remove("hidden");
+}
+
+/* EMAIL CONFIRMATION RETURN ADDRESS */
+
+function confirmationURL(){
+ return window.location.origin + window.location.pathname;
+}
+
+/* DRIVER DATABASE RECORDS */
+
+async function createDriverRecords(user,name,phone){
+
+ if(!user || !user.id){
+  throw new Error("Your login session could not be verified.");
+ }
+
+ const email = user.email || "";
+
+ // Check existing profile.
+
+ const {data:profile,error:profileError} = await db
+  .from("izandla_profiles")
+  .select("user_id,role")
+  .eq("user_id",user.id)
+  .maybeSingle();
+
+ if(profileError) throw profileError;
+
+ if(profile && profile.role !== "driver"){
+  throw new Error(
+   "This account is not registered as a driver. Contact administration."
+  );
+ }
+
+ // Create driver profile only if missing.
+
+ if(!profile){
+  const {error} = await db
+   .from("izandla_profiles")
+   .insert({
+    user_id:user.id,
+    role:"driver",
+    store_id:null
+   });
+
+  if(error) throw error;
+ }
+
+ // Check existing driver application.
+
+ const {data:driver,error:driverError} = await db
+  .from("izandla_drivers")
+  .select("user_id")
+  .eq("user_id",user.id)
+  .maybeSingle();
+
+ if(driverError) throw driverError;
+
+ // Create application only once.
+
+ if(!driver){
+  const {error} = await db
+   .from("izandla_drivers")
+   .insert({
+    user_id:user.id,
+    full_name:name || user.user_metadata?.full_name || "",
+    phone:phone || user.user_metadata?.phone || "",
+    available:false,
+    verified:false,
+    activated:false
+   });
+
+  if(error) throw error;
+ }
+
+}
+
+/* DRIVER APPROVAL STATUS */
+
+async function showDriverStatus(user){
+
+ currentUser = user;
+
+ const metadata = user.user_metadata || {};
+
+ // Ensure the application exists after email confirmation/login.
+
+ await createDriverRecords(
+  user,
+  metadata.full_name || "",
+  metadata.phone || ""
+ );
+
+ const {data:driver,error} = await db
+  .from("izandla_drivers")
+  .select("full_name,verified,activated")
+  .eq("user_id",user.id)
+  .maybeSingle();
+
+ if(error) throw error;
+
+ if(!driver){
+  throw new Error(
+   "Driver record not found. Contact Izandla One administration."
+  );
+ }
+
+ hideSections();
+
+ if(driver.verified === true && driver.activated === true){
+
+  $("dashboardSection").classList.remove("hidden");
+
+  $("driverWelcome").textContent =
+   "Welcome, " + (driver.full_name || "Driver") + ".";
+
+  await loadJobs(true);
+  startPolling();
+
+ }else{
+
+  stopPolling();
+  $("pendingSection").classList.remove("hidden");
+
+ }
+}
+
+/* REGISTRATION */
+
+$("registerForm").addEventListener("submit",async e=>{
+
+ e.preventDefault();
+
+ if(busy) return;
+
+ const name = $("fullName").value.trim();
+ const email = $("email").value.trim().toLowerCase();
+ const phone = $("phone").value.trim();
+ const password = $("password").value;
+ const confirm = $("confirmPassword").value;
+
+ hideMessage("registerMessage");
+
+ if(password !== confirm){
+  showMessage(
+   "registerMessage",
+   "Your passwords do not match."
+  );
+  return;
+ }
+
+ if(password.length < 8){
+  showMessage(
+   "registerMessage",
+   "Password must contain at least 8 characters."
+  );
+  return;
+ }
+
+ busy = true;
+ $("registerButton").disabled = true;
+ $("registerButton").textContent = "REGISTERING...";
+
+ try{
+
+  const {data,error} = await db.auth.signUp({
+   email:email,
+   password:password,
+   options:{
+    emailRedirectTo:confirmationURL(),
+    data:{
+     full_name:name,
+     phone:phone,
+     role:"driver"
+    }
+   }
+  });
+
+  if(error) throw error;
+
+  if(!data.user){
+   throw new Error("Supabase did not return a registration account.");
+  }
+
+  if(data.session){
+
+   await showDriverStatus(data.user);
+
+  }else{
+
+   hideSections();
+   $("emailSection").classList.remove("hidden");
+
+   $("emailAddress").textContent =
+    "Confirmation email requested for: " + email;
+
+  }
+
+ }catch(error){
+
+  showAuth();
+
+  showMessage(
+   "registerMessage",
+   error.message || "Registration failed. Please try again."
+  );
+
+ }finally{
+
+  busy = false;
+  $("registerButton").disabled = false;
+  $("registerButton").textContent = "REGISTER AS DRIVER";
+
+ }
+
+});
+
+/* LOGIN */
+
+$("loginForm").addEventListener("submit",async e=>{
+
+ e.preventDefault();
+
+ if(busy) return;
+
+ busy = true;
+ $("loginButton").disabled = true;
+
+ try{
+
+  showMessage("loginMessage","Signing in...","success");
+
+  const {data,error} = await db.auth.signInWithPassword({
+   email:$("loginEmail").value.trim().toLowerCase(),
+   password:$("loginPassword").value
+  });
+
+  if(error) throw error;
+
+  await showDriverStatus(data.user);
+
+ }catch(error){
+
+  showMessage(
+   "loginMessage",
+   error.message || "Login failed. Please try again."
+  );
+
+ }finally{
+
+  busy = false;
+  $("loginButton").disabled = false;
+
+ }
+
+});
+
+/* RESEND EMAIL CONFIRMATION */
+
+$("resendButton").addEventListener("click",async()=>{
+
+ const email = (
+  $("email").value || $("loginEmail").value
+ ).trim().toLowerCase();
+
+ if(!email){
+  showMessage(
+   "loginMessage",
+   "Enter your registration email address first."
+  );
+  return;
+ }
+
+ try{
+
+  const {error} = await db.auth.resend({
+   type:"signup",
+   email:email,
+   options:{
+    emailRedirectTo:confirmationURL()
+   }
+  });
+
+  if(error) throw error;
+
+  showMessage(
+   "loginMessage",
+   "A new confirmation email has been requested. Check your inbox and spam folder.",
+   "success"
+  );
+
+ }catch(error){
+
+  showMessage("loginMessage",error.message);
+
+ }
+
+});
+
+/* RETURN TO LOGIN */
+
+$("emailLoginButton").addEventListener("click",showAuth);
+
+/* SOUND AND ALARMS */
+
+async function enableSound(){
+
+ try{
+
+  const AudioEngine =
+   window.AudioContext || window.webkitAudioContext;
+
+  if(!AudioEngine){
+   throw new Error("Audio is not supported by this browser.");
+  }
+
+  if(!audioContext){
+   audioContext = new AudioEngine();
+  }
+
+  if(audioContext.state === "suspended"){
+   await audioContext.resume();
+  }
+
+  soundEnabled = true;
+
+  $("soundStatus").textContent =
+   "Job alert sound is enabled.";
+
+  $("soundButton").textContent =
+   "JOB ALERT SOUND ENABLED";
+
+  playAlarm();
+
+ }catch(error){
+
+  $("soundStatus").textContent =
+   "Sound could not be enabled: " + error.message;
+
+ }
+
+}
+
+function playAlarm(){
+
+ if(!soundEnabled || !audioContext) return;
+
+ const start = audioContext.currentTime;
+
+ [0,0.45,0.9].forEach(offset=>{
+
+  const oscillator = audioContext.createOscillator();
+  const gain = audioContext.createGain();
+
+  oscillator.type = "sine";
+  oscillator.frequency.value = 880;
+
+  gain.gain.setValueAtTime(0.0001,start + offset);
+  gain.gain.exponentialRampToValueAtTime(
+   0.25,start + offset + 0.04
+  );
+  gain.gain.exponentialRampToValueAtTime(
+   0.0001,start + offset + 0.25
+  );
+
+  oscillator.connect(gain);
+  gain.connect(audioContext.destination);
+
+  oscillator.start(start + offset);
+  oscillator.stop(start + offset + 0.28);
+
+ });
+
+}
+
+/* NEW JOB ALERT */
+
+function announceNewJobs(count){
+
+ playAlarm();
+
+ const alertBox = $("jobAlert");
+
+ alertBox.textContent =
+  "NEW JOB ALERT! " + count +
+  " new ride or delivery request(s) available.";
+
+ alertBox.style.display = "block";
+
+ if("Notification" in window &&
+    Notification.permission === "granted"){
+
+  new Notification("Izandla One - New Driver Job",{
+   body:count + " new request(s) are available."
+  });
+
+ }
+
+}
+
+$("soundButton").addEventListener("click",async()=>{
+
+ if(!soundEnabled){
+  await enableSound();
+ }else{
+  soundEnabled = false;
+  $("soundStatus").textContent = "Job alert sound is disabled.";
+  $("soundButton").textContent = "ENABLE JOB ALERT SOUND";
+ }
+
+});
+
+if("Notification" in window &&
+ Notification.permission === "default"){
+
+ $("soundButton").addEventListener("click",()=>{
+  if(soundEnabled){
+   Notification.requestPermission();
+  }
+ },{once:true});
+
+}
+
+/* LOAD AVAILABLE JOBS */
+
+async function loadJobs(initial=false){
+
+ if(!currentUser) return;
+
+ const box = $("jobsList");
+ box.textContent = "Checking available requests...";
+
+ try{
+
+  const {data:jobs,error} = await db
+   .from("izandla_requests")
+   .select("id,created_at,service,customer_name,phone,details,status")
+   .eq("available_to_drivers",true)
+   .eq("verified",true)
+   .limit(30);
+
+  if(error) throw error;
+
+  const currentIds = new Set(
+   (jobs || []).map(job=>job.id)
+  );
+
+  if(!firstJobLoad && !initial){
+
+   const newJobs = (jobs || []).filter(
+    job=>!knownJobIds.has(job.id)
+   );
+
+   if(newJobs.length > 0){
+    announceNewJobs(newJobs.length);
+   }
+
+  }
+
+  knownJobIds = currentIds;
+  firstJobLoad = false;
+
+  if(!jobs || jobs.length === 0){
+   box.textContent =
+    "No available rides or deliveries right now. New requests will be checked automatically.";
+   return;
+  }
+
+  box.innerHTML = "";
+
+  jobs.forEach(job=>{
+
+   const item = document.createElement("div");
+   item.className = "job";
+
+   const heading = document.createElement("h3");
+   heading.textContent = job.service || "Customer request";
+
+   const details = document.createElement("p");
+
+   details.textContent =
+    "Customer: " + (job.customer_name || "Customer") +
+    "\nContact: " + (job.phone || "Not provided") +
+    "\nStatus: " + (job.status || "Available");
+
+   const extra = document.createElement("p");
+
+   if(job.details){
+    extra.textContent = typeof job.details === "string"
+     ? job.details
+     : JSON.stringify(job.details);
+   }
+
+   const claim = document.createElement("button");
+   claim.textContent = "ACCEPT REQUEST";
+
+   claim.addEventListener("click",async()=>{
+
+    claim.disabled = true;
+    claim.textContent = "PROCESSING...";
+
+    try{
+
+     const {error} = await db.rpc(
+      "izandla_claim_order",
+      {p_order_id:job.id}
+     );
+
+     if(error) throw error;
+
+     alert("Request accepted successfully!");
+
+     knownJobIds.delete(job.id);
+     await loadJobs();
+
+    }catch(err){
+
+     alert("Could not accept request: " + err.message);
+
+     claim.disabled = false;
+     claim.textContent = "ACCEPT REQUEST";
+
+    }
+
+   });
+
+   item.appendChild(heading);
+   item.appendChild(details);
+
+   if(job.details){
+    item.appendChild(extra);
+   }
+
+   item.appendChild(claim);
+   box.appendChild(item);
+
+  });
+
+ }catch(error){
+
+  box.textContent =
+   "Could not load requests: " + error.message;
+
+ }
+
+}
+
+/* AUTOMATIC JOB CHECKING */
+
+function startPolling(){
+
+ stopPolling();
+
+ pollingTimer = setInterval(()=>{
+  if(currentUser){
+   loadJobs();
+  }
+ },15000);
+
+}
+
+function stopPolling(){
+
+ if(pollingTimer){
+  clearInterval(pollingTimer);
+  pollingTimer = null;
+ }
+
+}
+
+/* REFRESH */
+
+$("refreshButton").addEventListener("click",()=>{
+ loadJobs();
+});
+
+/* LOGOUT */
+
+async function logout(){
+
+ stopPolling();
+ currentUser = null;
+ knownJobIds.clear();
+ firstJobLoad = true;
+ soundEnabled = false;
+
+ const {error} = await db.auth.signOut();
+
+ if(error){
+  alert("Logout issue: " + error.message);
+ }
+
+ showAuth();
+
+}
+
+$("pendingLogout").addEventListener("click",logout);
+$("dashboardLogout").addEventListener("click",logout);
+
+/* RESTORE VERIFIED SESSION AFTER EMAIL RETURN */
+
+(async()=>{
+
+ try{
+
+  const {data,error} = await db.auth.getSession();
+
+  if(error) throw error;
+
+  if(data.session){
+
+   await showDriverStatus(data.session.user);
+
+  }
+
+ }catch(error){
+
+  showAuth();
+
+  showMessage(
+   "loginMessage",
+   "Account status could not be loaded: " + error.message
+  );
+
+ }
+
+})();
+
+</script>
+</body>
+</html>
