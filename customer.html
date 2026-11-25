@@ -1,0 +1,742 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Izandla One | Customer Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+  --blue:#168bd2;
+  --dark:#104b78;
+  --light:#eaf6ff;
+  --white:#ffffff;
+  --text:#193b55;
+  --muted:#71869a;
+  --border:#dceaf5;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  background:#f2f8fd;
+  color:var(--text);
+  font-family:Arial,sans-serif;
+}
+header {
+  background:linear-gradient(120deg,#087ac3,#42b5f5);
+  color:white;
+  padding:22px 17px;
+  border-radius:0 0 23px 23px;
+}
+.header-row {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.logo {font-size:23px;font-weight:900;letter-spacing:1px}
+.tagline {font-size:12px;margin-top:5px}
+.container {
+  width:100%;
+  max-width:900px;
+  margin:auto;
+  padding:17px;
+}
+.card {
+  background:white;
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:17px;
+  margin-bottom:15px;
+  box-shadow:0 3px 12px rgba(30,90,130,.045);
+}
+h2 {font-size:19px;margin:0 0 13px}
+h3 {font-size:15px;margin:0 0 8px}
+p {line-height:1.5}
+input {
+  width:100%;
+  padding:13px;
+  margin:7px 0;
+  border:1px solid #cbddea;
+  border-radius:10px;
+  font-size:15px;
+  outline-color:var(--blue);
+}
+button {
+  background:var(--blue);
+  color:white;
+  border:0;
+  border-radius:10px;
+  padding:13px 16px;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
+}
+button:disabled {opacity:.5;cursor:not-allowed}
+button.secondary {background:#e5f3ff;color:#1266a3}
+button.danger {background:#e74c62}
+.full {width:100%;margin-top:8px}
+.small {font-size:12px;color:var(--muted)}
+.blue {color:var(--blue)}
+.stats {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.stat {
+  background:#eaf6ff;
+  border-radius:13px;
+  padding:15px;
+}
+.stat strong {
+  display:block;
+  font-size:25px;
+  color:#087ac3;
+  margin-bottom:5px;
+}
+.progress {
+  height:12px;
+  border-radius:20px;
+  background:#e4edf5;
+  overflow:hidden;
+  margin:14px 0;
+}
+.progress div {
+  height:100%;
+  background:linear-gradient(90deg,#168bd2,#53c1fa);
+  width:0%;
+  transition:width .3s;
+}
+.order {
+  border-bottom:1px solid var(--border);
+  padding:13px 0;
+}
+.order:last-child {border:0}
+.order-top {
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+.pill {
+  font-size:11px;
+  padding:5px 9px;
+  background:#e8f4ff;
+  color:#087ac3;
+  border-radius:20px;
+  white-space:nowrap;
+}
+.tabs {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+  margin-bottom:15px;
+}
+.tabs button {
+  padding:11px 5px;
+  background:#e3f2ff;
+  color:#1266a3;
+}
+.tabs button.active {background:#168bd2;color:white}
+.hidden {display:none!important}
+.notice {
+  padding:12px;
+  background:#edf7ff;
+  border-radius:10px;
+  font-size:13px;
+  line-height:1.5;
+  margin-top:12px;
+}
+.warning {
+  background:#fff5e5;
+  color:#8b5b12;
+}
+footer {
+  text-align:center;
+  color:#8298aa;
+  font-size:12px;
+  padding:25px;
+}
+#message {
+  font-size:13px;
+  margin:10px 0;
+  color:#1266a3;
+  white-space:pre-wrap;
+}
+@media(min-width:650px) {
+  .stats {grid-template-columns:repeat(4,1fr)}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-row">
+    <div>
+      <div class="logo">🤝 IZANDLA ONE</div>
+      <div class="tagline">Quality uplifts the world.</div>
+    </div>
+    <div>MY ACCOUNT</div>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- AUTHENTICATION -->
+<section id="authSection">
+
+  <div class="card">
+    <h2>Welcome to Izandla One</h2>
+    <p class="small">Sign in or create your customer account to access your loyalty dashboard.</p>
+
+    <div class="tabs">
+      <button id="loginTab" class="active" onclick="showAuth('login')">Login</button>
+      <button id="signupTab" onclick="showAuth('signup')">Register</button>
+    </div>
+
+    <div id="loginForm">
+      <h3>Customer Login</h3>
+      <input id="loginEmail" type="email" placeholder="Email address">
+      <input id="loginPassword" type="password" placeholder="Password">
+      <button class="full" onclick="login()">Login to my account</button>
+      <button class="full secondary" onclick="resetPassword()">Forgot password?</button>
+    </div>
+
+    <div id="signupForm" class="hidden">
+      <h3>Create Customer Account</h3>
+      <input id="signupName" placeholder="Full name">
+      <input id="signupPhone" type="tel" placeholder="Phone number">
+      <input id="signupEmail" type="email" placeholder="Email address">
+      <input id="signupPassword" type="password" placeholder="Create password">
+      <button class="full" onclick="register()">Create my account</button>
+    </div>
+
+    <div id="message"></div>
+  </div>
+</section>
+
+<!-- CUSTOMER DASHBOARD -->
+<section id="dashboard" class="hidden">
+
+  <div class="card">
+    <div class="header-row">
+      <div>
+        <div class="small">CUSTOMER DASHBOARD</div>
+        <h2 id="welcomeName">Welcome!</h2>
+      </div>
+      <button class="danger" onclick="logout()">Logout</button>
+    </div>
+    <p class="small" id="customerEmail"></p>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="card">
+    <h2>My Loyalty Overview</h2>
+
+    <div class="stats">
+      <div class="stat">
+        <strong id="totalOrders">0</strong>
+        <span class="small">Total transactions</span>
+      </div>
+      <div class="stat">
+        <strong id="successfulOrders">0</strong>
+        <span class="small">Successful transactions</span>
+      </div>
+      <div class="stat">
+        <strong id="milestones">0</strong>
+        <span class="small">Reward milestones</span>
+      </div>
+      <div class="stat">
+        <strong id="nextReward">3</strong>
+        <span class="small">Next milestone</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- REWARDS -->
+  <div class="card">
+    <h2>🏆 My Cashback Rewards</h2>
+
+    <h3>50% Cashback Programme</h3>
+    <p>Every third successful qualifying transaction earns 50% cashback on that transaction.</p>
+
+    <div class="progress">
+      <div id="rewardProgress"></div>
+    </div>
+
+    <h2 id="progressText" class="blue">0 / 3 transactions</h2>
+
+    <div class="notice">
+      Your loyalty journey continues:
+      <br>3rd transaction — 50% cashback
+      <br>6th transaction — 50% cashback
+      <br>9th transaction — 50% cashback
+      <br>12th transaction — 50% cashback
+      <br><br>
+      Failed and cancelled transactions do not qualify.
+    </div>
+
+    <div class="notice warning">
+      Reward amounts and payouts are subject to secure server-side verification. This dashboard does not independently issue or credit cashback.
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <div class="tabs">
+    <button id="ordersTab" class="active" onclick="showPanel('orders')">Orders</button>
+    <button id="referralTab" onclick="showPanel('referral')">Referrals</button>
+    <button id="profileTab" onclick="showPanel('profile')">Profile</button>
+  </div>
+
+  <!-- ORDER HISTORY -->
+  <div id="ordersPanel" class="card">
+    <h2>📦 My Transactions</h2>
+    <div id="ordersList">
+      Loading transactions...
+    </div>
+    <button class="full secondary" onclick="loadOrders()">Refresh transactions</button>
+  </div>
+
+  <!-- REFERRALS -->
+  <div id="referralPanel" class="card hidden">
+    <h2>🤝 Invite and Earn</h2>
+    <p>Invite friends and family to join Izandla One.</p>
+
+    <div class="stat">
+      <div class="small">Your customer referral code</div>
+      <strong id="referralCode">Loading...</strong>
+    </div>
+
+    <button class="full" onclick="copyReferral()">Copy referral code</button>
+    <button class="full secondary" onclick="shareReferral()">Invite a friend</button>
+
+    <div class="notice">
+      Referral tracking and earnings will be connected to verified referral records. No referral earnings are credited by this display alone.
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div id="profilePanel" class="card hidden">
+    <h2>👤 My Profile</h2>
+
+    <label class="small">Full name</label>
+    <input id="profileName" placeholder="Full name">
+
+    <label class="small">Phone number</label>
+    <input id="profilePhone" placeholder="Phone number">
+
+    <label class="small">Email address</label>
+    <input id="profileEmail" disabled>
+
+    <button class="full" onclick="saveProfile()">Save profile</button>
+
+    <div id="profileMessage" class="small"></div>
+  </div>
+
+</section>
+
+</div>
+
+<footer>
+  IZANDLA ONE COMPANY<br>
+  Quality uplifts the world.<br>
+  Customer Support: 079 510 0296
+</footer>
+
+<script>
+
+// ==========================================
+// IZANDLA ONE SUPABASE CONNECTION
+// ==========================================
+
+const SUPABASE_URL =
+"https://ejsdxxapryebecgmkekf.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_hvKxq3KkZNrmKMSNXlyYWg_hmFm5AYd";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+// Existing Izandla database structure
+const REQUEST_TABLE = "izandla_requests";
+const CUSTOMER_ID_COLUMN = "customer_user_id";
+
+// IMPORTANT:
+// Confirm the actual completed status used by
+// your order-processing dashboard before launch.
+const SUCCESS_STATUSES = [
+  "completed",
+  "successful"
+];
+
+// ==========================================
+// GENERAL FUNCTIONS
+// ==========================================
+
+const $ = id => document.getElementById(id);
+
+function message(text) {
+  $("message").textContent = text;
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  })[char]);
+}
+
+function showAuth(mode) {
+  $("loginForm").classList.toggle("hidden", mode !== "login");
+  $("signupForm").classList.toggle("hidden", mode !== "signup");
+
+  $("loginTab").classList.toggle("active", mode === "login");
+  $("signupTab").classList.toggle("active", mode === "signup");
+
+  message("");
+}
+
+function showPanel(panel) {
+  ["orders","referral","profile"].forEach(name => {
+    $(name + "Panel").classList.toggle("hidden", name !== panel);
+    $(name + "Tab").classList.toggle("active", name === panel);
+  });
+}
+
+// ==========================================
+// CUSTOMER REGISTRATION
+// ==========================================
+
+async function register() {
+  const name = $("signupName").value.trim();
+  const phone = $("signupPhone").value.trim();
+  const email = $("signupEmail").value.trim();
+  const password = $("signupPassword").value;
+
+  if (!name || !phone || !email || !password) {
+    message("Please complete all registration fields.");
+    return;
+  }
+
+  if (password.length < 8) {
+    message("Password must contain at least 8 characters.");
+    return;
+  }
+
+  message("Creating your customer account...");
+
+  const {data,error} = await db.auth.signUp({
+    email,
+    password,
+    options:{
+      emailRedirectTo: window.location.origin + window.location.pathname,
+      data:{
+        full_name:name,
+        phone:phone,
+        role:"customer"
+      }
+    }
+  });
+
+  if (error) {
+    message(error.message);
+    return;
+  }
+
+  if (data.session) {
+    message("Account created successfully!");
+    await loadDashboard(data.session.user);
+  } else {
+    message("Registration successful! Please check your email and confirm your account before logging in.");
+  }
+}
+
+// ==========================================
+// CUSTOMER LOGIN
+// ==========================================
+
+async function login() {
+  const email = $("loginEmail").value.trim();
+  const password = $("loginPassword").value;
+
+  if (!email || !password) {
+    message("Enter your email and password.");
+    return;
+  }
+
+  message("Signing you in...");
+
+  const {data,error} = await db.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    message(error.message);
+    return;
+  }
+
+  await loadDashboard(data.user);
+}
+
+// ==========================================
+// PASSWORD RESET
+// ==========================================
+
+async function resetPassword() {
+  const email = $("loginEmail").value.trim();
+
+  if (!email) {
+    message("Enter your email address first.");
+    return;
+  }
+
+  const {error} = await db.auth.resetPasswordForEmail(email,{
+    redirectTo:window.location.origin + window.location.pathname
+  });
+
+  message(error ? error.message :
+    "Password reset instructions have been sent to your email.");
+}
+
+// ==========================================
+// SESSION MANAGEMENT
+// ==========================================
+
+async function logout() {
+  const {error} = await db.auth.signOut();
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  location.reload();
+}
+
+db.auth.onAuthStateChange((event,session) => {
+  if (event === "SIGNED_IN" && session) {
+    setTimeout(() => loadDashboard(session.user),0);
+  }
+  if (event === "SIGNED_OUT") {
+    $("dashboard").classList.add("hidden");
+    $("authSection").classList.remove("hidden");
+  }
+});
+
+async function initialize() {
+  const {data,error} = await db.auth.getSession();
+
+  if (error) {
+    message(error.message);
+    return;
+  }
+
+  if (data.session) {
+    await loadDashboard(data.session.user);
+  }
+}
+
+// ==========================================
+// LOAD CUSTOMER DASHBOARD
+// ==========================================
+
+async function loadDashboard(user) {
+  if (!user) return;
+
+  $("authSection").classList.add("hidden");
+  $("dashboard").classList.remove("hidden");
+
+  const metadata = user.user_metadata || {};
+
+  $("welcomeName").textContent =
+    "Welcome, " + (metadata.full_name || "Customer") + "!";
+
+  $("customerEmail").textContent = user.email || "";
+
+  $("profileName").value = metadata.full_name || "";
+  $("profilePhone").value = metadata.phone || "";
+  $("profileEmail").value = user.email || "";
+
+  $("referralCode").textContent =
+    "IZ" + user.id.replace(/-/g,"").substring(0,8).toUpperCase();
+
+  await loadOrders();
+}
+
+// ==========================================
+// LOAD EXISTING CUSTOMER TRANSACTIONS
+// ==========================================
+
+async function loadOrders() {
+  const {data:sessionData,error:sessionError} =
+    await db.auth.getSession();
+
+  if (sessionError || !sessionData.session) return;
+
+  const user = sessionData.session.user;
+
+  $("ordersList").textContent = "Loading your transactions...";
+
+  const {data,error} = await db
+    .from(REQUEST_TABLE)
+    .select("id,service,status,created_at,details")
+    .eq(CUSTOMER_ID_COLUMN,user.id)
+    .order("created_at",{ascending:false})
+    .limit(100);
+
+  if (error) {
+    $("ordersList").innerHTML =
+      '<div class="notice warning">Unable to load transactions: ' +
+      escapeHTML(error.message) +
+      '<br><br>Check that customer SELECT permissions are enabled in Supabase RLS.</div>';
+    return;
+  }
+
+  const orders = data || [];
+
+  const successful = orders.filter(order =>
+    SUCCESS_STATUSES.includes(
+      String(order.status || "").toLowerCase()
+    )
+  );
+
+  $("totalOrders").textContent = orders.length;
+  $("successfulOrders").textContent = successful.length;
+
+  const rewards = Math.floor(successful.length / 3);
+  const progress = successful.length % 3;
+  const next = successful.length === 0
+    ? 3
+    : (3 - progress);
+
+  $("milestones").textContent = rewards;
+  $("nextReward").textContent = next;
+
+  $("rewardProgress").style.width =
+    (progress / 3 * 100) + "%";
+
+  $("progressText").textContent =
+    progress + " / 3 successful transactions";
+
+  if (!orders.length) {
+    $("ordersList").innerHTML =
+      '<div class="notice">You have no transactions linked to this account yet. Your Izandla journey starts here!</div>';
+    return;
+  }
+
+  $("ordersList").innerHTML = orders.map(order => {
+    const status = String(order.status || "unknown");
+    const details = order.details || {};
+
+    return `
+      <div class="order">
+        <div class="order-top">
+          <strong>${escapeHTML(order.service || "Izandla service")}</strong>
+          <span class="pill">${escapeHTML(status)}</span>
+        </div>
+        <div class="small">
+          Transaction #${escapeHTML(order.id)}
+        </div>
+        <div class="small">
+          ${escapeHTML(
+            order.created_at
+              ? new Date(order.created_at).toLocaleString("en-ZA")
+              : ""
+          )}
+        </div>
+        ${
+          details.notes
+            ? `<div class="small">Notes: ${escapeHTML(details.notes)}</div>`
+            : ""
+        }
+      </div>
+    `;
+  }).join("");
+}
+
+// ==========================================
+// CUSTOMER PROFILE
+// ==========================================
+
+async function saveProfile() {
+  const name = $("profileName").value.trim();
+  const phone = $("profilePhone").value.trim();
+
+  if (!name || !phone) {
+    $("profileMessage").textContent =
+      "Enter your name and phone number.";
+    return;
+  }
+
+  const {error} = await db.auth.updateUser({
+    data:{
+      full_name:name,
+      phone:phone,
+      role:"customer"
+    }
+  });
+
+  if (error) {
+    $("profileMessage").textContent = error.message;
+    return;
+  }
+
+  $("welcomeName").textContent = "Welcome, " + name + "!";
+  $("profileMessage").textContent =
+    "Your profile has been updated successfully.";
+}
+
+// ==========================================
+// REFERRAL SHARING
+// ==========================================
+
+async function copyReferral() {
+  const code = $("referralCode").textContent;
+
+  try {
+    await navigator.clipboard.writeText(code);
+    alert("Referral code copied!");
+  } catch(e) {
+    alert("Your referral code is: " + code);
+  }
+}
+
+async function shareReferral() {
+  const code = $("referralCode").textContent;
+
+  const text =
+    "Join Izandla One! Quality uplifts the world. My referral code is " +
+    code + ". Visit https://izandla-one.vercel.app/";
+
+  if (navigator.share) {
+    try {
+      await navigator.share({title:"Izandla One",text});
+    } catch(e) {}
+  } else {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert("Invitation copied!");
+    } catch(e) {
+      alert(text);
+    }
+  }
+}
+
+// ==========================================
+// START APPLICATION
+// ==========================================
+
+initialize();
+
+</script>
+</body>
+</html>
