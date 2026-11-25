@@ -1,0 +1,636 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Izandla One | Administration</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --blue:#168bd2;
+  --dark:#123b59;
+  --light:#eaf6ff;
+  --white:#fff;
+  --border:#d8e8f3;
+  --muted:#637b8d;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f2f8fc;
+  color:var(--dark);
+}
+header {
+  background:linear-gradient(120deg,#087cc2,#54b9ef);
+  color:white;
+  padding:22px 18px;
+}
+header h1 {margin:0;font-size:23px}
+header p {margin:7px 0 0;font-size:13px}
+.container {max-width:1150px;margin:auto;padding:18px}
+.card {
+  background:white;
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:17px;
+  margin-bottom:15px;
+  box-shadow:0 3px 12px #174b7010;
+}
+input,button,textarea {
+  font:inherit;
+  padding:12px;
+  border-radius:9px;
+}
+input,textarea {
+  width:100%;
+  border:1px solid var(--border);
+  margin:6px 0 12px;
+}
+button {
+  border:0;
+  background:var(--blue);
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  margin:3px;
+}
+button.secondary {background:#e8f4fc;color:#15547b}
+button.danger {background:#c83e4d}
+button:disabled {opacity:.5;cursor:not-allowed}
+.login {
+  max-width:430px;
+  margin:55px auto;
+}
+.stats {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.stat {
+  background:var(--light);
+  border-radius:12px;
+  padding:15px;
+}
+.stat strong {display:block;font-size:27px;color:#087cc2}
+.tabs {
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  margin-bottom:15px;
+}
+.tabs button {white-space:nowrap}
+.tabs button.active {background:var(--dark)}
+.application {
+  border:1px solid var(--border);
+  padding:15px;
+  border-radius:12px;
+  margin:12px 0;
+  background:white;
+}
+.application h3 {margin:0 0 8px}
+.small {font-size:13px;color:var(--muted)}
+.status {
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:20px;
+  background:#fff1d8;
+  color:#805400;
+  font-size:12px;
+  margin:5px 0;
+}
+.status.good {background:#dff6e8;color:#176b38}
+.status.bad {background:#ffe4e7;color:#a52235}
+.actions {display:flex;flex-wrap:wrap;gap:5px;margin-top:12px}
+.document-link {display:inline-block;margin:5px;color:#087cc2}
+.hidden {display:none!important}
+.notice {
+  padding:12px;
+  border-radius:9px;
+  background:#eaf6ff;
+  margin:10px 0;
+  font-size:13px;
+}
+#error {
+  color:#a52235;
+  white-space:pre-wrap;
+  font-size:13px;
+}
+footer {text-align:center;padding:25px;color:var(--muted)}
+@media(max-width:600px) {
+ .stats {grid-template-columns:1fr 1fr}
+ .container {padding:12px}
+ header h1 {font-size:20px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🤝 IZANDLA ONE</h1>
+  <p>Administration Control Centre | Quality uplifts the world</p>
+</header>
+
+<div class="container">
+
+<section id="loginBox" class="card login">
+  <h2>Administrator Login</h2>
+  <p class="small">Use your existing Izandla One administrator account.</p>
+  <form id="loginForm">
+    <label>Email address</label>
+    <input id="email" type="email" required
+      value="Izandla.one@gmail.com">
+    <label>Password</label>
+    <input id="password" type="password" required
+      placeholder="Administrator password">
+    <button type="submit" style="width:100%">Sign In</button>
+  </form>
+  <p id="loginMessage"></p>
+</section>
+
+<section id="dashboard" class="hidden">
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+      <div>
+        <h2 style="margin:0">Administration Dashboard</h2>
+        <p class="small" id="adminEmail"></p>
+      </div>
+      <div>
+        <button onclick="loadAll()">↻ Refresh</button>
+        <button class="secondary" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <strong id="driverCount">0</strong>
+      <span>Drivers</span>
+    </div>
+    <div class="stat">
+      <strong id="jobCount">0</strong>
+      <span>Job applications</span>
+    </div>
+    <div class="stat">
+      <strong id="partnerCount">0</strong>
+      <span>Partner applications</span>
+    </div>
+  </div>
+
+  <div class="tabs" style="margin-top:18px">
+    <button class="active" onclick="showTab('drivers',this)">Drivers</button>
+    <button onclick="showTab('jobs',this)">Recruitment</button>
+    <button onclick="showTab('partners',this)">Partners</button>
+  </div>
+
+  <div id="error"></div>
+  <div id="message" class="notice hidden"></div>
+
+  <div id="drivers" class="card">
+    <h2>Driver Applications</h2>
+    <p class="small">Review drivers and activate approved accounts.</p>
+    <div id="driverList">Loading drivers...</div>
+  </div>
+
+  <div id="jobs" class="card hidden">
+    <h2>Recruitment Applications</h2>
+    <p class="small">Construction, roofing, waterproofing and other job applicants.</p>
+    <div id="jobList">Loading applications...</div>
+  </div>
+
+  <div id="partners" class="card hidden">
+    <h2>Business Partner Applications</h2>
+    <p class="small">Stores, restaurants, liquor stores and other partners.</p>
+    <div id="partnerList">Loading partners...</div>
+  </div>
+
+</section>
+</div>
+
+<footer>
+  IZANDLA ONE · Quality uplifts the world
+</footer>
+
+<script>
+const SUPABASE_URL =
+  "https://ejsdxxapryebecgmkekf.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_hvKxq3KkZNrmKMSNXlyYWg_hmFm5AYd";
+
+const ADMIN_EMAIL = "izandla.one@gmail.com";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+let drivers = [];
+let jobs = [];
+let partners = [];
+let currentUser = null;
+
+const $ = id => document.getElementById(id);
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[char]);
+}
+
+function showError(error) {
+  $("error").textContent =
+    error?.message || String(error);
+}
+
+function clearError() {
+  $("error").textContent = "";
+}
+
+function notify(message) {
+  $("message").textContent = message;
+  $("message").classList.remove("hidden");
+}
+
+async function checkAdmin() {
+  const {data,error} = await db.auth.getUser();
+
+  if (error || !data.user) {
+    $("loginBox").classList.remove("hidden");
+    $("dashboard").classList.add("hidden");
+    return;
+  }
+
+  currentUser = data.user;
+
+  if (
+    (currentUser.email || "").toLowerCase() !== ADMIN_EMAIL
+  ) {
+    const {data:profile,error:profileError} =
+      await db.from("izandla_profiles")
+      .select("role")
+      .eq("user_id",currentUser.id)
+      .maybeSingle();
+
+    if (
+      profileError ||
+      profile?.role !== "admin"
+    ) {
+      await db.auth.signOut();
+      $("loginMessage").textContent =
+        "Access denied. This account is not an Izandla administrator.";
+      return;
+    }
+  }
+
+  $("loginBox").classList.add("hidden");
+  $("dashboard").classList.remove("hidden");
+  $("adminEmail").textContent = currentUser.email || "";
+  await loadAll();
+}
+
+$("loginForm").addEventListener("submit",async event=>{
+  event.preventDefault();
+  $("loginMessage").textContent = "Signing in...";
+
+  const {error} = await db.auth.signInWithPassword({
+    email:$("email").value.trim(),
+    password:$("password").value
+  });
+
+  if (error) {
+    $("loginMessage").textContent = error.message;
+    return;
+  }
+
+  $("loginMessage").textContent = "";
+  await checkAdmin();
+});
+
+async function logout() {
+  await db.auth.signOut();
+  location.reload();
+}
+
+function showTab(tab,button) {
+  ["drivers","jobs","partners"].forEach(id=>{
+    $(id).classList.toggle("hidden",id!==tab);
+  });
+
+  document.querySelectorAll(".tabs button")
+    .forEach(b=>b.classList.remove("active"));
+
+  button.classList.add("active");
+}
+
+async function loadAll() {
+  clearError();
+
+  $("driverList").textContent = "Loading...";
+  $("jobList").textContent = "Loading...";
+  $("partnerList").textContent = "Loading...";
+
+  const results = await Promise.all([
+    db.from("izandla_drivers")
+      .select("*")
+      .order("created_at",{ascending:false}),
+
+    db.from("izandla_applications")
+      .select("*")
+      .order("created_at",{ascending:false}),
+
+    db.from("izandla_partner_applications")
+      .select("*")
+      .order("created_at",{ascending:false})
+  ]);
+
+  const labels = ["Drivers","Recruitment","Partners"];
+  const errors = results
+    .map((result,i)=>result.error ?
+      labels[i]+": "+result.error.message : null)
+    .filter(Boolean);
+
+  if (errors.length) {
+    showError(errors.join("\n"));
+  }
+
+  drivers = results[0].data || [];
+  jobs = results[1].data || [];
+  partners = results[2].data || [];
+
+  $("driverCount").textContent = drivers.length;
+  $("jobCount").textContent = jobs.length;
+  $("partnerCount").textContent = partners.length;
+
+  renderDrivers();
+  renderJobs();
+  renderPartners();
+}
+
+function renderDrivers() {
+  if (!drivers.length) {
+    $("driverList").innerHTML =
+      "<p>No driver records found or access is restricted.</p>";
+    return;
+  }
+
+  $("driverList").innerHTML = drivers.map(d=>`
+    <article class="application">
+      <h3>${escapeHTML(d.full_name || "Unnamed driver")}</h3>
+      <p>Phone: ${escapeHTML(d.phone)}</p>
+      <p class="small">Driver ID: ${escapeHTML(d.id)}</p>
+      <p class="small">User ID: ${escapeHTML(d.user_id)}</p>
+      <p class="small">Submitted: ${escapeHTML(d.created_at)}</p>
+
+      <span class="status ${d.verified ? "good":""}">
+        ${d.verified ? "Verified":"Awaiting verification"}
+      </span>
+
+      <span class="status ${d.activated ? "good":"bad"}">
+        ${d.activated ? "Activated":"Not activated"}
+      </span>
+
+      <span class="status">
+        ${d.available ? "Online":"Offline"}
+      </span>
+
+      <div class="actions">
+        <button onclick="activateDriver('${d.id}')"
+          ${d.activated && d.verified ? "disabled":""}>
+          Approve & Activate
+        </button>
+        <button class="secondary"
+          onclick="deactivateDriver('${d.id}')">
+          Deactivate
+        </button>
+      </div>
+      <p class="small">
+        Driver documents are not yet linked to this table.
+        Do not activate until required documents have been
+        checked through the correct secure upload workflow.
+      </p>
+    </article>
+  `).join("");
+}
+
+async function activateDriver(id) {
+  if (!confirm(
+    "Have you checked this driver's identity, licence and required documents? Activate this driver?"
+  )) return;
+
+  clearError();
+
+  const {error} = await db
+    .from("izandla_drivers")
+    .update({
+      verified:true,
+      activated:true,
+      available:false
+    })
+    .eq("id",id);
+
+  if (error) {
+    showError(error);
+    return;
+  }
+
+  notify("Driver approved and activated. Driver is initially offline.");
+  await loadAll();
+}
+
+async function deactivateDriver(id) {
+  if (!confirm("Deactivate this driver?")) return;
+
+  const {error} = await db
+    .from("izandla_drivers")
+    .update({
+      activated:false,
+      available:false
+    })
+    .eq("id",id);
+
+  if (error) {
+    showError(error);
+    return;
+  }
+
+  notify("Driver deactivated.");
+  await loadAll();
+}
+
+function renderJobs() {
+  if (!jobs.length) {
+    $("jobList").innerHTML = "<p>No recruitment applications found.</p>";
+    return;
+  }
+
+  $("jobList").innerHTML = jobs.map(j=>`
+    <article class="application">
+      <h3>${escapeHTML(j.full_name)}</h3>
+      <p>Category: ${escapeHTML(j.category)}</p>
+      <p>Phone: ${escapeHTML(j.phone)}</p>
+      <p>Email: ${escapeHTML(j.email)}</p>
+      <p>Location: ${escapeHTML(j.location)}</p>
+      <p>Experience: ${escapeHTML(j.experience)}</p>
+      <p>Qualifications: ${escapeHTML(j.qualifications)}</p>
+      <p>Availability: ${escapeHTML(j.availability)}</p>
+      <p>Message: ${escapeHTML(j.message)}</p>
+      <span class="status">${escapeHTML(j.status)}</span>
+      <div id="jobdocs-${j.id}"></div>
+      <label>Administration notes</label>
+      <textarea id="jobnote-${j.id}">${escapeHTML(j.admin_notes)}</textarea>
+      <div class="actions">
+        <button onclick="updateJob('${j.id}','Approved')">Approve</button>
+        <button class="danger" onclick="updateJob('${j.id}','Rejected')">Reject</button>
+      </div>
+    </article>
+  `).join("");
+
+  jobs.forEach(j=>renderDocuments(
+    j.document_paths,
+    "jobdocs-"+j.id
+  ));
+}
+
+async function updateJob(id,status) {
+  const note = $("jobnote-"+id).value;
+
+  if (!confirm("Change this application to "+status+"?")) return;
+
+  const {error} = await db
+    .from("izandla_applications")
+    .update({
+      status:status,
+      admin_notes:note
+    })
+    .eq("id",id);
+
+  if (error) {
+    showError(error);
+    return;
+  }
+
+  notify("Recruitment application updated.");
+  await loadAll();
+}
+
+function renderPartners() {
+  if (!partners.length) {
+    $("partnerList").innerHTML =
+      "<p>No partner applications found.</p>";
+    return;
+  }
+
+  $("partnerList").innerHTML = partners.map(p=>`
+    <article class="application">
+      <h3>${escapeHTML(p.application_type)}</h3>
+      <p class="small">Application ID: ${escapeHTML(p.id)}</p>
+      <p class="small">User ID: ${escapeHTML(p.user_id)}</p>
+      <p>Submitted: ${escapeHTML(p.created_at)}</p>
+      <pre style="white-space:pre-wrap;overflow-wrap:anywhere">${escapeHTML(JSON.stringify(p.application_data,null,2))}</pre>
+      <span class="status">${escapeHTML(p.status)}</span>
+      <div id="partnerdocs-${p.id}"></div>
+      <label>Administration notes</label>
+      <textarea id="partnernote-${p.id}">${escapeHTML(p.admin_note)}</textarea>
+      <div class="actions">
+        <button onclick="updatePartner('${p.id}','approved')">Approve</button>
+        <button class="danger" onclick="updatePartner('${p.id}','rejected')">Reject</button>
+      </div>
+    </article>
+  `).join("");
+
+  partners.forEach(p=>renderDocuments(
+    p.document_paths,
+    "partnerdocs-"+p.id
+  ));
+}
+
+async function updatePartner(id,status) {
+  const note = $("partnernote-"+id).value;
+
+  if (!confirm("Change partner application to "+status+"?")) return;
+
+  const {error} = await db
+    .from("izandla_partner_applications")
+    .update({
+      status:status,
+      admin_note:note,
+      reviewed_at:new Date().toISOString()
+    })
+    .eq("id",id);
+
+  if (error) {
+    showError(error);
+    return;
+  }
+
+  notify("Partner application updated.");
+  await loadAll();
+}
+
+async function renderDocuments(paths,elementId) {
+  const element = $(elementId);
+  if (!element) return;
+
+  if (!Array.isArray(paths) || !paths.length) {
+    element.innerHTML = "<p class='small'>No document paths recorded.</p>";
+    return;
+  }
+
+  element.innerHTML = "<p class='small'>Preparing secure document links...</p>";
+
+  const buckets = [
+    "izandla-application-documents",
+    "izandla-private-documents"
+  ];
+
+  const links = [];
+
+  for (const originalPath of paths) {
+    let found = false;
+
+    for (const bucket of buckets) {
+      let path = String(originalPath || "").replace(/^\/+/,"");
+
+      if (path.startsWith(bucket+"/")) {
+        path = path.slice(bucket.length+1);
+      }
+
+      const {data,error} = await db.storage
+        .from(bucket)
+        .createSignedUrl(path,300);
+
+      if (!error && data?.signedUrl) {
+        links.push(
+          `<a class="document-link" target="_blank" rel="noopener" href="${escapeHTML(data.signedUrl)}">Open document</a>`
+        );
+        found = true;
+        break;
+      }
+    }
+
+    if (!found) {
+      links.push("<span class='small'>Document unavailable: check storage path and permissions.</span>");
+    }
+  }
+
+  element.innerHTML = "<h4>Application documents</h4>"+links.join("<br>");
+}
+
+db.auth.onAuthStateChange((event,session)=>{
+  if (event === "SIGNED_OUT") {
+    $("dashboard").classList.add("hidden");
+    $("loginBox").classList.remove("hidden");
+  }
+});
+
+checkAdmin();
+</script>
+</body>
+</html>
